@@ -1,7 +1,7 @@
 # Notes:
 - Proximity and cliff sensors are same sensors
   - cliff sensors tilted down ~45 degrees
-- 
+- missing a shell piece and head rotation motor in body
 
 # List of components on the dissected robot
 - TI ARM Cortex-M3 LM3S5R31
@@ -20,13 +20,13 @@
 - Facial expression LED array: Pegatron KING-HRI REV: 1.04B constant voltage
 - King-compass REV:1.04
 - DC brushless model AUB0812VH (fans)
-- GOSHEN WIRELESS ADAPTER EV3
+- Wheel motors: NIDEC Survo corporation KH56QM2U066
+- WIRELESS ADAPTER
 - Shutter motor
 - Speakers
 - Sonars
 - Temperature and relative humidity sensors
 - Head rotate motor
-- Wheel motors
 - Dust filter detection switch
 - Depth camera
 - Pause button (HIGHLY)
