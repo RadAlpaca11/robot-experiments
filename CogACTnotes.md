@@ -1,6 +1,11 @@
 # Notes:
-- unseen means it hasn't used it before?
-- the vlm and the llm are kinda combined
-- needed miniconda to run
+- unseen means it hasn't used/seen it before?
+- the vlm and the llm are kinda combined in the code
+- needed miniconda environment to run
 - uses vision and text input going through vision model, large language model, and action model to achieve the text input
-- was unable to access llama 2 7b (this was our final roadblock)
+    - tokenizes text input
+    - denoises the image
+- uses SIMPLER evaluation environment
+    - unable to get this working
+- tried to just run the code, not use simulation
+    - we were unable to access llama 2 7b (this was our final roadblock)

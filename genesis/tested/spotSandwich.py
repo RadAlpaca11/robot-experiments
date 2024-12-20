@@ -21,7 +21,9 @@ scene = gs.Scene(
     ),
     renderer = gs.renderers.Rasterizer(), # using rasterizer for camera rendering
 )
+
 plane = scene.add_entity(gs.morphs.Plane())
+
 spot = scene.add_entity(
     gs.morphs.MJCF(file='mujoco_menagerie/boston_dynamics_spot/spot.xml',
     pos = (0, 0, 10),)
@@ -49,7 +51,6 @@ sphere3=scene.add_entity(gs.morphs.Sphere(
     pos = (0, 0, 6),
 ))
 
-
 cam = scene.add_camera(
     res = (640, 480),
     pos = (3.5, 0.0, 0.5),
@@ -71,4 +72,4 @@ for i in range(1000):
         lookat = (0, 0, 0.5),
     )
     cam.render()
-cam.stop_recording(save_to_filename='spotSandwich.mp4', fps=60)
+cam.stop_recording(save_to_filename='genesis/picsAndVids/spotSandwich.mp4', fps=60)

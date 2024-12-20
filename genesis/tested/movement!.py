@@ -92,4 +92,4 @@ for i in range(1250):
     scene.step()
     cam.render()
 
-cam.stop_recording(save_to_filename='movement!.mp4', fps=60)
+cam.stop_recording(save_to_filename='genesis/movement!.mp4', fps=60)
