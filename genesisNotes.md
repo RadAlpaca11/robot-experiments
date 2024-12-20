@@ -55,6 +55,7 @@
     dofs_idx = [franka.get_joint(name).dof_idx_local for name in jnt_names]
 
 - remember the franka thing
+  - we use panda
 - this puts all of the robot's joints into an array so you can set their positions like this:
 
   ```
@@ -65,3 +66,4 @@
 
 - replacing control with set makes the joints "teleport" rather than moving
 - 
+- inverse kinematics doesn't need explicit definitions of joints?
