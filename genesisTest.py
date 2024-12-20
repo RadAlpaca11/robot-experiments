@@ -22,14 +22,38 @@ scene = gs.Scene(
     renderer = gs.renderers.Rasterizer(), # using rasterizer for camera rendering
 )
 plane = scene.add_entity(gs.morphs.Plane())
-franka = scene.add_entity(
-    gs.morphs.MJCF(file='spot.xml')
+spot = scene.add_entity(
+    gs.morphs.MJCF(file='mujoco_menagerie/boston_dynamics_spot/spot.xml',
+    pos = (0, 0, 10),)
 )
+spot2 = scene.add_entity(
+    gs.morphs.MJCF(file='mujoco_menagerie/boston_dynamics_spot/spot.xml',
+    pos = (0, 0, 3),)
+)
+spot3 = scene.add_entity(
+    gs.morphs.MJCF(file='mujoco_menagerie/boston_dynamics_spot/spot.xml',
+    pos = (0, 0, 5),)
+)
+spot4 = scene.add_entity(
+    gs.morphs.MJCF(file='mujoco_menagerie/boston_dynamics_spot/spot.xml',
+    pos = (0, 0, 0),)
+)
+
+sphere=scene.add_entity(gs.morphs.Sphere(
+    pos = (0, 0, 2),
+))
+sphere2=scene.add_entity(gs.morphs.Sphere(
+    pos = (0, 0, 4),
+))
+sphere3=scene.add_entity(gs.morphs.Sphere(
+    pos = (0, 0, 6),
+))
+
 
 cam = scene.add_camera(
     res = (640, 480),
     pos = (3.5, 0.0, 0.5),
-    fov = 30,
+    fov = 100,
     GUI = True,
 )
 
