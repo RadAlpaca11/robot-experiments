@@ -71,4 +71,4 @@ for i in range(1000):
         lookat = (0, 0, 0.5),
     )
     cam.render()
-cam.stop_recording(save_to_filename='video1.mp4', fps=60)
+cam.stop_recording(save_to_filename='spotSandwich.mp4', fps=60)

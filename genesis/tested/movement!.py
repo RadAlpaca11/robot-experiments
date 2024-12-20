@@ -23,7 +23,7 @@ scene = gs.Scene(
 )
 plane = scene.add_entity(gs.morphs.Plane())
 panda = scene.add_entity(
-    gs.morphs.MJCF(file='panda.xml',)
+    gs.morphs.MJCF(file='genesis/mujoco_menagerie/franka_emika_panda/panda.xml',)
 )
 jnt_names = [
     'joint1',
@@ -92,4 +92,4 @@ for i in range(1250):
     scene.step()
     cam.render()
 
-cam.stop_recording(save_to_filename='video1.mp4', fps=60)
+cam.stop_recording(save_to_filename='movement!.mp4', fps=60)
