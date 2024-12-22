@@ -8,8 +8,8 @@
 	- knee (kn)
 - hips are ball joints
 - legs are labeled like this:
-	-front left = fl
-	-hind  right = hr
+	- front left = fl
+	- hind  right = hr
 - hind left knee joint = hl_kn
 - joint index:
 
