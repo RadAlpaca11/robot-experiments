@@ -65,5 +65,9 @@
   )
 
 - replacing control with set makes the joints "teleport" rather than moving
-- 
+
+- [documentation](https://genesis-world.readthedocs.io/en/latest/api_reference/index.html)
+
+## Questions:
 - inverse kinematics doesn't need explicit definitions of joints?
+- what materials and shapes are avalible in the simulator?
