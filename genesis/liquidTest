@@ -1,4 +1,8 @@
+# there's a lot going on here
+# there should be liquid in the scene
 # there should be a fluid emitter in the scene?
+# there should be an elastic box in the scene?
+
 import genesis as gs
 
 gs.init()
@@ -45,6 +49,16 @@ liquid = scene.add_entity(
         color = (0.4, 0.8, 1.0),
         vis_mode = 'particle',
     ),
+)
+elastic = scene.add_entity(
+    material = gs.materials.MPM.Elastic(),
+    morph = gs.morphs.Box(
+        size = (0.2, 0.3, 0.2),
+        pos = (0.0, -0.5, 0.25),
+    ),
+    surface = gs.surfaces.Default(
+        color = (1.0, 0.4, 0.4),
+        vis_mode = 'particle',
 )
 
 emitter = scene.add_emitter(
