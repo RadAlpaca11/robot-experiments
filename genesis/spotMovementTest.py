@@ -79,6 +79,7 @@ for i in range(1500):
         spot.control_dofs_force(
             np.array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]), # making hips floppy so that knees can move
             dofs_idx,
+        ),
     elif i == 500:
       # setting force to 1
         spot.control_dofs_force(

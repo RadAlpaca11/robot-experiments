@@ -1,6 +1,7 @@
 # UNFINISHED
 # Once this code is finished the hope is that this will make the spot walk
 import genesis as gs
+import numpy as np
 
 gs.init(backend=gs.cpu)
 
@@ -54,50 +55,22 @@ cam = scene.add_camera(
 
 scene.build()
 
+fl_dof = np.arrange(3)
+fr_dof = np.arrange(3, 6)
+hl_dof = np.arrange(6, 9)
+hr_dof = np.arrange(9, 12)
+
+fl_end_effector = spot.get_link('FL')
+fr_end_effector = spot.get_link('FR')
+hl_end_effector = spot.get_link('HL')
+hr_end_effector = spot.get_link('HR')
+
 gb, depth, segmentation, normal = cam.render(depth=True, segmentation=True, normal=True)
 
 cam.start_recording()
-import numpy as np
-# PD control
-for i in range(1250):
-    if i == 0:
-        panda.control_dofs_position(
-            np.array([1, 1, 0, 0, 0, 0, 0, 0.04, 0.04]),
-            dofs_idx,
-        )
-    elif i == 250:
-        panda.control_dofs_position(
-            np.array([-1, 0.8, 1, -2, 1, 0.5, -0.5, 0.04, 0.04]),
-            dofs_idx,
-        )
-    elif i == 500:
-        panda.control_dofs_position(
-            np.array([0, 0, 0, 0, 0, 0, 0, 0, 0]),
-            dofs_idx,
-        )
-    elif i == 750:
-        # control first dof with velocity, and the rest with position
-        panda.control_dofs_position(
-            np.array([0, 0, 0, 0, 0, 0, 0, 0, 0])[1:],
-            dofs_idx[1:],
-        )
-        panda.control_dofs_velocity(
-            np.array([1.0, 0, 0, 0, 0, 0, 0, 0, 0])[:1],
-            dofs_idx[:1],
-        )
-    elif i == 1000:
-        panda.control_dofs_force(
-            np.array([0, 0, 0, 0, 0, 0, 0, 0, 0]),
-            dofs_idx,
-        )
-    # This is the control force computed based on the given control command
-    # If using force control, it's the same as the given control command
-    print('control force:', spot.get_dofs_control_force(dofs_idx))
 
-    # This is the actual force experienced by the dof
-    print('internal force:', spot.get_dofs_force(dofs_idx))
+# add movement code here
+# could pick values
+# if the positionTest code works, we can add it to this code and then add or subtract to the starting positions
 
-    scene.step()
-    cam.render()
-
-cam.stop_recording(save_to_filename='picsAndVids/video1.mp4', fps=60)
+cam.stop_recording(save_to_filename='picsAndVids/dogWalkTest.mp4', fps=60)
