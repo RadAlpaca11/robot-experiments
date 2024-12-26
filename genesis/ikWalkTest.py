@@ -49,11 +49,11 @@ scene.build()
 cam.start_recording()
 import numpy as np
 
-#values need to be tuned
+#values need to be tuned (note from hayden: they might be tuned in the xml file?)
 spot.set_dofs_kp(
     np.array([2000, 2000, 1500, 2000, 2000, 1500, 2000, 2000, 1500, 2000, 2000, 1500]),
 )
-spot.set_dofs_kv
+spot.set_dofs_kv(
     np.array([50, 50, 40, 50, 50, 40, 50, 50, 40, 50, 50, 40]),
 )
 spot.dofs_force_range(
@@ -75,13 +75,13 @@ qpos = spot.inverse_kinematics(
 )
 # something important i think
 qpos[-2:] = 0.04
-path = franka.plan_path(
+path = spot.plan_path(
     qpos_goal     = qpos,
     num_waypoints = 200, # 2s duration
 )
 # execute the planned path
 for waypoint in path:
-    franka.control_dofs_position(waypoint)
+    spot.control_dofs_position(waypoint)
     scene.step()
 
 # allow robot to reach the last waypoint
