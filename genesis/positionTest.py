@@ -27,6 +27,7 @@ scene = gs.Scene(
     ),
 )
 
+# this doesn't seem to do anything
 gs.options.SimOptions(
     gravity = (0.0, 0.0, 0.0),
 )
@@ -81,12 +82,18 @@ print(pos_idx)
 
 cam.start_recording()
 
+
+# in other files, we've put the control_dofs_position and control_dofs_force in an if statement that only runs once
 for i in range(1000):
+    # zeroing velocity makes the robot fall down slower at a consistent rate
+    # might be reseting the velocity to 0 every step, so it only has one step to accelerate
     # spot.zero_all_dofs_velocity()
     spot.control_dofs_force(
+            # 1000 seems to be the max force for spot
             np.array([1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]),
             dofs_idx,
         )
+    # spot moved, but didn't support its own weight
     spot.control_dofs_position(
             np.array([0.29785, 0.055, -1, 0.29785, -0.055, -1, -0.29785, 0.055, -1, -0.29785, -0.055, -1]),
             dofs_idx,

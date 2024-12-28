@@ -33,6 +33,7 @@ plane = scene.add_entity(gs.morphs.Plane())
 panda = scene.add_entity(
     gs.morphs.MJCF(file='genesis/mujoco_menagerie/franka_emika_panda/panda.xml',)
 )
+# would it be simpler to use parallel simulation?
 panda2 = scene.add_entity(
     gs.morphs.MJCF(
         file='genesis/mujoco_menagerie/franka_emika_panda/panda.xml',
@@ -40,6 +41,7 @@ panda2 = scene.add_entity(
     )
 )
 
+# blocks don't roll very well
 sphere = scene.add_entity(
     gs.morphs.Sphere(
         pos = (0, 0.65, 0.02),
@@ -98,29 +100,27 @@ qpos = panda.inverse_kinematics(
     quat = np.array([1, 0, 0, 0]),
 )
 cam.start_recording
-# open gripper
+# plan path
 qpos[-2:] = 0.04
 path = panda.plan_path(
     qpos_goal = qpos,
     num_waypoints = 200 # 2s duration
 )
 # execute path
+# does this need to be separate from the second loop?
 for waypoint in path:
     panda.control_dofs_position(waypoint)
     scene.step()
+    cam.render()
+# hand is now lowered
 
 # let robot reach waypoint
 for i in range(750):
     scene.step()
 
-    
-    # qpos = panda.inverse_kinematics(
-    #     link = end_effector,
-    #     pos = np.array([0.65, 0.0, 0.135]),
-    #     quat = np.array([0, 1, 0, 0]),
-    # )
     if i == 250:
         panda.control_dofs_velocity(
+            #velocity lower than 5 moves over the block
             np.array([10, 0, 0, 0, 0, 0, 0, 0, 0])[:1],
             dofs_idx[:1],
         )

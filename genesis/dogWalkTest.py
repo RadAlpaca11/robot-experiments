@@ -1,5 +1,6 @@
 # UNFINISHED
 # Once this code is finished the hope is that this will make the spot walk
+# Doesn't work; genesis can't do ik for entities with free joints yet
 import genesis as gs
 import numpy as np
 

@@ -10,6 +10,7 @@ scene = gs.Scene(
         substeps = 10,
     ),
     sph_options = gs.options.SPHOptions(
+        # setting a boundary that the fluid stays within
         lower_bound = (-0.5, -0.5, 0.0),
         upper_bound = (0.5, 0.5, 1),
         particle_size = 0.01,
@@ -60,6 +61,7 @@ scene.build()
 
 cam.start_recording()
 
+# this runs at 2fps, so be mindful of the number of steps
 for i in range(250):
     scene.step()
     cam.render()

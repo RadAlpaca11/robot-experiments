@@ -62,6 +62,7 @@ th_dofs = np.arange(11, 15)
 
 for i in range(1000):
     scene.step()
+    # trying to move index finger
     if i==0:
         hand.control_dofs_force(
             np.array([10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),

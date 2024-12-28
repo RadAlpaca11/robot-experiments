@@ -1,5 +1,8 @@
 import numpy as np
 import genesis as gs
+
+# genesis is not yet able to do ik for entities with free joints
+
 gs.init(backend=gs.cpu)
 scene = gs.Scene(
     viewer_options = gs.options.ViewerOptions(
