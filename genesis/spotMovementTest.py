@@ -27,12 +27,10 @@ scene = gs.Scene(
         substeps = 4,
     ),
     renderer = gs.renderers.Rasterizer(), # using rasterizer for camera rendering
-    show_viewer = True,
 )
 plane = scene.add_entity(gs.morphs.Plane())
 
-spot = scene.add_entity(gs.morphs.MJCF(file='mujoco_menagerie/boston_dynamics_spot/spot.xml',
-    pos = (0, 0, 0),)
+spot = scene.add_entity(gs.morphs.MJCF(file='genesis/mujoco_menagerie/boston_dynamics_spot/spot.xml')
 )
 jnt_names = [
     'fl_hx',
@@ -62,36 +60,40 @@ cam.start_recording()
 import numpy as np
 # PD control
 for i in range(1500):
+    # if i == 0:
+    #   # testing what 0 position is
+    #   # 0 isn't in knee range, so probably change this
+    #     spot.control_dofs_position(
+    #         np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+    #         dofs_idx,
+    #     )
+    # elif i == 250:
+    #   # moving knees with floppy hips
+    #     spot.control_dofs_position(
+    #         np.array([0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1]),
+    #         dofs_idx,
+    #     )
+    #   # no clue what normal force values are, may need to change from 1
+    #     spot.control_dofs_force(
+    #         np.array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]), # making hips floppy so that knees can move
+    #         dofs_idx,
+    #     ),
+    # elif i == 500:
+    #   # setting force to 1
+    #     spot.control_dofs_force(
+    #         np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
+    #         dofs_idx,
+    #     )
     if i == 0:
-      # testing what 0 position is
-      # 0 isn't in knee range, so probably change this
-        spot.control_dofs_position(
-            np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-            dofs_idx,
-        )
-    elif i == 250:
-      # moving knees with floppy hips
-        spot.control_dofs_position(
-            np.array([0, 0, -1, 0, 0, -1, 0, 0, -1, 0, 0, -1]),
-            dofs_idx,
-        )
-      # no clue what normal force values are, may need to change from 1
-        spot.control_dofs_force(
-            np.array([0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]), # making hips floppy so that knees can move
-            dofs_idx,
-        ),
-    elif i == 500:
-      # setting force to 1
-        spot.control_dofs_force(
-            np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]),
-            dofs_idx,
-        )
-    elif i == 750:
       # moving stuff
-      spot.control_dofs_position(
-            np.array([0.75, 2, -2, 0.75, 2, -2, 0.75, 2, -2, 0.75, 2, -2]),
+        spot.control_dofs_force(
+            np.array([100, 100, 0, 100, 100, 00, 100, 100, 00, 100, 100, 00]), 
+            dofs_idx,)
+        spot.control_dofs_position(
+            np.array([0.29785, 0.055, -1, 0.29785, -0.055, -1, -0.29785, 0.055, -1, -0.29785, -0.055, -1]),
             dofs_idx,
         )
+
     elif i == 1000:
       # setting positions to roughly middle of range
         spot.control_dofs_position(

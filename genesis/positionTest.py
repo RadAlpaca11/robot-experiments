@@ -3,11 +3,12 @@ import genesis as gs
 import numpy as np
 
 gs.init(backend=gs.cpu)
+
 scene = gs.Scene(
     show_viewer    = True,
     viewer_options = gs.options.ViewerOptions(
         res           = (1280, 960),
-        camera_pos    = (3.5, 0.0, 2.5),
+        camera_pos    = (0, 3, 0.5),
         camera_lookat = (0.0, 0.0, 0.5),
         camera_fov    = 40,
         max_FPS       = 60,
@@ -21,11 +22,20 @@ scene = gs.Scene(
         ambient_light    = (0.1, 0.1, 0.1),
     ),
     renderer = gs.renderers.Rasterizer(),
+    rigid_options = gs.options.RigidOptions(
+        dt = 0.01,
+    ),
 )
+
+gs.options.SimOptions(
+    gravity = (0.0, 0.0, 0.0),
+)
+
 plane = scene.add_entity(gs.morphs.Plane())
 spot = scene.add_entity(
     gs.morphs.MJCF(file='genesis/mujoco_menagerie/boston_dynamics_spot/spot.xml',)
 )
+
 jnt_names = [
     'fl_hx',
     'fl_hy',
@@ -41,34 +51,49 @@ jnt_names = [
     'hr_kn',
 ]
 dofs_idx = [spot.get_joint(name).dof_idx_local for name in jnt_names]
+
 cam = scene.add_camera(
     res = (640, 480),
-    pos = (3.5, 0.0, 0.5),
+    pos = (0, 3, 0.5),
     fov = 100,
     GUI = True,
 )
 scene.build()
-
 fl_dof = np.arange(3)
 fr_dof = np.arange(3, 6)
 hl_dof = np.arange(6, 9)
 hr_dof = np.arange(9, 12)
 
-fl_end_effector = spot.get_link('fl_foot')
-fr_end_effector = spot.get_link('fr_foot')
-hl_end_effector = spot.get_link('hl_foot')
-hr_end_effector = spot.get_link('hr_foot')
+#rgb, depth, segmentation, normal = cam.render(depth = True, segmentation=True, normal=True)
 
-# this should give the position of the feet at spawn
-fl_pos = fl_end_effector.get_pos()
-fr_pos = fr_end_effector.get_pos()
-hl_pos = hl_end_effector.get_pos()
-hr_pos = hr_end_effector.get_pos()
+pos_idx = spot.get_dofs_position(dofs_idx_local = dofs_idx)
 
-print('fl_pos:', fl_pos)
-print('fr_pos:', fr_pos)
-print('hl_pos:', hl_pos)
-print('hr_pos:', hr_pos)
 
-for i in range(1500):
+#fl_pos = spot.get_pos(spot.get_body('fl_lleg'))
+# fr_pos = spot.get_pos('fr_lleg')
+# hl_pos = spot.get_pos('hl_lleg')
+# hr_pos = spot.get_pos('hr_lleg')
+
+print(pos_idx)
+# print("fr_pos:" + fr_pos)
+# print("hl_pos:" + hl_pos)
+# print("hr_pos:" + hr_pos)
+
+cam.start_recording()
+
+for i in range(1000):
+    # spot.zero_all_dofs_velocity()
+    spot.control_dofs_force(
+            np.array([1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]),
+            dofs_idx,
+        )
+    spot.control_dofs_position(
+            np.array([0.29785, 0.055, -1, 0.29785, -0.055, -1, -0.29785, 0.055, -1, -0.29785, -0.055, -1]),
+            dofs_idx,
+        )
+    cam.render()
     scene.step()
+    if i==999:
+        print(pos_idx)
+
+cam.stop_recording(save_to_filename='genesis/picsAndVids/noGrav2.mp4', fps=60)

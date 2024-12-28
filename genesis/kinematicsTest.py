@@ -27,7 +27,6 @@ scene = gs.Scene(
         substeps = 4,
     ),
     renderer = gs.renderers.Rasterizer(), # using rasterizer for camera rendering
-    show_viewer = True,
 )
 plane = scene.add_entity(gs.morphs.Plane())
 
@@ -37,7 +36,7 @@ panda = scene.add_entity(
 
 cube = scene.add_entity(
     gs.morphs.Box(
-        size = (0.04, 0.04, 0.04),
+        size = (0.04, 0.04, 0.08),
         pos = (0.65, 0.0, 0.02),
     )
 )
@@ -68,8 +67,8 @@ gb, depth, segmentation, normal = cam.render(depth=True, segmentation=True, norm
 
 cam.start_recording()
 
-motors_dof = np.arrange(7)
-fingers_dof = np.arrange(7,9)
+motors_dof = np.arange(7)
+fingers_dof = np.arange(7,9)
 
 # these are tuned for the specific robot (panda)
 panda.set_dofs_kp(
@@ -127,5 +126,6 @@ qpos = panda.inverse_kinematics(
 panda.control_dofs_position(qpos[:-2], motors_dof)
 for i in range(200):
     scene.step()
+    cam.render()
 
-cam.stop_recording(save_to_filename='picsAndVids/video1.mp4', fps=60)
+cam.stop_recording(save_to_filename='picsAndVids/kinematics.mp4', fps=60)

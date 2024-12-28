@@ -55,20 +55,38 @@ cam = scene.add_camera(
 
 scene.build()
 
-fl_dof = np.arrange(3)
-fr_dof = np.arrange(3, 6)
-hl_dof = np.arrange(6, 9)
-hr_dof = np.arrange(9, 12)
+fl_dof = np.arange(3)
+fr_dof = np.arange(3, 6)
+hl_dof = np.arange(6, 9)
+hr_dof = np.arange(9, 12)
 
-fl_end_effector = spot.get_link('FL')
-fr_end_effector = spot.get_link('FR')
-hl_end_effector = spot.get_link('HL')
-hr_end_effector = spot.get_link('HR')
+fl_end_effector = spot.get_link('fl_lleg')
+fr_end_effector = spot.get_link('fr_lleg')
+hl_end_effector = spot.get_link('hl_lleg')
+hr_end_effector = spot.get_link('hr_lleg')
 
 gb, depth, segmentation, normal = cam.render(depth=True, segmentation=True, normal=True)
 
 cam.start_recording()
 
+fl_qpos = spot.inverse_kinematics(
+    link = fl_end_effector,
+    pos = np.array([1, 0, 1]),
+)
+
+fl_qpos[-2:] = 0.04
+path = spot.plan_path(
+    qpos_goal = fl_qpos,
+    num_waypoints = 200
+)
+for waypoint in path:
+    spot.control_dofs_position(waypoint)
+    scene.step()
+    cam.render()
+
+for i in range(100):
+    scene.step()
+    cam.render()
 # add movement code here
 # could pick values
 # if the positionTest code works, we can add it to this code and then add or subtract to the starting positions

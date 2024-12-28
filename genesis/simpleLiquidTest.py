@@ -1,7 +1,7 @@
 # This is a simple test combining the liquid simulation tutorial with previous rendering and recording code
 import genesis as gs
 
-gs.init()
+gs.init(backend=gs.cpu)
 
 # combination of previous code used to set up scene, and instructions for fluid simulation
 scene = gs.Scene(
@@ -60,7 +60,7 @@ scene.build()
 
 cam.start_recording()
 
-for i in range(1000):
+for i in range(250):
     scene.step()
     cam.render()
 
