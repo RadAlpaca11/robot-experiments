@@ -55,21 +55,43 @@ cam = scene.add_camera(
 )
 
 scene.build()
-if_dofs = np.arange(3)
-mf_dofs = np.arange(3, 7)
-rf_dofs = np.arange(7, 11)
-th_dofs = np.arange(11, 15)
+# [ mcp, rot, pip, dip ]
+if_dofs = np.arange(4)
+mf_dofs = np.arange(4, 8)
+rf_dofs = np.arange(8, 12)
+th_dofs = np.arange(12, 16)
 
-for i in range(1000):
-    scene.step()
-    # trying to move index finger
+hand.set_dofs_kp(
+    np.array([3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0])
+)
+
+hand.set_dofs_kv(
+    np.array([0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01])
+)
+
+cam.start_recording()
+
+for i in range(2000):
     if i==0:
-        hand.control_dofs_force(
-            np.array([10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
-            dofs_idx,
-        )
-        
         hand.control_dofs_position(
-            np.array([1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0]),
-            dofs_idx,
+            np.array([1, 0, 1, 1]),
+            dofs_idx[if_dofs],
         )
+    if i==500:
+        hand.control_dofs_position(
+            np.array([1, 0, 1, 1]),
+            dofs_idx[mf_dofs],
+        )
+    if i==1000:
+        hand.control_dofs_position(
+            np.array([1, 0, 1, 1]),
+            dofs_idx[rf_dofs],
+        )
+    if i==1500:
+        hand.control_dofs_position(
+            np.array([1, 0, 1, 1]),
+            dofs_idx[th_dofs],
+        )
+    cam.render()
+    scene.step()
+cam.stop_recording(save_to_file='genesis/picsAndVids/handTest.mp4')
