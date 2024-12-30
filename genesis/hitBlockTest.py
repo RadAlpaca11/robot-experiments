@@ -114,6 +114,8 @@ for waypoint in path:
     cam.render()
 # hand is now lowered
 
+sphere_pos = sphere.get_pos()
+
 # let robot reach waypoint
 for i in range(750):
     scene.step()
@@ -130,5 +132,10 @@ for i in range(750):
             dofs_idx[:1],
         )
     cam.render()
+    # not 100% sure i did this correctly
+    # this is meant to figure out when the sphere passes the second panda at x-coordinate -5
+    if sphere_pos[0] == -5:
+        print("step:"+ i)
+        print("sphere_pos:" + sphere_pos)
 
 cam.stop_recording(save_to_filename='picsAndVids/hitBlockTest.mp4', fps=60)

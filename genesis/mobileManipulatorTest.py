@@ -51,6 +51,10 @@ cam = scene.add_camera(
 scene.build()
 cam.start_recording()
 
+# this was in kinematicsTest, and this robot has the same number of dofs
+motors_dof = np.arange(7)
+fingers_dof = np.arange(7,9)
+
 robot.set_dofs_kp(
     np.array([40, 40, 40, 20, 20, 10, 10, 20, 20])
 )
@@ -90,3 +94,21 @@ qpos = robot.inverse_kinematics(
     pos = np.array([0.65, 0.0, 0.135]),
     quat = np.array([0, 1, 0, 0]),
 )
+
+robot.control_dofs_position(qpos[:-2], motors_dof)
+robot.control_dofs_force(np.array([-0.5, -0.5]), fingers_dof)
+
+for i in range(100):
+    scene.step()
+    cam.render()
+
+qpos = robot.inverse_kinematics(
+    link = end_effector,
+    pos = np.array([0.65, 0.0, 0.3]),
+    quat = np.array([0, 1, 0, 0]),
+)
+robot.control_dofs_position(qpos[:-2], motors_dof)
+for i in range(200):
+    scene.step()
+    cam.render()
+
