@@ -1,5 +1,6 @@
 import genesis as gs
 import numpy as np
+import IPython
 
 gs.init(backend=gs.cpu)
 
@@ -23,7 +24,7 @@ scene = gs.Scene(
     renderer = gs.renderers.Rasterizer(), # using rasterizer for camera rendering
 )
 plane = scene.add_entity(gs.morphs.Plane())
-# Spawns palm-up
+# Spawns palm-up?
 hand = scene.add_entity(
     gs.morphs.MJCF(file='genesis/mujoco_menagerie/leap_hand/right_hand.xml')
 )
@@ -55,22 +56,25 @@ cam = scene.add_camera(
 )
 
 scene.build()
+IPython.embed()
+
 # [ mcp, rot, pip, dip ]
 if_dofs = np.arange(4)
 mf_dofs = np.arange(4, 8)
 rf_dofs = np.arange(8, 12)
 th_dofs = np.arange(12, 16)
 
+# Taken from xml file
 hand.set_dofs_kp(
     np.array([3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0])
 )
-
 hand.set_dofs_kv(
     np.array([0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01])
 )
 
 cam.start_recording()
 
+# Attempting to move each finger one at a time
 for i in range(2000):
     if i==0:
         hand.control_dofs_position(
@@ -94,4 +98,5 @@ for i in range(2000):
         )
     cam.render()
     scene.step()
+
 cam.stop_recording(save_to_file='genesis/picsAndVids/handTest.mp4')
