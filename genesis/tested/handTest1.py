@@ -1,6 +1,6 @@
 import genesis as gs
 import numpy as np
-import IPython
+# import IPython
 
 gs.init(backend=gs.cpu)
 
@@ -9,8 +9,8 @@ scene = gs.Scene(
     viewer_options = gs.options.ViewerOptions(
         res           = (1280, 960),
         camera_pos    = (0, 0.0, 2),
-        camera_lookat = (0.0, 0.0, 0.5),
-        camera_fov    = 40,
+        camera_lookat = (0.0, 0.0, 0),
+        camera_fov    = 15,
         max_FPS       = 60,
     ),
     vis_options = gs.options.VisOptions(
@@ -47,22 +47,25 @@ jnt_names = [
     'th_ipl'
 ]
 dofs_idx = [hand.get_joint(name).dof_idx_local for name in jnt_names]
+dofs_idx_split = np.array_split(dofs_idx, 4)
+# 0 is index, 1 is middle, 2 is ring, 3 is thumb
 
 cam = scene.add_camera(
     res = (640, 480),
-    pos = (0, 0.0, 2),
-    fov = 100,
+    pos = (1.5, -1.5, 1.0),
+    lookat = (0, 0, 0),
+    fov = 30,
     GUI = True,
 )
 
 scene.build()
-IPython.embed()
+# IPython.embed()
 
 # [ mcp, rot, pip, dip ]
-if_dofs = np.arange(4)
-mf_dofs = np.arange(4, 8)
-rf_dofs = np.arange(8, 12)
-th_dofs = np.arange(12, 16)
+# if_dofs = np.arange(4)
+# mf_dofs = np.arange(4, 8)
+# rf_dofs = np.arange(8, 12)
+# th_dofs = np.arange(12, 16)
 
 # Taken from xml file
 hand.set_dofs_kp(
@@ -72,6 +75,11 @@ hand.set_dofs_kv(
     np.array([0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01])
 )
 
+hand.set_dofs_force_range(
+    np.array([-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100]),
+    np.array([100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]),
+)
+
 cam.start_recording()
 
 # Attempting to move each finger one at a time
@@ -79,24 +87,24 @@ for i in range(2000):
     if i==0:
         hand.control_dofs_position(
             np.array([1, 0, 1, 1]),
-            dofs_idx[if_dofs],
+            dofs_idx_split[0],
         )
     if i==500:
         hand.control_dofs_position(
             np.array([1, 0, 1, 1]),
-            dofs_idx[mf_dofs],
+            dofs_idx_split[1],
         )
     if i==1000:
         hand.control_dofs_position(
             np.array([1, 0, 1, 1]),
-            dofs_idx[rf_dofs],
+            dofs_idx_split[2],
         )
     if i==1500:
         hand.control_dofs_position(
             np.array([1, 0, 1, 1]),
-            dofs_idx[th_dofs],
+            dofs_idx_split[3],
         )
     cam.render()
     scene.step()
 
-cam.stop_recording(save_to_file='genesis/picsAndVids/handTest.mp4')
+cam.stop_recording(save_to_filename='genesis/picsAndVids/handTest1.mp4')

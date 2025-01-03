@@ -33,31 +33,6 @@ plane = scene.add_entity(gs.morphs.Plane())
 panda = scene.add_entity(
     gs.morphs.MJCF(file='genesis/mujoco_menagerie/franka_emika_panda/panda.xml',)
 )
-# would it be simpler to use parallel simulation?
-panda2 = scene.add_entity(
-    gs.morphs.MJCF(
-        file='genesis/mujoco_menagerie/franka_emika_panda/panda.xml',
-        pos=(-5, 0, 0.2)
-    )
-)
-
-# blocks don't roll very well
-sphere = scene.add_entity(
-    gs.morphs.Sphere(
-        pos = (0, 0.61, 0.02),
-        radius = (0.1)
-    )
-)
-
-# testing a barrier
-right_wall = scene.add_entity(
-    gs.morphs.Box(
-        pos = (-2.5, 0.85, 0.25),
-        size = (5, 0.2, 0.5),
-        collision = True,
-        fixed = True,
-    )
-)
 
 jnt_names = [
     'joint1',
@@ -71,7 +46,6 @@ jnt_names = [
     'finger_joint2',
 ]
 dofs_idx = [panda.get_joint(name).dof_idx_local for name in jnt_names]
-dofs2_idx = [panda2.get_joint(name).dof_idx_local for name in jnt_names]
 
 cam = scene.add_camera(
     res = (640, 480),
@@ -80,7 +54,29 @@ cam = scene.add_camera(
     GUI = True,
 )
 
-scene.build()
+
+# blocks don't roll very well
+sphere = scene.add_entity(
+    gs.morphs.Sphere(
+        pos = (0, 0.62, 0.02),
+        radius = (0.1)
+    )
+)
+
+# testing a barrier
+right_wall = scene.add_entity(
+    gs.morphs.Box(
+        pos = (-2.5, 1, 0.25),
+        size = (5, 0.25, 0.5),
+        collision = True,
+        fixed = True,
+    )
+)
+
+
+n_envs = 2
+scene.build(n_envs=n_envs, env_spacing = (5, 0))
+
 
 cam.start_recording()
 
@@ -102,20 +98,6 @@ panda.set_dofs_force_range(
 # get the end-effector link
 end_effector = panda.get_link('hand')
 
-panda2.set_dofs_kp(
-    np.array([4500, 4500, 3500, 3500, 2000, 2000, 2000, 100, 100]),
-)
-panda2.set_dofs_kv(
-    np.array([450, 450, 350, 350, 200, 200, 200, 10, 10]),
-)
-panda2.set_dofs_force_range(
-    np.array([-87, -87, -87, -87, -12, -12, -12, -100, -100]),
-    np.array([87, 87, 87, 87, 12, 12, 12, 100, 100]),
-)
-
-# get the end-effector link
-end_effector2 = panda2.get_link('hand')
-
 # move to pose before grasp
 qpos = panda.inverse_kinematics(
     link = end_effector,
@@ -129,45 +111,21 @@ path = panda.plan_path(
     qpos_goal = qpos,
     num_waypoints = 200 # 2s duration
 )
-
-panda2.control_dofs_position(
-    np.array([0, 0, 0, -0.07, 0, 0, 0, 0, 0]),
-    dofs2_idx,
-)
-
 # execute path
 # does this need to be separate from the second loop?
 for waypoint in path:
     panda.control_dofs_position(waypoint)
     scene.step()
     cam.render()
+# hand is now lowered
 
-# qpos2 = panda2.inverse_kinematics(
-#     link = end_effector2,
-#     pos = np.array([-4.35, 0.0, 0.2]),
-#     #quat = np.array([1, 0, 0, 0]),
-# )
-
-# # plan path
-# qpos2[-2:] = 0.04
-# path2 = panda2.plan_path(
-#     qpos_goal = qpos2,
-#     num_waypoints = 200 # 2s duration
-# )
-# for waypoint2 in path2:
-#     panda2.control_dofs_position(waypoint2)
-#     scene.step()
-#     cam.render()
-
-# # hand is now lowered
-
-
+sphere_pos = sphere.get_pos()
 
 # let robot reach waypoint
-for i in range(1000):
+for i in range(250):
     scene.step()
 
-    if i == 0:
+    if i == 250:
         panda.control_dofs_velocity(
             #velocity lower than 5 moves over the block
             np.array([20, 0, 0, 0, 0, 0, 0, 0, 0])[:1],
@@ -176,29 +134,9 @@ for i in range(1000):
     cam.render()
     # not 100% sure i did this correctly
     # this is meant to figure out when the sphere passes the second panda at x-coordinate -5
-    active_sphere_pos = sphere.get_pos()
-    if active_sphere_pos[0] <= -4.75:
-        #print("step:"+ i)
-        #print("sphere_pos:" + active_sphere_pos)
-        sphere_pos = sphere.get_pos()
-        break
+    if sphere_pos[0] == -5:
+        print("step:"+ i)
+        print("sphere_pos:" + sphere_pos)
 
-qpos2 = panda2.inverse_kinematics(
-    link = end_effector2,
-    pos = np.array(sphere_pos),
-    quat = np.array([0, 1, 0, 0]),
-)
-path2 = panda2.plan_path(
-    qpos_goal = qpos2,
-    num_waypoints = 200,
-)
-for waypoint in path2:
-    panda2.control_dofs_position(waypoint)
-    scene.step()
-    cam.render()
 
-for i in range(50):
-    scene.step()
-    cam.render()
-
-cam.stop_recording(save_to_filename='picsAndVids/hitBlockTest.mp4', fps=60)
+cam.stop_recording(save_to_filename='picsAndVids/parallelizedHitBlockTest.mp4', fps=60)

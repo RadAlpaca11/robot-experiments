@@ -68,6 +68,8 @@
 
 - [documentation](https://genesis-world.readthedocs.io/en/latest/api_reference/index.html)
 
+- 12/17/24 when testing inverse kinematics with spot: [Genesis] [14:46:43] [ERROR] Motion planning is not yet supported for rigid entities with free joints.
+
 ## Questions:
 - inverse kinematics doesn't need explicit definitions of joints?
 - what materials and shapes are avalible in the simulator?
