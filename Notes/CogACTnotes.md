@@ -25,3 +25,6 @@ conda create --name cogact python=3.10
 
 - Final issue: Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-2-7b-hf/resolve/main/config.json.
 Access to model meta-llama/Llama-2-7b-hf is restricted. You must have access to it and be authenticated to access it. Please log in.
+
+# 1/7/25
+- llama is the llm
