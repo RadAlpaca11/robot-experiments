@@ -94,14 +94,14 @@ spot.control_dofs_position(
 )
 
 cam.start_recording()
-
+x=0
 for i in range(750):
-    if i==0:
+    if x==1:
         spot.control_dofs_position(
             np.array([0.15, 0.5,-1, -0.15, 0.5, -1, 0.15, 0.5, -1, -0.15, 0.5, -1]),
             dofs_idx,
         )
-    if i>=100:
+    if x>=100:
         spot.control_dofs_position(
             np.array([0, 1, -2]),
             dofs_idx[:3],
@@ -110,6 +110,27 @@ for i in range(750):
             np.array([0, 1, -2]),
             dofs_idx[9:],
         )
+    if x>=110:
+        spot.control_dofs_position(
+            np.array([0.15, 0.45, -1.2]),
+            dofs_idx[:3],
+        )
+        spot.control_dofs_position(
+            np.array([-0.15, 0.45, -1.2]),
+            dofs_idx[9:],
+        )
+    if x>=120:
+        spot.control_dofs_position(
+            np.array([-0.15, 0.45, -1.2]),
+            dofs_idx[3:6],
+        )
+        spot.control_dofs_position(
+            np.array([0.15, 0.45, -1.2]),
+            dofs_idx[6:9],
+        )
+    if x==150:
+        x=0
+    x+=1
     cam.render()
     scene.step()
 
