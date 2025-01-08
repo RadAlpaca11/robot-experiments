@@ -96,11 +96,13 @@ spot.control_dofs_position(
 cam.start_recording()
 x=0
 for i in range(750):
+    # standing up
     if x==1:
         spot.control_dofs_position(
             np.array([0.15, 0.5,-1, -0.15, 0.5, -1, 0.15, 0.5, -1, -0.15, 0.5, -1]),
             dofs_idx,
         )
+    # raising fl and hr legs
     if x>=100:
         spot.control_dofs_position(
             np.array([0, 1, -2]),
@@ -110,6 +112,7 @@ for i in range(750):
             np.array([0, 1, -2]),
             dofs_idx[9:],
         )
+    #fl and hr legs forward
     if x>=110:
         spot.control_dofs_position(
             np.array([0.15, 0.45, -1.2]),
@@ -119,7 +122,20 @@ for i in range(750):
             np.array([-0.15, 0.45, -1.2]),
             dofs_idx[9:],
         )
+    
+    # it wasn't working earlier because this was missing
+    # raising fr and hl legs
     if x>=120:
+        spot.control_dofs_position(
+            np.array([0, 1, -2]),
+            dofs_idx[:3],
+        )
+        spot.control_dofs_position(
+            np.array([0, 1, -2]),
+            dofs_idx[9:],
+        )
+    #fr and hl legs forward
+    if x>=130:
         spot.control_dofs_position(
             np.array([-0.15, 0.45, -1.2]),
             dofs_idx[3:6],
