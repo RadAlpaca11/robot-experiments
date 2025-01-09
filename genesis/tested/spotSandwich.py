@@ -36,6 +36,8 @@ spot3 = scene.add_entity(
     gs.morphs.MJCF(file='mujoco_menagerie/boston_dynamics_spot/spot.xml',
     pos = (0, 0, 5),)
 )
+# spot4 starts off in the ground because z=0
+# it will be flung into the air when the scene starts
 spot4 = scene.add_entity(
     gs.morphs.MJCF(file='mujoco_menagerie/boston_dynamics_spot/spot.xml',
     pos = (0, 0, 0),)
@@ -67,6 +69,7 @@ import numpy as np
 
 for i in range(1000):
     scene.step()
+    # camera rotates around origin of the plane
     cam.set_pose(
         pos = (3.0 * np.sin(i/60), 3.0 * np.cos(i/60), 2.5),
         lookat = (0, 0, 0.5),
