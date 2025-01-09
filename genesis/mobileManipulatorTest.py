@@ -1,5 +1,6 @@
 # incomplete
 # this is going to pick up a block like in kinematicsTest, and then hopefully move using the wheels
+# unsure how to use the wheels, they don't seem to have actuators in the xml file
 
 import numpy as np
 import genesis as gs
