@@ -1,3 +1,18 @@
+Genesis is a universal physics engine developed entirely in python. It is lightweight, fast, and very user-friendly.
+
+# Installation
+Getting Genesis installed is as easy as:
+```
+pip install genesis-world
+```
+and installing PyTorch.
+
+# Learning to use the simulator
+The genesis documentation has detailed tutorials, which we followed through, built off of, and quickly learned how to write our own programs for the simulator.
+
+
+
+
 ## Notes:
 - Completely in python
 
@@ -26,7 +41,7 @@
 - we've been fixing it by increasing fov, but it gets a fisheye lense effect at high values
 - if GUI is set to True, it opens a bunch of windows while the simulation is running (not sure what that is)
 
--steps:
+- steps:
 
     ```
     for i in range(1000):

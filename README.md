@@ -10,3 +10,6 @@
 * [CogACT Notes](Notes/CogACTnotes.md)
 * [OpenVLA Notes](Notes/OpenVLAnotes.md)
 * [Genesis Notes](Notes/genesisNotes.md)
+
+## 1/7
+* [Agi Bot World Notes](Notes/AgiBotWorldNotes.md)
