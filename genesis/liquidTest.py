@@ -1,3 +1,5 @@
+# Untested due to simpleLiquidTest running extremely slow
+
 # there's a lot going on here
 # there should be liquid in the scene
 # there should be a fluid emitter in the scene?

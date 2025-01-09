@@ -1,20 +1,58 @@
+# Genesis sources
+[Website](https://genesis-embodied-ai.github.io/)
+
+[Code](https://github.com/Genesis-Embodied-AI/Genesis)
+
+[Documentation](https://genesis-world.readthedocs.io/en/latest/)
+
+Paper is coming soon.
+
+# Summary
 Genesis is a universal physics engine developed entirely in python. It is lightweight, fast, and very user-friendly.
 
+We have gone through some of the Getting Started section of the [user guide](https://genesis-world.readthedocs.io/en/latest/user_guide/index.html).
+
+## User Guide progress
+- [x] Hello, Genesis
+- [x] Visualization & Rendering
+- [x] Control Your Robot
+- [ ] Parallel Simulation
+- [x] Inverse Kinematics & Motion Planning
+- [ ] Advanced and Parallel IK
+- [x] Beyond Rigid Bodies (we found this runs really slow)
+- [ ] Interactive Information Access and Debugging
+- [ ] Training Locomotion Policies with RL
+- [ ] Training Drone Hovering Policies with RL
+- [ ] Soft Robots
+- [x] Command Line Tools
+
+Using these guides to learn, and occasionally referencing the API Reference has allowed us to write our own code for the simulator.
+
 # Installation
-Getting Genesis installed is as easy as:
+Getting Genesis installed was as easy as:
 ```
 pip install genesis-world
 ```
 and installing PyTorch.
 
-# Learning to use the simulator
-The genesis documentation has detailed tutorials, which we followed through, built off of, and quickly learned how to write our own programs for the simulator.
+# Notes
+The gs view command for the terminal opens up two pop up windows, one rendering the starting position of the model, and the other a joint control interface with sliders to control the position of the joints.
+```
+gs view path/to/model
+```
+We have utilized this function for planning positions for joints, noting down values to use in our code.
 
+- Motion planning is not yet supported for free joints.
 
+There are two functions for changing the position of a joint:
+``` python
+# This moves the joint to the position, which relies on defined force ranges
+robot.control_dofs_position(position, dofs_idx)
 
+# This "teleports" the joint to the position
+robot.set_dofs_position(position, dofs_idx)
+```
 
-## Notes:
-- Completely in python
 
 ### Making things exist:
 
@@ -81,10 +119,4 @@ The genesis documentation has detailed tutorials, which we followed through, bui
 
 - replacing control with set makes the joints "teleport" rather than moving
 
-- [documentation](https://genesis-world.readthedocs.io/en/latest/api_reference/index.html)
-
 - 12/17/24 when testing inverse kinematics with spot: [Genesis] [14:46:43] [ERROR] Motion planning is not yet supported for rigid entities with free joints.
-
-## Questions:
-- inverse kinematics doesn't need explicit definitions of joints?
-- what materials and shapes are avalible in the simulator?
