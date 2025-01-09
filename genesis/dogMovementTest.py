@@ -1,10 +1,12 @@
 import genesis as gs
 import numpy as np
 
+# gs.gpu by default
 gs.init(backend=gs.cpu)
 
 scene = gs.Scene(
     show_viewer    = True,
+    # this is the viewer window that opens while the simulation is running, rather than the camera that records the video
     viewer_options = gs.options.ViewerOptions(
         res           = (1280, 960),
         camera_pos    = (3.5, 0.0, 2.5),
@@ -28,6 +30,7 @@ spot = scene.add_entity(
 )
 # seems like fl, is front left, fr is front right, hl is hind left, and hr is hind right
 # hx is hip x, hy is hip y, and kn is knee
+# indexing joints to make them easier to control
 jnt_names = [
     'fl_hx',
     'fl_hy',
@@ -46,6 +49,8 @@ dofs_idx = [spot.get_joint(name).dof_idx_local for name in jnt_names]
 dofs_idx_split = np.array_split(dofs_idx, 3)
 # 0 is front left, 1 is front right, 2 is hind left, 3 is hind right
 
+
+# spot balances better with the arm; it tends to fall backwards without
 arm_jnts = [
     'arm_sh0',
     'arm_sh1',
@@ -57,6 +62,7 @@ arm_jnts = [
 ]
 arm_idx = [spot.get_joint(name).dof_idx_local for name in arm_jnts]
 
+# this camera records the video
 cam = scene.add_camera(
     res = (640, 480),
     pos = (0, 2, 0.5),
@@ -94,6 +100,7 @@ spot.control_dofs_position(
 )
 
 cam.start_recording()
+# x resets after each step so that the walk cycle can loop
 x=0
 for i in range(750):
     # standing up
