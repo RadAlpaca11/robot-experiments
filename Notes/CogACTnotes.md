@@ -1,13 +1,22 @@
-CogACT improves performance with a smaller model size, compared to other VLAs.
+# Sources
+[Website](https://cogact.github.io/)
 
-# The model
+[Code](https://github.com/microsoft/CogACT)
+
+[Paper](https://cogact.github.io/CogACT_paper.pdf)
+
+# Summary
+CogACT is a VLA architecture derived from VLM. 
+It has a specialized action model trained on outputs from the VLM and improves performance with a model size smaller than other VLAs.
+
+## The model
 The CogACT model leverages a pretrained Prismatic-7b VLM, with the output being used as the input for the action model.
 The action model generates a series of actions, with a diffusion modeling process predicting the action.
 The model also predicts actions for multiple time steps with and Adaptive Action Ensemble strategy to aggregate similiatities between actions.
 
-
-
 # Getting it working
+**We are currently unable to run the model (more details below)**
+
 We used miniconda to set up the environment:
 ```
 conda create --name cogact python=3.10
@@ -28,13 +37,9 @@ Cannot access gated repo for url https://huggingface.co/meta-llama/Llama-2-7b-hf
 Access to model meta-llama/Llama-2-7b-hf is restricted. You must have access to it and be authenticated to access it. Please log in.
 ```
 
-After getting setup in HuggingFace we tried again.
+After getting setup in HuggingFace we tried again, and the access issue was solved.
 
-
-
-# Notes on CogACT
-- Improves performance with smaller model size
-- vision model and language models are separate, but combined and pre-trained
-- does it build it's own prompts?
-- kinda repeating?
-- Unseen means the first time? (We're pretty sure)
+Currently we are unable to run the model. 
+It may have to do with some libraries being missing (TensorRT, and potentially more). 
+It begins running and then stops at the same point every time when loading the VLM. 
+The terminal does not give an error, it just stops outputting anything until we interrupt it. 
