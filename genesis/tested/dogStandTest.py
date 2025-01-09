@@ -56,6 +56,7 @@ cam = scene.add_camera(
 scene.build()
 
 # Taken directly from xml file
+# With spot, kp, kv, and force range must be set or it cannot move
 spot.set_dofs_kp(
     np.array([500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500, 500]),
     dofs_idx,

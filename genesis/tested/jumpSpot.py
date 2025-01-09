@@ -75,21 +75,25 @@ cam.start_recording()
 
 for i in range(250):
     if i==0:
+        # crouching
         spot.control_dofs_position(
             np.array([0, 1, -2.25, 0, 1, -2.25, 0, 1, -2.25, 0, 1, -2.25]),
             dofs_idx,
         )
     if i==100:
+        # extending back legs first; spot tends to do backflips
         spot.control_dofs_position(
             np.array([0, 1, -2.25, 0, 1, -2.25, 0, 0, -0.25, 0, 0, -0.25]),
             dofs_idx
         )
     if i==125:
+        # extending front legs
         spot.control_dofs_position(
             np.array([0, 1.15, -0.5, 0, 1.15, -0.5, 0, 0, -0.25, 0, 0, -0.25]),
             dofs_idx,
         )
     if i==132:
+        # drawing legs in for more airtime
         spot.control_dofs_position(
             np.array([0, 1, -2.25, 0, 1, -2.25, 0, 1, -2.25, 0, 1, -2.25]),
             dofs_idx,

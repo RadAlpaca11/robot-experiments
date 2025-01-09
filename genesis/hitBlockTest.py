@@ -1,6 +1,8 @@
 import numpy as np
 import genesis as gs
 
+# doesn't currently work; sphere is not in range of panda2 long enough
+
 # init
 gs.init(backend=gs.cpu)
 
@@ -168,6 +170,7 @@ for i in range(1000):
     scene.step()
 
     if i == 0:
+        # first panda spins to hit sphere
         panda.control_dofs_velocity(
             #velocity lower than 5 moves over the block
             np.array([20, 0, 0, 0, 0, 0, 0, 0, 0])[:1],
@@ -183,6 +186,7 @@ for i in range(1000):
         sphere_pos = sphere.get_pos()
         break
 
+# when sphere is within range, second panda moves to hit sphere
 qpos2 = panda2.inverse_kinematics(
     link = end_effector2,
     pos = np.array(sphere_pos),
@@ -196,6 +200,7 @@ for waypoint in path2:
     panda2.control_dofs_position(waypoint)
     scene.step()
     cam.render()
+
 
 for i in range(50):
     scene.step()
