@@ -1,3 +1,6 @@
+# Summary
+We dissected a test robot to understand it's systems and components with the plan to find a way to make the robots functional again.
+
 # Notes:
 - Proximity and cliff sensors are same sensors
   - cliff sensors tilted down ~45 degrees

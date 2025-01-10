@@ -8,7 +8,7 @@
 Paper is coming soon.
 
 # Summary
-Genesis is a universal physics engine developed entirely in python. It is lightweight, fast, and very user-friendly.
+Genesis is a universal physics engine developed entirely in python, and controlled with python code. It is lightweight, fast, and very user-friendly. There are plans to include more features, including AI-generated scenes and assets.
 
 We have gone through some of the Getting Started section of the [user guide](https://genesis-world.readthedocs.io/en/latest/user_guide/index.html).
 
@@ -26,22 +26,35 @@ We have gone through some of the Getting Started section of the [user guide](htt
 - [ ] Soft Robots
 - [x] Command Line Tools
 
-Using these guides to learn, and occasionally referencing the API Reference has allowed us to write our own code for the simulator.
+Using these guides to learn, and occasionally utilizing the [API Reference](https://genesis-world.readthedocs.io/en/latest/api_reference/index.html) has allowed us to write our own code for the simulator.
 
 # Some of our work
 After working throught he first two tutorials in the user guide, we felt comfortable enough to start writing our own code, playing around with spawning assets.
 
-[![Spot sandwich](../genesis/picsAndVids/spotSandwich.mp4)](../genesis/tested/spotSandwich.py)
+<video src="../genesis/picsAndVids/spotSandwich.mp4" width="320" height="240" controls></video>
+
+[Spot sandwich](../genesis/tested/spotSandwich.py)
+
 
 After getting the hang of that, and successfully completing the Control Your Robot tutorial, we started working on movement. We wanted to explore another model, and after struggling with spot, we decided to try a hand model.
 When looking at the xml for the hand model, we finally realized that the joint positions were in radians!
 This was also when we discovered the gs view command (see below), which helped us plan the positions for the joints.
-[![Hand movement](../genesis/picsAndVids/handTest2.mp4)](../genesis/tested/handTest2.py)
 
-[![Spot jumping](../genesis/picsAndVids/jump.mp4)](../genesis/tested/jumpSpot.py)
+<video src="../genesis/picsAndVids/handTest2.mp4" width="320" height="240" controls></video>
 
-[![Spot trotting](../genesis/picsAndVids/spotTrot1.mp4)](../genesis/tested/spotTrot1.py)
+[Hand movement](../genesis/tested/handTest2.py)
 
+We then went back to Spot, and took a while trying to get the robot to jump. It took some trial and error, but we finally got it to work.
+
+<video src="../genesis/picsAndVids/jump.mp4" width="320" height="240" controls></video>
+
+[Spot jumping](../genesis/tested/jumpSpot.py)
+
+And then we tried getting Spot to trot. It took a while to get it to stay standing, but discovered that you just really needed to move the legs back down quickly, so that the robot didn't fall over.
+
+<video src="../genesis/picsAndVids/spotTrot1.mp4" width="320" height="240" controls></video>
+
+[Spot trotting](../genesis/tested/spotTrot1.py)
 
 
 # Installation
@@ -50,6 +63,13 @@ Getting Genesis installed was as easy as:
 pip install genesis-world
 ```
 and installing PyTorch.
+
+# Key findings
+- Genesis is very user-friendly and quick to get started with.
+- We found the guides and API Reference very helpful in learning how to use the simulator.
+- The gs view command is very useful for planning joint positions. (more details in Notes)
+- There are plans to have the ability to use AI to generate scenes, assets, and more to the simulator.
+- A paper is coming soon, and will hopefully provide deeper insights into the model.
 
 # Notes
 The gs view command for the terminal opens up two pop up windows, one rendering the starting position of the model, and the other a joint control interface with sliders to control the position of the joints.

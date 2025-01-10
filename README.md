@@ -30,5 +30,6 @@ Things that do not work as intended, but we are no longer working on.
 ### mujoco_menagerie
 This is a repository we found that contained several models for robots we wanted to use.
 
-### 
+### picsAndVids
+A collection of pictures and videos we have taken while working with Genesis.
 

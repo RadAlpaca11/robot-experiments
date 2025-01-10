@@ -18,6 +18,7 @@ The model also predicts actions for multiple time steps with and Adaptive Action
 
 # Getting it working
 **We are currently unable to run the model (more details below)**
+
 Needs cuda to run.
 
 Loading the VLA takes a few minutes (5+) even with the small size model.

@@ -10,7 +10,7 @@ The majority area was in the home.
 
 It seems as if the 100 robots are made up of many 6DoF robotic arms and mobile 2 arm robots.
 
-The training was in a facility of over 4,000 square meters (imagine robots in IKEA).
+The training was in a facility of over 4,000 square meters with partially set-up environments for the robots to test in (imagine robots in IKEA).
 
 # What is in the dataset?
 Various hardware including, visual tactile sensors, 6DoF robotic arms, mobile 2 arm robots.
@@ -25,14 +25,10 @@ We got access to the dataset through Hugging Face, then started following the At
 Visualizing the dataset opens in rerun and has many windows:
 - action graph
 - observation.images.back_left_fisheye
-    - this is the view of the person controlling the robot
 - observation.images.back_right_fisheye
 - observation.images.cam_top_depth
-    - depth sensor
 - observation.images.hand_left
-    - the left hand is the one that picks up the items to scan
 - observation.images.hand_right
-    - the right hand is the one that scans the items
 - observation.images.head_center_fisheye
 - obsercation.images.head_left_fisheye
 - observation.images.head_right_fisheye
@@ -56,7 +52,7 @@ python scripts/convert_to_lerobot.py --src_path ./data/datafile --task_id 123 --
 python scripts/visualize_dataset.py --task_id 123 --dataset_path ./data/datafile_lerobot
 ```
 
-Depth camera kind of sees double.
+Depth camera appears to be seeing double.
 
 Because the dataset includes a Jupyter Notebook for training diffusion policies, this dataset would likely be quite easy to use for training.
 
