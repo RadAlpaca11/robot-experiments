@@ -9,6 +9,8 @@
 CogACT is a VLA architecture derived from VLM. 
 It has a specialized action model trained on outputs from the VLM and improves performance with a model size smaller than other VLAs.
 
+The model will only work on a server-class machine.
+
 ## The model
 The CogACT model leverages a pretrained Prismatic-7b VLM, with the output being used as the input for the action model.
 The action model generates a series of actions, with a diffusion modeling process predicting the action.
@@ -16,6 +18,9 @@ The model also predicts actions for multiple time steps with and Adaptive Action
 
 # Getting it working
 **We are currently unable to run the model (more details below)**
+Needs cuda to run.
+
+Loading the VLA takes a few minutes (5+) even with the small size model.
 
 We used miniconda to set up the environment:
 ```
@@ -41,5 +46,8 @@ After getting setup in HuggingFace we tried again, and the access issue was solv
 
 Currently we are unable to run the model. 
 It may have to do with some libraries being missing (TensorRT, and potentially more). 
-It begins running and then stops at the same point every time when loading the VLM. 
+It begins running and then stops at the same point every time when loading the VLM. (Note, doesn't stop, just takes an insanely long time to output, and we didn't have enough patience).
 The terminal does not give an error, it just stops outputting anything until we interrupt it. 
+
+# Notes
+We are unable to find any helpful documentation for the code.

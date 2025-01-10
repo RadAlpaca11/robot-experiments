@@ -6,7 +6,7 @@
 [Paper](https://arxiv.org/abs/2406.09246)
 
 # Summary
-OpenVLA is a 7B papameter VLA that is pretrained on 970k episodes from the Open X-Embodiment dataset and focused on generalist robotics manipulation.
+OpenVLA is a 7B parameter VLA that is pretrained on 970k episodes from the Open X-Embodiment dataset and focused on generalist robotics manipulation.
 
 Results from testing show strong results for multi-purpose manipulation especially in multi-task and multi-object scenarios.
 More detailed results can be found on their website.
