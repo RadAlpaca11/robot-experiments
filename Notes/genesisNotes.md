@@ -40,19 +40,19 @@ After getting the hang of that, and successfully completing the Control Your Rob
 When looking at the xml for the hand model, we finally realized that the joint positions were in radians!
 This was also when we discovered the gs view command (see below), which helped us plan the positions for the joints.
 
-<video src="../genesis/picsAndVids/handTest2.mp4" width="320" height="240" controls></video>
+https://github.com/user-attachments/assets/cfcd90b1-ed8e-406d-824c-a38d1df502ac
 
 [Hand movement](../genesis/tested/handTest2.py)
 
 We then went back to Spot, and took a while trying to get the robot to jump. It took some trial and error, but we finally got it to work.
 
-<video src="../genesis/picsAndVids/jump.mp4" width="320" height="240" controls></video>
+https://github.com/user-attachments/assets/9fa80f09-db36-4d7c-848e-8d0a78973f04
 
 [Spot jumping](../genesis/tested/jumpSpot.py)
 
 And then we tried getting Spot to trot. It took a while to get it to stay standing, but discovered that you just really needed to move the legs back down quickly, so that the robot didn't fall over.
 
-<video src="../genesis/picsAndVids/spotTrot1.mp4" width="320" height="240" controls></video>
+https://github.com/user-attachments/assets/c50ba2b4-d396-446d-bcb7-c799630f008e
 
 [Spot trotting](../genesis/tested/spotTrot1.py)
 
