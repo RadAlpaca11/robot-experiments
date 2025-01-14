@@ -31,7 +31,8 @@ Using these guides to learn, and occasionally utilizing the [API Reference](http
 # Some of our work
 After working throught he first two tutorials in the user guide, we felt comfortable enough to start writing our own code, playing around with spawning assets.
 
-<video src="../genesis/picsAndVids/spotSandwich.mp4" width="320" height="240" controls></video>
+<!-- <video src="../genesis/picsAndVids/spotSandwich.mp4" width="320" height="240" controls></video> -->
+![Spot sandwich](../genesis/picsAndVids/spotSandwich.mp4)
 
 [Spot sandwich](../genesis/tested/spotSandwich.py)
 
