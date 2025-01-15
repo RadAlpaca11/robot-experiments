@@ -67,7 +67,7 @@ and installing PyTorch.
 # Key findings
 - Genesis is very user-friendly and quick to get started with.
 - We found the guides and API Reference very helpful in learning how to use the simulator.
-- The gs view command is very useful for planning joint positions. (more details in Notes)
+- The gs view command is very useful for planning joint positions. more details in [Notes](#notes)
 - There are plans to have the ability to use AI to generate scenes, assets, and more to the simulator.
 - A paper is coming soon, and will hopefully provide deeper insights into the model.
 

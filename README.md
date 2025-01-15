@@ -1,3 +1,12 @@
+# Links
+* [What is ChatGPT](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/)
+* [Robot Dissection Notes](Notes/robotDissectionNotes.md)
+* [CogACT Notes](Notes/CogACTnotes.md)
+* [OpenVLA Notes](Notes/OpenVLAnotes.md)
+* [Genesis Notes](Notes/genesisNotes.md)
+* [Agi Bot World Notes](Notes/AgiBotWorldNotes.md)
+
+
 ## 12/10/24:
 * What is ChatGPT: https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/
 

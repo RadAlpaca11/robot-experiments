@@ -11,7 +11,10 @@ OpenVLA is a 7B parameter VLA that is pretrained on 970k episodes from the Open 
 Results from testing show strong results for multi-purpose manipulation especially in multi-task and multi-object scenarios.
 More detailed results can be found on their website.
 
-We have not yet been able to get the model running due to the issues with access to Llama 2 7B and issues with installing dependencies.
+We have not yet been able to get the model running due to the issues with access to Llama 2 7B and with installing dependencies.
+
+# Installation
+
 
 # Notes
 Key elements of the model:

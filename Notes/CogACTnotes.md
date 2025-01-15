@@ -52,3 +52,5 @@ The terminal does not give an error, it just stops outputting anything until we 
 
 # Notes
 We are unable to find any helpful documentation for the code.
+
+It helped to remove the version specification in the pyproject.toml for tensorflow before running pip install -e.

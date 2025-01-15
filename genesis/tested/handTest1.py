@@ -24,7 +24,8 @@ scene = gs.Scene(
     renderer = gs.renderers.Rasterizer(), # using rasterizer for camera rendering
 )
 plane = scene.add_entity(gs.morphs.Plane())
-# Spawns palm-up?
+
+# hand spawns palm-up
 hand = scene.add_entity(
     gs.morphs.MJCF(file='genesis/mujoco_menagerie/leap_hand/right_hand.xml')
 )
@@ -47,7 +48,7 @@ jnt_names = [
     'th_ipl'
 ]
 dofs_idx = [hand.get_joint(name).dof_idx_local for name in jnt_names]
-dofs_idx_split = np.array_split(dofs_idx, 4)
+dofs_idx_split = np.array_split(dofs_idx, 4) # splits into groups of 4 joints
 # 0 is index, 1 is middle, 2 is ring, 3 is thumb
 
 cam = scene.add_camera(
@@ -59,13 +60,6 @@ cam = scene.add_camera(
 )
 
 scene.build()
-# IPython.embed()
-
-# [ mcp, rot, pip, dip ]
-# if_dofs = np.arange(4)
-# mf_dofs = np.arange(4, 8)
-# rf_dofs = np.arange(8, 12)
-# th_dofs = np.arange(12, 16)
 
 # Taken from xml file
 hand.set_dofs_kp(
@@ -75,6 +69,7 @@ hand.set_dofs_kv(
     np.array([0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01])
 )
 
+# Manually tuned
 hand.set_dofs_force_range(
     np.array([-100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100, -100]),
     np.array([100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100]),
@@ -82,24 +77,28 @@ hand.set_dofs_force_range(
 
 cam.start_recording()
 
-# Attempting to move each finger one at a time
+# Move fingers one at a time
 for i in range(2000):
     if i==0:
+        # index finger
         hand.control_dofs_position(
             np.array([1, 0, 1, 1]),
             dofs_idx_split[0],
         )
     if i==500:
+        # middle finger
         hand.control_dofs_position(
             np.array([1, 0, 1, 1]),
             dofs_idx_split[1],
         )
     if i==1000:
+        # ring finger
         hand.control_dofs_position(
             np.array([1, 0, 1, 1]),
             dofs_idx_split[2],
         )
     if i==1500:
+        # thumb
         hand.control_dofs_position(
             np.array([1, 0, 1, 1]),
             dofs_idx_split[3],
