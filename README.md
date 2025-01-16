@@ -1,3 +1,12 @@
+# Links
+* [What is ChatGPT](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/)
+* [Robot Dissection Notes](Notes/robotDissectionNotes.md)
+* [CogACT Notes](Notes/CogACTnotes.md)
+* [OpenVLA Notes](Notes/OpenVLAnotes.md)
+* [Genesis Notes](Notes/genesisNotes.md)
+* [Agi Bot World Notes](Notes/AgiBotWorldNotes.md)
+
+
 ## 12/10/24:
 * What is ChatGPT: https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/
 
@@ -5,6 +14,7 @@
 
 ## 12/17
 * [Robot Dissection Notes](Notes/robotDissectionNotes.md)
+    * We dissected a test robot to understand its systems and components with the plan to find a way to make the robots functional again.
 
 ## 12/19
 * [CogACT Notes](Notes/CogACTnotes.md)
@@ -17,6 +27,7 @@
 
 ## 1/7
 * [Agi Bot World Notes](Notes/AgiBotWorldNotes.md)
+    * AgiBot World is a huge (in size and breakthrough) new open source robotics dataset.
 
 
 ## genesis
@@ -30,5 +41,6 @@ Things that do not work as intended, but we are no longer working on.
 ### mujoco_menagerie
 This is a repository we found that contained several models for robots we wanted to use.
 
-### 
+### picsAndVids
+A collection of pictures and videos we have taken while working with Genesis.
 
