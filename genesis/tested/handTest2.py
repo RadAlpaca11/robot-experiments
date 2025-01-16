@@ -83,11 +83,86 @@ hand.set_dofs_force_range(
 cam.start_recording()
 
 # Attempting to move each finger one at a time
-for i in range(200):
-    if i==1:
+for i in range(500):
+    if i==25:
         hand.control_dofs_position(
-            np.array([2.23, 0, 0.66, 0.85, 0, 0, 0, 0, 2.23, 0, 0.66, 0.85, 0, 2.09, 2.44, 0.46]),
-            dofs_idx
+            np.array([1.5, 0 , 0, 0]),
+            dofs_idx_split[0],
+        )
+    if i==50:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 1.5, 0]),
+            dofs_idx_split[0],
+        )
+    if i==75:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 1.5, 1.5]),
+            dofs_idx_split[0],
+        )
+    if i==100:
+        hand.control_dofs_position(
+            np.array([0.65, 0 , 0.65, 0.65]),
+            dofs_idx_split[0],
+        )
+    if i==125:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 0, 0]),
+            dofs_idx_split[1],
+        )
+    if i==150:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 1.5, 0]),
+            dofs_idx_split[1],
+        )
+    if i==175:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 1.5, 1.5]),
+            dofs_idx_split[1],
+        )
+    if i==200:
+        hand.control_dofs_position(
+            np.array([0.65, 0 , 0.65, 0.65]),
+            dofs_idx_split[1],
+        )
+    if i==225:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 0, 0]),
+            dofs_idx_split[2],
+        )
+    if i==250:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 1.5, 0]),
+            dofs_idx_split[2],
+        )
+    if i==275:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 1.5, 1.5]),
+            dofs_idx_split[2],
+        )
+    if i==300:
+        hand.control_dofs_position(
+            np.array([0.65, 0 , 0.65, 0.65]),
+            dofs_idx_split[2],
+        )
+    if i==325:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 0, 0]),
+            dofs_idx_split[3],
+        )
+    if i==350:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 1.5, 0]),
+            dofs_idx_split[3],
+        )
+    if i==375:
+        hand.control_dofs_position(
+            np.array([1.5, 0 , 1.5, 1.5]),
+            dofs_idx_split[3],
+        )
+    if i==400:
+        hand.control_dofs_position(
+            np.array([0.65, 0 , 0.65, 0.65]),
+            dofs_idx_split[3],
         )
     cam.render()
     scene.step()
