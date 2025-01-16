@@ -14,6 +14,7 @@
 
 ## 12/17
 * [Robot Dissection Notes](Notes/robotDissectionNotes.md)
+    * We dissected a test robot to understand its systems and components with the plan to find a way to make the robots functional again.
 
 ## 12/19
 * [CogACT Notes](Notes/CogACTnotes.md)
@@ -26,6 +27,7 @@
 
 ## 1/7
 * [Agi Bot World Notes](Notes/AgiBotWorldNotes.md)
+    * AgiBot World is a huge (in size and breakthrough) new open source robotics dataset.
 
 
 ## genesis
