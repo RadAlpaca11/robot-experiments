@@ -46,10 +46,18 @@ Access to model meta-llama/Llama-2-7b-hf is restricted. You must have access to 
 After getting setup in HuggingFace we tried again, and the access issue was solved.
 
 Currently we are unable to run the model. 
-It may have to do with some libraries being missing (TensorRT, and potentially more). 
-It begins running and then stops at the same point every time when loading the VLM. (Note, doesn't stop, just takes an insanely long time to output, and we didn't have enough patience).
-The terminal does not give an error, it just stops outputting anything until we interrupt it. 
-
+This is due to errors on both the server machine, and the one we have been using the whole time. 
+On January 9th we were getting errors about cuda out of memory, and on January 16th we got those same errors on the server machine. When we tried ot run the model on the machine we had used previously we recieved different errors. First we got 
+```
+RuntimeError: CUDA error: CUDA-capable device(s) is/are busy or unavailable
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+```
+then after uninstalling 'tensorflow[and-cuda]' we got
+```
+RuntimeError: CUDA unknown error - this may be due to an incorrectly set up environment, e.g. changing env variable CUDA_VISIBLE_DEVICES after program start. Setting the available devices to be zero.
+```
 # Notes
 We are unable to find any helpful documentation for the code.
 
