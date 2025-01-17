@@ -1,3 +1,6 @@
 [submodule "mujoco_menagerie"]
 	path = mujoco_menagerie
 	url = https://github.com/google-deepmind/mujoco_menagerie.git
+[submodule "openvla"]
+	path = openvla
+	url = https://github.com/openvla/openvla.git
