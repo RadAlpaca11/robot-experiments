@@ -77,20 +77,11 @@ vla = AutoModelForVision2Seq.from_pretrained(
 
 # Grab image input & format prompt
 #image: Image.Image = get_from_camera(...)
-prompt = "In: What action should the robot take to pick up the coke can?\nOut:"
-
-# Predict Action (7-DoF; un-normalize for BridgeData V2)
-inputs = processor(prompt, frame).to("cuda:0", dtype=torch.bfloat16)
-action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
-
-
-
+prompt = "In: What action should the robot take to touch the block?\nOut:"
 
 scene.build()
 cam1.start_recording()
 cam2.start_recording()
-
-
 
 # these are tuned for the specific robot (panda)
 panda.set_dofs_kp(
@@ -128,10 +119,10 @@ for i in range(1000):
             inputs = processor(prompt, image).to("cuda:0", dtype=torch.bfloat16)
             action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
 
+            # we realize that we would need to use inverse kinematics for this to actually work
             panda.control_dofs_position(
-                np;array([current_pos[0]+action[0], current_pos[1]+action[1], current_pos[2]+action[2], current_pos[3]+action[3], current_pos[4]+action[4], current_pos[5]+action[5], current_pos[6]+action[6], 0, 0]),
+                np.array([current_pos[0]+action[0], current_pos[1]+action[1], current_pos[2]+action[2], current_pos[3]+action[3], current_pos[4]+action[4], current_pos[5]+action[5], current_pos[6]+action[6], 0, 0]),
                 dofs_idx,
+            )
 
 cam2.stop_recording(save_to_filename='video.mp4')
-
-        
