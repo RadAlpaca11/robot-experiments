@@ -23,3 +23,10 @@ Key elements of the model:
 - Llama 2 7B language model backbone
 
 The model has 3 outputs, a change in x, change in theta, and change in grip. 
+
+
+From the github README: 
+
+Note: OpenVLA typically requires fine-tuning on a small demonstration dataset (~100 demos) from your target domain robot. Out-of-the-box, it only works well on domains from the training dataset.
+
+Fine-tuning and fully fine-tuning would require server class machines.
