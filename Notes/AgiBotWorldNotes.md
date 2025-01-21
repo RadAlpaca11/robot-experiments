@@ -35,6 +35,12 @@ Visualizing the dataset opens in rerun and has many windows:
 - observation.images.top_head
 - state graph
 
+## Experimenting with the dataset
+We have so far visualized a few tasks, using the process described below in the Notes section.
+- task_355
+- task_390
+- task_422
+
 # Notes
 You need to get the data and then convert it to the lerobot format. (Why do they not provide it in the lerobot format?)
 Make sure the .tar file is in the data folder. You should also navigate to the data folder in the terminal before running the commands.
@@ -45,11 +51,12 @@ tar -xvf datafile.tar
 # Going back
 cd ..
 
+# You can start here if you already have data
 # Convert
 python scripts/convert_to_lerobot.py --src_path ./data/datafile --task_id 123 --tgt_path ./data/datafile_lerobot
 
 # Visualize
-python scripts/visualize_dataset.py --task_id 123 --dataset_path ./data/datafile_lerobot
+python scripts/visualize_dataset.py --task-id 123 --dataset-path ./data/datafile_lerobot
 ```
 
 Depth camera appears to be seeing double.
