@@ -16,15 +16,15 @@ _Items with strikethrough are completed_
     * Get model up and summarize
 
 ## Simulation
-* [Genesis](https://genesis-embodied-ai.github.io/)
+* ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
 * [nVidia WARP](https://github.com/NVIDIA/warp)
     * plugin system for omniverse
 * [nVidia COSMOS](https://www.nvidia.com/en-us/ai/cosmos/)
     * world model for omniverse
-* [mujoco](https://mujoco.org/) [Guthub] (https://github.com/google-deepmind/mujoco_playground)
+* [mujoco](https://mujoco.org/) [Github](https://github.com/google-deepmind/mujoco_playground)
    * procedural simulator    
-* omniverse
-    * issacsim tutorials
+* [Omniverse](https://www.nvidia.com/en-us/omniverse/)
+    * [IssacSim tutorials](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/index.html#)
 * Genesis with OpenVLA
  
 ## Generative AI Ramp up
