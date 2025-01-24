@@ -4,6 +4,28 @@ import genesis as gs
 import numpy as np
 import cv2
 
+
+# openVLA stuff
+from transformers import AutoModelForVision2Seq, AutoProcessor
+from PIL import Image
+
+import torch
+
+# Load Processor & VLA
+processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
+vla = AutoModelForVision2Seq.from_pretrained(
+    "openvla/openvla-7b", 
+    #attn_implementation="flash_attention_2",  # [Optional] Requires `flash_attn`
+    torch_dtype=torch.bfloat16, 
+    low_cpu_mem_usage=True, 
+    trust_remote_code=True
+).to("cuda:0")
+
+# Grab image input & format prompt
+#image: Image.Image = 'get_from_camera(...)'
+prompt = "In: What action should the robot take to touch the block?\nOut:"
+#prompt = "In: What action should the robot take to pick up the coke can?\nOut:"
+
 gs.init(backend=gs.cpu)
 
 scene = gs.Scene(
@@ -84,35 +106,17 @@ panda.set_dofs_force_range(
     np.array([-87, -87, -87, -87, -12, -12, -12, -100, -100]),
     np.array([87, 87, 87, 87, 12, 12, 12, 100, 100]),
 )
-
+panda.set_dofs_position(
+    np.array([0, 0, 0, -1.6, 0, 1.85, 0, 0, 0]),
+)
 panda.control_dofs_position(
-    np.array([0, 0, 0, -0.07, 0, 0, 0, 0, 0]),
+    np.array([0, 0, 0, -1.6, 0, 1.85, 0, 0, 0]),
 )
 
 # cam1 for filming, cam2 for processing
 cam1.start_recording()
 cam2.start_recording()
 
-# openVLA stuff
-from transformers import AutoModelForVision2Seq, AutoProcessor
-from PIL import Image
-
-import torch
-
-# Load Processor & VLA
-processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
-vla = AutoModelForVision2Seq.from_pretrained(
-    "openvla/openvla-7b", 
-    attn_implementation="flash_attention_2",  # [Optional] Requires `flash_attn`
-    torch_dtype=torch.bfloat16, 
-    low_cpu_mem_usage=True, 
-    trust_remote_code=True
-).to("cuda:0")
-
-# Grab image input & format prompt
-#image: Image.Image = 'get_from_camera(...)'
-prompt = "In: What action should the robot take to touch the block?\nOut:"
-#prompt = "In: What action should the robot take to pick up the coke can?\nOut:"
 
 import time
 
@@ -123,29 +127,32 @@ for i in range(2000):
     scene.step()
     cam1.render()
     cam2.render()
-
     if(i%10 == 0):
+        cam2.render()
         cam2.stop_recording(save_to_filename='clip.mp4')
-
-        video=cv2.VideoCapture('clip.mp4')
-        print(video.isOpened())
-        video.set(cv2.CAP_PROP_POS_FRAMES, 1)
-        print(video.get(cv2.CAP_PROP_POS_FRAMES))
-        time.sleep(1)
+        time.sleep(2)
+        currentPos = end_effector.get_pos()
+        currentQuat = end_effector.get_quat()
+        video = cv2.VideoCapture('clip.mp4')
+        time.sleep(2)
+        video.set(cv2.CAP_PROP_POS_FRAMES, 8)
+        time.sleep(2)
         ret, frame = video.read()
-        if(ret):
-
-            print(ret)
+        if ret:
             cv2.imwrite('pic.png', frame)
             image = Image.open('pic.png')
             # Predict Action (7-DoF; un-normalize for BridgeData V2)
             inputs = processor(prompt, image).to("cuda:0", dtype=torch.bfloat16)
             action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
+
+        
             currentPos  = panda.get_dofs_position(dofs_idx)
             qpos=panda.inverse_kinematics(
                 link = end_effector,
                 pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
+                # quat = np.array([currentQuat[0]+action[3], currentQuat[1]+action[4], currentQuat[2]+action[5]]),
             )
+            print(action)
             path = panda.plan_path(
                 qpos_goal = qpos,
                 num_waypoints = 20,
@@ -153,8 +160,9 @@ for i in range(2000):
             for waypoint in path:
                 panda.control_dofs_position(waypoint)
                 scene.step()
-
         cam2.start_recording()
+
+
 
 cam1.stop_recording(save_to_filename='openvla/test.mp4')
 # Execute...
