@@ -44,3 +44,6 @@
 * got mujoco playground ai to work
 * tried to access rgb render with genesis to continue working on integrating openVLA and genesis
 
+# 1/28/25
+* got IsaacSim to work
+* got openvla and genesis integrated with inverse kinematics (not fully successful yet)
