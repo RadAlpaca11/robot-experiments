@@ -1,5 +1,7 @@
 # List of investigations
 _Items with strikethrough are completed_
+
+***Items in bold Italics are in progress***
 ## Robot Analysis
   * ~~Tear down~~
   * ~~Enumerate COTS~~
@@ -12,8 +14,9 @@ _Items with strikethrough are completed_
 * ~~[OpenVLA](https://github.com/openvla/openvla)~~
 * ~~[Genesis-world](https://genesis-embodied-ai.github.io/)~~
 * ~~Agibot-world [Article](https://www.yicaiglobal.com/news/chinas-agibot-launches-open-source-robot-dataset-that-it-says-is-bigger-better-than-googles) [GitHub](https://github.com/OpenDriveLab/AgiBot-World?tab=readme-ov-file)~~
-* [Pi0](https://github.com/allenzren/open-pi-zero?utm_source=tldraihttps://www.physicalintelligence.company/download/pi0.pdf)
+* ***[Pi0](https://github.com/allenzren/open-pi-zero?utm_source=tldraihttps://www.physicalintelligence.company/download/pi0.pdf)***
     * Get model up and summarize
+* [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
@@ -21,11 +24,11 @@ _Items with strikethrough are completed_
     * plugin system for omniverse
 * [nVidia COSMOS](https://www.nvidia.com/en-us/ai/cosmos/)
     * world model for omniverse
-* [mujoco](https://mujoco.org/) [Github](https://github.com/google-deepmind/mujoco_playground)
+* ***[mujoco](https://mujoco.org/) [Github](https://github.com/google-deepmind/mujoco_playground)***
    * procedural simulator    
-* [Omniverse](https://www.nvidia.com/en-us/omniverse/)
+* ***[Omniverse](https://www.nvidia.com/en-us/omniverse/)***
     * [IssacSim tutorials](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/index.html#)
-* Genesis with OpenVLA
+* ***Genesis with OpenVLA***
 * Comparsion of Genesis, Mujoco and Omniverse (IsaacSim)
  
 ## Generative AI Ramp up
