@@ -1,0 +1,46 @@
+# 12/10/24
+* What is ChatGPT: https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/
+
+    * A paper that explains how LLMs and other types of machine learning work
+
+# 12/17/24
+* [Robot Dissection Notes](Notes/robotDissectionNotes.md)
+    * We dissected a test robot to understand its systems and components with the plan to find a way to make the robots functional again.
+
+# 12/19/24
+* [CogACT Notes](Notes/CogACTnotes.md)
+    * CogACT is a VLA architecture derived from VLM
+* [OpenVLA Notes](Notes/OpenVLAnotes.md)
+    * OpenVLA is another VLA model, similar to CogACT
+    * We have not yet been able to get this model running
+* [Genesis Notes](Notes/genesisNotes.md)
+    * Genesis is a universal physics engine developed entirely in python. It is lightweight, fast, and very user-friendly.
+
+# 1/7/25
+* [Agi Bot World Notes](Notes/AgiBotWorldNotes.md)
+    * AgiBot World is a huge (in size and breakthrough) new open source robotics dataset.
+
+# 1/9/25
+* Updated and organized repository and notes
+* worked on gettingCogACT to work
+    * Discovered that it needs a server-class machine to run
+* got AgiBot World visualization to work
+
+# 1/14/25
+* Worked to get CogACT to work on server-class machine
+    * ran out of storage on the server
+* worked on getting OpenVLA to work
+
+# 1/16/25
+* continued working on CogACT after clearing storage
+    * Still unscuccessful
+* Got OpenVLA to work
+* integrated openVLA with Genesis
+
+# 1/21/25
+* began working on mujoco playground
+
+# 1/23/25
+* got mujoco playground ai to work
+* tried to access rgb render with genesis to continue working on integrating openVLA and genesis
+
