@@ -58,7 +58,7 @@ panda = scene.add_entity(
 box = scene.add_entity(
     gs.morphs.Box(
         size=(0.2, 0.2, 0.2),
-        pos=(0.5, 0.5, 0.1),
+        pos=(0.5, -0.5, 0.1),
     ),
 )
 
@@ -66,15 +66,15 @@ box = scene.add_entity(
 
 cam1 = scene.add_camera(
     res    = (640, 480),
-    pos    = (3.5, 0.0, 0.5),
-    lookat = (0, 0, 0),
+    pos    = (-0.5, 0.5, 2),
+    lookat = (0.5, -0.5, 0),
     fov    = 35,
     GUI    = False,
 )
 cam2 = scene.add_camera(
     res    = (640, 480),
-    pos    = (3.5, 0.0, 0.5),
-    lookat = (0, 0, 0),
+    pos    = (-0.5, 0.5, 2),
+    lookat = (0.5, -0.5, 0),
     fov    = 35,
     GUI    = False,
 )
@@ -95,6 +95,10 @@ jnt_names = [
     'finger_joint2',
 ]
 dofs_idx = [panda.get_joint(name).dof_idx_local for name in jnt_names]
+
+motors_dof = np.arange(7)
+fingers_dof = np.arange(7,9)
+
 
 panda.set_dofs_kp(
     np.array([4500, 4500, 3500, 3500, 2000, 2000, 2000, 100, 100]),
@@ -121,22 +125,21 @@ cam2.start_recording()
 import time
 
 end_effector = panda.get_link('hand')
+position = end_effector.get_pos()
+print(position)
 
-
-for i in range(2000):
+for i in range(50):
     scene.step()
     cam1.render()
     cam2.render()
     if(i%10 == 0):
         cam2.render()
         cam2.stop_recording(save_to_filename='clip.mp4')
-        time.sleep(2)
         currentPos = end_effector.get_pos()
+        print(currentPos)
         currentQuat = end_effector.get_quat()
         video = cv2.VideoCapture('clip.mp4')
-        time.sleep(2)
         video.set(cv2.CAP_PROP_POS_FRAMES, 8)
-        time.sleep(2)
         ret, frame = video.read()
         if ret:
             cv2.imwrite('pic.png', frame)
@@ -151,15 +154,25 @@ for i in range(2000):
                 link = end_effector,
                 pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
                 # quat = np.array([currentQuat[0]+action[3], currentQuat[1]+action[4], currentQuat[2]+action[5]]),
+                init_qpos = currentPos,
             )
+            panda.control_dofs_position(qpos[:-2], motors_dof)
             print(action)
-            path = panda.plan_path(
-                qpos_goal = qpos,
-                num_waypoints = 20,
-            )
-            for waypoint in path:
-                panda.control_dofs_position(waypoint)
+            # path = panda.plan_path(
+            #     qpos_goal = qpos,
+            #     qpos_start = currentPos,
+            #     num_waypoints = 20,
+            # )
+
+            print("path")
+            for i in range(200):
                 scene.step()
+                cam1.render()
+            # for waypoint in path:
+            #     print("waypoint")
+            #     panda.control_dofs_position(waypoint)
+            #     scene.step()
+        print("restarting recording")
         cam2.start_recording()
 
 

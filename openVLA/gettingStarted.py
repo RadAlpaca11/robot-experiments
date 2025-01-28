@@ -9,7 +9,7 @@ import torch
 processor = AutoProcessor.from_pretrained("openvla/openvla-7b", trust_remote_code=True)
 vla = AutoModelForVision2Seq.from_pretrained(
     "openvla/openvla-7b", 
-    attn_implementation="flash_attention_2",  # [Optional] Requires `flash_attn`
+    #attn_implementation="flash_attention_2",  # [Optional] Requires `flash_attn`
     torch_dtype=torch.bfloat16, 
     low_cpu_mem_usage=True, 
     trust_remote_code=True
@@ -17,7 +17,7 @@ vla = AutoModelForVision2Seq.from_pretrained(
 
 # Grab image input & format prompt
 #image: Image.Image = 'get_from_camera(...)'
-image = Image.open('openvla/pickcokecan.png')
+image = Image.open('openVLA/pickcokecan.png')
 prompt = "In: What action should the robot take to {<INSTRUCTION>}?\nOut:"
 #prompt = "In: What action should the robot take to pick up the coke can?\nOut:"
 
