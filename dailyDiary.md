@@ -33,7 +33,7 @@
 
 # 1/16/25
 * continued working on CogACT after clearing storage
-    * Still unscuccessful
+* Got CogACT to work on server-class machine 
 * Got OpenVLA to work
 * integrated openVLA with Genesis
 
