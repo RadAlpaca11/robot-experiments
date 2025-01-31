@@ -53,28 +53,31 @@ plane = scene.add_entity(
     gs.morphs.Plane(),
 )
 panda = scene.add_entity(
-    gs.morphs.MJCF(file='genesis/mujoco_menagerie/franka_emika_panda/panda.xml'),
+    gs.morphs.MJCF(file='../genesis/mujoco_menagerie/franka_emika_panda/panda.xml'),
 )
 box = scene.add_entity(
     gs.morphs.Box(
         size=(0.2, 0.2, 0.2),
-        pos=(0.5, -0.5, 0.1),
+        pos=(0.5, 0, 0.1),
     ),
+    surface=gs.surfaces.Default(
+        color=(1, 0.8, 0),
+    )
 )
 
 
 
 cam1 = scene.add_camera(
     res    = (640, 480),
-    pos    = (-0.5, 0.5, 2),
-    lookat = (0.5, -0.5, 0),
+    pos    = (-0.5, 0, 2),
+    lookat = (0.5, 0, 0),
     fov    = 35,
     GUI    = False,
 )
 cam2 = scene.add_camera(
     res    = (640, 480),
-    pos    = (-0.5, 0.5, 2),
-    lookat = (0.5, -0.5, 0),
+    pos    = (-0.5, 0, 2),
+    lookat = (0.5, 0, 0),
     fov    = 35,
     GUI    = False,
 )
@@ -110,12 +113,6 @@ panda.set_dofs_force_range(
     np.array([-87, -87, -87, -87, -12, -12, -12, -100, -100]),
     np.array([87, 87, 87, 87, 12, 12, 12, 100, 100]),
 )
-panda.set_dofs_position(
-    np.array([0, 0, 0, -1.6, 0, 1.85, 0, 0, 0]),
-)
-panda.control_dofs_position(
-    np.array([0, 0, 0, -1.6, 0, 1.85, 0, 0, 0]),
-)
 
 # cam1 for filming, cam2 for processing
 cam1.start_recording()
@@ -128,21 +125,25 @@ end_effector = panda.get_link('hand')
 position = end_effector.get_pos()
 print(position)
 
-for i in range(50):
+for i in range(150):
     scene.step()
     cam1.render()
     cam2.render()
     if(i%10 == 0):
         cam2.render()
-        cam2.stop_recording(save_to_filename='clip.mp4')
+        cam2.stop_recording(save_to_filename='openVLA/references/clip.mp4')
         currentPos = end_effector.get_pos()
         print(currentPos)
+
+        something = np.array([0.65, 0.0, 0.25])
+        print(currentPos[0])
+        print(currentPos[0]+something[0])
         currentQuat = end_effector.get_quat()
-        video = cv2.VideoCapture('clip.mp4')
+        video = cv2.VideoCapture('openVLA/references/clip.mp4')
         video.set(cv2.CAP_PROP_POS_FRAMES, 8)
         ret, frame = video.read()
         if ret:
-            cv2.imwrite('pic.png', frame)
+            cv2.imwrite('openVLA/references/pic.png', frame)
             image = Image.open('pic.png')
             # Predict Action (7-DoF; un-normalize for BridgeData V2)
             inputs = processor(prompt, image).to("cuda:0", dtype=torch.bfloat16)
@@ -152,10 +153,13 @@ for i in range(50):
             currentPos  = panda.get_dofs_position(dofs_idx)
             qpos=panda.inverse_kinematics(
                 link = end_effector,
-                pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
+                pos = np.array([0.65,0.0, 0.135])
+                # pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
                 # quat = np.array([currentQuat[0]+action[3], currentQuat[1]+action[4], currentQuat[2]+action[5]]),
-                init_qpos = currentPos,
+                #init_qpos = currentPos,
             )
+            print (qpos)
+            print(np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]))
             panda.control_dofs_position(qpos[:-2], motors_dof)
             print(action)
             # path = panda.plan_path(
@@ -177,7 +181,7 @@ for i in range(50):
 
 
 
-cam1.stop_recording(save_to_filename='openvla/test.mp4')
+cam1.stop_recording(save_to_filename='openVLA/picsAndVids/test.mp4')
 # Execute...
 # robot.act(action, ...)
 # print(robot.act(action, ...))

@@ -4,3 +4,15 @@
 [submodule "openvla"]
 	path = openvla
 	url = https://github.com/openvla/openvla.git
+[submodule "openPi0/open-pi-zero"]
+	path = openPi0/open-pi-zero
+	url = https://github.com/allenzren/open-pi-zero
+[submodule "openPi0/--recurse-submodules"]
+	path = openPi0/--recurse-submodules
+	url = https://github.com/allenzren/SimplerEnv
+[submodule "openPi0/SimplerEnv"]
+	path = openPi0/SimplerEnv
+	url = https://github.com/allenzren/SimplerEnv
+[submodule "openPi0/paligemma-3b-pt-224"]
+	path = openPi0/paligemma-3b-pt-224
+	url = https://huggingface.co/google/paligemma-3b-pt-224
