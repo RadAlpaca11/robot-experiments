@@ -30,6 +30,8 @@ _Items with strikethrough are completed_
     * [IssacSim tutorials](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/index.html#)
 * ***Genesis with OpenVLA***
 * Comparsion of Genesis, Mujoco and Omniverse (IsaacSim)
+* [Simulately](https://simulately.wiki/docs/)
+* [Glomap](https://github.com/colmap/glomap)
  
 ## Generative AI Ramp up
 * ~~[Understanding ChatGPT](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/)~~
