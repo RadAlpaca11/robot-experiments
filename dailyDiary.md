@@ -47,3 +47,8 @@
 # 1/28/25
 * got IsaacSim to work
 * got openvla and genesis integrated with inverse kinematics (not fully successful yet)
+
+# 1/30/25
+* worked on getting openPi0 to work
+* got openVLA and genesis successfully integrated! 
+    * [video](openVLA/picsAndVids/film.mp4)

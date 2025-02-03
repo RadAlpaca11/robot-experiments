@@ -18,6 +18,9 @@ We cloned the repository, and ran ```pip install -e.``` to install the dependenc
 
 You also need to get access to the huggingface model, which is explained in the openvla README
 
+
+# Combining with 
+
 # Notes
 Key elements of the model:
 - fused visual encoder
