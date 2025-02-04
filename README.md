@@ -1,5 +1,7 @@
 [Daily diary](dailyDiary.md): This is a log of our work and progress.
+
 [Tasks](tasks.md): This is a list of tasks that we are working on or need to work on.
+
 [Troubleshooting](troubleshooting.md): This is a list of common issues we run into and how we solve them.
 
 
