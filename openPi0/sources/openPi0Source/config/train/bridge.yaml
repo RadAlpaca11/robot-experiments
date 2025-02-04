@@ -10,7 +10,7 @@ name: ${data.train.dataset_mix}_${data.train.split}_tp${horizon_steps}_${flow_sa
 device: cuda
 n_nodes: 1
 seed: 42
-pretrained_model_path: sources/paligemma-3b-pt-224
+pretrained_model_path: /home/a3r/Interns/internship2024-25/openPi0/sources/paligemma-3b-pt-224
 load_pretrained_weights: True
 resume_checkpoint_path:
 train_vlm: True
