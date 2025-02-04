@@ -10,22 +10,27 @@ name:
 device: cuda
 seed: 42
 checkpoint_path:
-n_eval_episode: ${eval:'25 * 4 * 10'}  # 25 locations, 4 urdfs, 10 trials each
+n_eval_episode: ${eval:'9 * 4 * 3 * 10'}  # 9 apple locations, 4 urdfs, 3 robot locations/rgb_overlay_paths, 10 trials each
 n_video: ${n_eval_episode}
-# From Simpler: for each orientation, we place the coke can at 25 grid positions within a rectangle on the tabletop
+# From Simpler: We place the robot at 3 different positions on the floor and the apple at 9 different positions within a grid on the cabinet top, yielding a total of 3 x 9 = 27 trials
+# The 3 locations are fixed w.r.t. rgb_overlay_path! https://github.com/simpler-env/ManiSkill2_real2sim/blob/87dc84508520310e61c972ece399a0f034095e42/mani_skill2_real2sim/envs/custom_scenes/place_in_closed_drawer_in_scene.py#L184
 # sweeps:
 #   urdf_version:
 #     - null
 #     - "recolor_tabletop_visual_matching_1"
 #     - "recolor_tabletop_visual_matching_2"
 #     - "recolor_cabinet_visual_matching_1"
+#   rgb_overlay_path:
+#     - ./SimplerEnv/ManiSkill2_real2sim/data/real_inpainting/open_drawer_a0.png
+#     - ./SimplerEnv/ManiSkill2_real2sim/data/real_inpainting/open_drawer_b0.png
+#     - ./SimplerEnv/ManiSkill2_real2sim/data/real_inpainting/open_drawer_c0.png
 
 env:
   task:
   adapter:
     _target_: src.agent.env_adapter.simpler.EDRSimplerAdapter
     dataset_statistics_path: config/fractal_statistics.json
-    pretrained_model_path: ${oc.env:TRANSFORMERS_CACHE}/paligemma-3b-pt-224
+    pretrained_model_path: sources/paligemma-3b-pt-224
     tokenizer_padding: max_length
     max_seq_len: 276  # fixed 256 for image + max 20 for text
     num_image_tokens: 256

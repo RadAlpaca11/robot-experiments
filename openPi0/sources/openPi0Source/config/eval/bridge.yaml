@@ -21,7 +21,7 @@ env:
   adapter:
     _target_: src.agent.env_adapter.simpler.BridgeSimplerAdapter
     dataset_statistics_path: config/bridge_statistics.json
-    pretrained_model_path: ${oc.env:TRANSFORMERS_CACHE}/paligemma-3b-pt-224
+    pretrained_model_path: sources/paligemma-3b-pt-224
     tokenizer_padding: max_length
     max_seq_len: 276  # fixed 256 for image + max 20 for text
     num_image_tokens: 256

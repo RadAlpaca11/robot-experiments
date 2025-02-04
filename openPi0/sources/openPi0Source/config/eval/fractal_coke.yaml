@@ -10,9 +10,9 @@ name:
 device: cuda
 seed: 42
 checkpoint_path:
-n_eval_episode: ${eval:'60 * 4 * 10'}  # 60 locations, 4 urdfs, 10 trials each
+n_eval_episode: ${eval:'25 * 4 * 10'}  # 25 locations, 4 urdfs, 10 trials each
 n_video: ${n_eval_episode}
-# From Simpler: In each trial, one object serves as the source object, one serves as the target, and the other serves as the distractor (this creates 6 trials for each triplet and each triangle pattern). We randomly choose 5 triplets of objects among a total of 8 objects (blue plastic bottle, pepsi can, orange, 7up can, apple, sponge, coke can, redbull can), and adopt 2 triangle patterns (upright and inverted). This creates a total of 5 x 2 x 6 = 60 trials
+# From Simpler: for each orientation, we place the coke can at 25 grid positions within a rectangle on the tabletop
 # sweeps:
 #   urdf_version:
 #     - null
@@ -25,7 +25,7 @@ env:
   adapter:
     _target_: src.agent.env_adapter.simpler.EDRSimplerAdapter
     dataset_statistics_path: config/fractal_statistics.json
-    pretrained_model_path: ${oc.env:TRANSFORMERS_CACHE}/paligemma-3b-pt-224
+    pretrained_model_path: sources/paligemma-3b-pt-224
     tokenizer_padding: max_length
     max_seq_len: 276  # fixed 256 for image + max 20 for text
     num_image_tokens: 256

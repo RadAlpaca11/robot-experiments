@@ -117,7 +117,8 @@ def main(
     quantize: bool = False,
 ):
     device = "cpu"
-    model_path = f"{os.environ['TRANSFORMERS_CACHE']}/paligemma-3b-pt-224"
+    #model_path = f"{os.environ['TRANSFORMERS_CACHE']}/paligemma-3b-pt-224"
+    model_path = "sources/paligemma-3b-pt-224"
 
     if not only_cpu:
         if torch.cuda.is_available():

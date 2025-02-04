@@ -10,7 +10,7 @@ name: ${data.train.dataset_mix}_${data.train.split}_tp${horizon_steps}_${flow_sa
 device: cuda
 n_nodes: 1
 seed: 42
-pretrained_model_path: ${oc.env:TRANSFORMERS_CACHE}/paligemma-3b-pt-224
+pretrained_model_path: sources/paligemma-3b-pt-224
 load_pretrained_weights: True
 resume_checkpoint_path:
 train_vlm: True
@@ -30,17 +30,17 @@ ema_start: ${save_model_start}
 ema_freq: 1
 ema_device: cuda
 use_swa: False
-swa_start: ${eval:'3786400 // ${global_batch_size} * 5'}
-swa_freq: ${eval:'3786400 // ${global_batch_size} // 4'}
+swa_start: ${eval:'1550000 // ${global_batch_size} * 5'}
+swa_freq: ${eval:'1550000 // ${global_batch_size} // 4'}
 swa_device: cpu
 
 data:
   val:  # stil aplying image randomization
-    split: train[95%:]
+    split:  # full val split
     shuffle_buffer_size: 10000
   train:
-    dataset_mix: fractal
-    split: train[:95%]
+    dataset_mix: bridge
+    split: train
     data_path: ${oc.env:VLA_DATA_DIR}/resize_224
     window_size: ${cond_steps}
     action_horizon: ${horizon_steps}
@@ -57,10 +57,10 @@ wandb:
   run: ${now:%H-%M-%S}_${name}
 
 log_freq: 16
-n_epochs: 10  # provided ckpts were about 8 epochs
-n_updates: ${eval:'3786400 // ${global_batch_size} * ${n_epochs}'}  # fractal dataset has 3786400 transitions in total, all used
-save_model_freq: ${eval:'3786400 // ${global_batch_size} * 1'}
-save_model_start: ${eval:'3786400 // ${global_batch_size} * 3'}
+n_epochs: 15  # provided ckpts were about 12 epochs
+n_updates: ${eval:'1550000 // ${global_batch_size} * ${n_epochs}'}  # bridge dataset has 2195527 transitions in total, but we are skipping (text-)unlabeled episodes, which is roughly 30% of the data
+save_model_freq: ${eval:'1550000 // ${global_batch_size} * 1'}
+save_model_start: ${eval:'1550000 // ${global_batch_size} * 5'}
 eval_freq: 2000
 eval_size: 1024
 eval_thresholds: [0.05, 0.1, 0.2, 0.3, 0.5]
@@ -88,7 +88,7 @@ final_action_clip_value: 1.0  # data normalized in [-1,1]
 cond_steps: 1
 horizon_steps: 4
 action_dim: 7 # EEF_POS
-proprio_dim: 8  # POS_QUAT
+proprio_dim: 7  # POS_EULER
 max_seq_len: 276  # fixed 256 for image + max 20 for text
 tokenizer_padding: max_length # instead of truncating to longest
 max_image_text_tokens: ${max_seq_len}
