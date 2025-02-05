@@ -16,6 +16,7 @@ _Items with strikethrough are completed_
 * ~~Agibot-world [Article](https://www.yicaiglobal.com/news/chinas-agibot-launches-open-source-robot-dataset-that-it-says-is-bigger-better-than-googles) [GitHub](https://github.com/OpenDriveLab/AgiBot-World?tab=readme-ov-file)~~
 * ***[Pi0](https://github.com/allenzren/open-pi-zero?utm_source=tldraihttps://www.physicalintelligence.company/download/pi0.pdf)***
     * Get model up and summarize
+* [OpenPi](https://github.com/Physical-Intelligence/openpi)
 * [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
 
 ## Simulation
