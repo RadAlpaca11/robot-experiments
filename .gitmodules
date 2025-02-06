@@ -16,3 +16,6 @@
 [submodule "openPi0/paligemma-3b-pt-224"]
 	path = openPi0/paligemma-3b-pt-224
 	url = https://huggingface.co/google/paligemma-3b-pt-224
+[submodule "openpi"]
+	path = openpi
+	url = https://github.com/Physical-Intelligence/openpi.git
