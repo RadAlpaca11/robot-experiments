@@ -63,3 +63,5 @@
 * worked on getting genesis working on server
     * plans to integrate cogACT and genesis in the future
 * began working on getting the official pi0 to work
+* got pi0 to work!
+    * It was not easy. The example code sucked!
