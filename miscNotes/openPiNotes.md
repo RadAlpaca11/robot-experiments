@@ -14,6 +14,7 @@ also needed to change tensorflow to not specify a version
 
 
 
+
 # Official model
 * some paths needed to be changed:
 ```python
@@ -27,8 +28,11 @@ import lerobot
 # to
 import lerobot0.lerobot1
 ```
+* lerobot folder was inside another lerobot folder; renamed parent lerobot to lerobot0 and child lerobot to lerobot1
 
 # Legit version
+
+using random input values
 ```
 # output
 [[ 0.13390535  0.01700424 -0.21063898  0.01644268  0.05704939 -0.02811454

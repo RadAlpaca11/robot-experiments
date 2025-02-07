@@ -59,7 +59,7 @@
 * worked on isaacsim
     * began exploring the scripting capabilities
 
-2/6/25
+# 2/6/25
 * worked on getting genesis working on server
     * plans to integrate cogACT and genesis in the future
 * began working on getting the official pi0 to work
