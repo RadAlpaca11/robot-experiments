@@ -6,12 +6,12 @@ from typing import Any
 
 import jax.numpy as jnp
 
-import openpi.models.model as _model
-import openpi.policies.policy as _policy
-import openpi.shared.download as download
-from openpi.training import checkpoints as _checkpoints
-from openpi.training import config as _config
-import openpi.transforms as transforms
+import src.openpi.models.model as _model
+import src.openpi.policies.policy as _policy
+import src.openpi.shared.download as download
+from src.openpi.training import checkpoints as _checkpoints
+from src.openpi.training import config as _config
+import src.openpi.transforms as transforms
 
 
 @dataclasses.dataclass

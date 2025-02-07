@@ -25,7 +25,7 @@ import jax
 import jax.numpy as jnp
 import ml_collections
 
-import openpi.shared.array_typing as at
+import src.openpi.shared.array_typing as at
 
 Variant = Literal["gemma_2b"]
 

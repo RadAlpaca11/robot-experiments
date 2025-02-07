@@ -34,9 +34,9 @@ import flax.linen as nn
 import jax
 import jax.numpy as jnp
 
-import openpi.models.lora as lora
-import openpi.shared.array_typing as at
-import openpi.training.sharding as sharding
+import src.openpi.models.lora as lora
+import src.openpi.shared.array_typing as at
+import src.openpi.training.sharding as sharding
 
 PALIGEMMA_VOCAB_SIZE = 257_152
 

@@ -6,13 +6,13 @@ from typing import Protocol, SupportsIndex, TypeVar
 
 import jax
 import jax.numpy as jnp
-import lerobot.common.datasets.lerobot_dataset as lerobot_dataset
+import lerobot0.lerobot1.common.datasets.lerobot_dataset as lerobot_dataset
 import numpy as np
 import torch
 
-import openpi.models.model as _model
-import openpi.training.config as _config
-import openpi.transforms as _transforms
+import src.openpi.models.model as _model
+import src.openpi.training.config as _config
+import src.openpi.transforms as _transforms
 
 T_co = TypeVar("T_co", covariant=True)
 

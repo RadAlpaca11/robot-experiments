@@ -8,13 +8,13 @@ import flax.traverse_util
 import jax
 import jax.numpy as jnp
 import numpy as np
-from openpi_client import base_policy as _base_policy
+from packages.openpiClient.src.openpi_client import base_policy as _base_policy
 from typing_extensions import override
 
-from openpi import transforms as _transforms
-from openpi.models import model as _model
-from openpi.shared import array_typing as at
-from openpi.shared import nnx_utils
+from src.openpi import transforms as _transforms
+from src.openpi.models import model as _model
+from src.openpi.shared import array_typing as at
+from src.openpi.shared import nnx_utils
 
 BasePolicy: TypeAlias = _base_policy.BasePolicy
 

@@ -4,7 +4,7 @@ from typing import ClassVar
 import einops
 import numpy as np
 
-from openpi import transforms
+from src.openpi import transforms
 
 
 def make_aloha_example() -> dict:

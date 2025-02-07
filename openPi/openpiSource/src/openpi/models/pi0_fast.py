@@ -8,10 +8,10 @@ import jax
 import jax.numpy as jnp
 from typing_extensions import override
 
-from openpi.models import model as _model
-import openpi.models.gemma_fast as _gemma
-import openpi.models.siglip as _siglip
-from openpi.shared import array_typing as at
+from src.openpi.models import model as _model
+import src.openpi.models.gemma_fast as _gemma
+import src.openpi.models.siglip as _siglip
+from src.openpi.shared import array_typing as at
 
 logger = logging.getLogger("openpi")
 

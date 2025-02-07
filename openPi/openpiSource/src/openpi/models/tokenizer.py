@@ -4,7 +4,7 @@ import numpy as np
 import sentencepiece
 from transformers import AutoProcessor
 
-import openpi.shared.download as download
+import src.openpi.shared.download as download
 
 
 class PaligemmaTokenizer:

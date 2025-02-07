@@ -13,18 +13,18 @@ import flax.nnx as nnx
 from typing_extensions import override
 import tyro
 
-import openpi.models.model as _model
-import openpi.models.pi0 as pi0
-import openpi.models.pi0_fast as pi0_fast
-import openpi.models.tokenizer as _tokenizer
-import openpi.policies.aloha_policy as aloha_policy
-import openpi.policies.droid_policy as droid_policy
-import openpi.policies.libero_policy as libero_policy
-import openpi.shared.download as _download
-import openpi.shared.normalize as _normalize
-import openpi.training.optimizer as _optimizer
-import openpi.training.weight_loaders as weight_loaders
-import openpi.transforms as _transforms
+import src.openpi.models.model as _model
+import src.openpi.models.pi0 as pi0
+import src.openpi.models.pi0_fast as pi0_fast
+import src.openpi.models.tokenizer as _tokenizer
+import src.openpi.policies.aloha_policy as aloha_policy
+import src.openpi.policies.droid_policy as droid_policy
+import src.openpi.policies.libero_policy as libero_policy
+import src.openpi.shared.download as _download
+import src.openpi.shared.normalize as _normalize
+import src.openpi.training.optimizer as _optimizer
+import src.openpi.training.weight_loaders as weight_loaders
+import src.openpi.transforms as _transforms
 
 ModelType: TypeAlias = _model.ModelType
 # Work around a tyro issue with using nnx.filterlib.Filter directly.

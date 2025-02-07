@@ -15,10 +15,10 @@ import jax.numpy as jnp
 import numpy as np
 import orbax.checkpoint as ocp
 
-from openpi.shared import image_tools
-import openpi.shared.array_typing as at
+from src.openpi.shared import image_tools
+import src.openpi.shared.array_typing as at
 
-logger = logging.getLogger("openpi")
+logger = logging.getLogger("openpiSource")
 
 ArrayT = TypeVar("ArrayT", at.Array, jax.ShapeDtypeStruct)
 

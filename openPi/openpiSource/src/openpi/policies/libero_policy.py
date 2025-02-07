@@ -3,8 +3,8 @@ import dataclasses
 import einops
 import numpy as np
 
-from openpi import transforms
-from openpi.models import model as _model
+from src.openpi import transforms
+from src.openpi.models import model as _model
 
 
 def make_libero_example() -> dict:

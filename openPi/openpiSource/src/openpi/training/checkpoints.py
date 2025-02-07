@@ -7,10 +7,10 @@ from etils import epath
 import jax
 import orbax.checkpoint as ocp
 
-from openpi.shared import array_typing as at
-import openpi.shared.normalize as _normalize
-import openpi.training.data_loader as _data_loader
-import openpi.training.utils as training_utils
+from src.openpi.shared import array_typing as at
+import src.openpi.shared.normalize as _normalize
+import src.openpi.training.data_loader as _data_loader
+import src.openpi.training.utils as training_utils
 
 
 def initialize_checkpoint_dir(

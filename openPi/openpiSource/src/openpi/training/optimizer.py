@@ -4,7 +4,7 @@ from typing import Protocol, runtime_checkable
 import jax.numpy as jnp
 import optax
 
-import openpi.shared.array_typing as at
+import src.openpi.shared.array_typing as at
 
 
 @runtime_checkable
