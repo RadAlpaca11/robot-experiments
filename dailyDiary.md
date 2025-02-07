@@ -52,3 +52,14 @@
 * worked on getting openPi0 to work
 * got openVLA and genesis successfully integrated! 
     * [video](openVLA/picsAndVids/film.mp4)
+
+# 2/4/25
+* Did a bit of research on deepseek
+* worked on getting openPi0 to work
+* worked on isaacsim
+    * began exploring the scripting capabilities
+
+2/6/25
+* worked on getting genesis working on server
+    * plans to integrate cogACT and genesis in the future
+* began working on getting the official pi0 to work

@@ -13,6 +13,21 @@ also needed to change tensorflow to not specify a version
 
 
 
+
+# Official model
+* some paths needed to be changed:
+```python
+# from
+import openpi
+# to
+import src.openpi
+
+# from
+import lerobot
+# to
+import lerobot0.lerobot1
+```
+
 # Legit version
 ```
 # output
