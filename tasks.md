@@ -38,3 +38,6 @@ _Items with strikethrough are completed_
 * ~~[Understanding ChatGPT](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/)~~
 * ~~Understand Concepts in GenAI (LLM, LAM, LBM, VLM, VLA, MobileVLA)~~
 * [video series explaining neural networks](https://youtube.com/playlist?list=PLiaHhY2iBX9hdHaRr6b7XevZtgZRa1PoU&si=tJoAmN8yy1aROMlW)
+
+## Software
+* [VScode and dev containers](https://code.visualstudio.com/docs/devcontainers/tutorial)
