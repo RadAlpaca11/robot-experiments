@@ -1,19 +1,6 @@
-Seems like it is meant for bigger tasks.
-
-Mentions that diverse data trained models are better than niche trained models.
-First train on diverse data, then fine tune on niche data.
-
-Model is also pre-trained on the internet, unlike openVLA, so it could probably recognize taylor swift.
-
-The github repo is from an individual who used the paper to create the model.
-
-ERROR: Package 'open-pi-zero' requires a different Python: 3.12.2 not in '==3.10.*'
-
-also needed to change tensorflow to not specify a version
-
-
-
-
+# Notes
+* It is not mentioned anywhere, but I'm pretty sure the 8 output values the 3 xyz position values, 4 quaternion values, and the 1 grip value.
+* The example code does not work. Many things are wrong with the general path references from everything in the repository as well as the example code not actually being functional. The README doesn't even say that you need to edit the example code to get it to work.
 
 # Official model
 * some paths needed to be changed:
@@ -81,3 +68,22 @@ Some kwargs in processor config are unused and will not have any effect: time_ho
  [ 0.16226726  0.03725068 -0.22036585 -0.01090471  0.02199482 -0.00092508
   -0.0137995  -0.00596324]]
 ```
+
+
+
+
+# Paper notes
+Seems like it is meant for bigger tasks.
+
+Mentions that diverse data trained models are better than niche trained models.
+First train on diverse data, then fine tune on niche data.
+
+Model is also pre-trained on the internet, unlike openVLA, so it could probably recognize taylor swift.
+
+
+# Recreated model
+The github repo is from an individual who used the paper to create the model.
+
+ERROR: Package 'open-pi-zero' requires a different Python: 3.12.2 not in '==3.10.*'
+
+also needed to change tensorflow to not specify a version
