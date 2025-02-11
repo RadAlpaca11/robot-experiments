@@ -23,7 +23,7 @@ vla = AutoModelForVision2Seq.from_pretrained(
 
 # Grab image input & format prompt
 #image: Image.Image = 'get_from_camera(...)'
-prompt = "In: What action should the robot take to touch the block?\nOut:"
+prompt = "In: What action should the robot take to touch the yellow block?\nOut:"
 #prompt = "In: What action should the robot take to pick up the coke can?\nOut:"
 
 gs.init(backend=gs.cpu)
@@ -35,7 +35,7 @@ scene = gs.Scene(
         res           = (1280, 960),
         camera_pos    = (3.5, 0.0, 2.5),
         camera_lookat = (0.0, 0.0, 0.5),
-        camera_fov    = 40,
+        camera_fov    = 30,
         max_FPS       = 60,
     ),
     vis_options = gs.options.VisOptions(
@@ -45,6 +45,10 @@ scene = gs.Scene(
         show_cameras     = False,
         plane_reflection = True,
         ambient_light    = (0.1, 0.1, 0.1),
+    ),
+        sim_options = gs.options.SimOptions(
+        dt = 0.01,
+        substeps = 4,
     ),
     renderer=gs.renderers.Rasterizer(),
 )
@@ -58,7 +62,7 @@ panda = scene.add_entity(
 box = scene.add_entity(
     gs.morphs.Box(
         size=(0.2, 0.2, 0.2),
-        pos=(0.5, 0, 0.1),
+        pos=(0.65, 0, 0.25),
     ),
     surface=gs.surfaces.Default(
         color=(1, 0.8, 0),
@@ -67,37 +71,27 @@ box = scene.add_entity(
 
 
 
-cam1 = scene.add_camera(
+# for long video
+camFilm = scene.add_camera(
     res    = (640, 480),
-    pos    = (-0.5, 0, 2),
-    lookat = (0.5, 0, 0),
-    fov    = 35,
-    GUI    = False,
+    pos    = (3.5, 0.0, 2.5),
+    lookat = (0.65, 0, 0.25),
+    fov    = 20,
+    GUI    = True,
 )
-cam2 = scene.add_camera(
+# for openVLA
+cam = scene.add_camera(
     res    = (640, 480),
-    pos    = (-0.5, 0, 2),
-    lookat = (0.5, 0, 0),
-    fov    = 35,
-    GUI    = False,
+    pos    = (1.25, -2.5, 1.3),
+    lookat = (0.65, 0, 0.25),
+    fov    = 20,
+    GUI    = True,
 )
 
 
 
 scene.build()
-
-jnt_names = [
-    'joint1',
-    'joint2',
-    'joint3',
-    'joint4',
-    'joint5',
-    'joint6',
-    'joint7',
-    'finger_joint1',
-    'finger_joint2',
-]
-dofs_idx = [panda.get_joint(name).dof_idx_local for name in jnt_names]
+camFilm.start_recording()
 
 motors_dof = np.arange(7)
 fingers_dof = np.arange(7,9)
@@ -114,74 +108,111 @@ panda.set_dofs_force_range(
     np.array([87, 87, 87, 87, 12, 12, 12, 100, 100]),
 )
 
-# cam1 for filming, cam2 for processing
-cam1.start_recording()
-cam2.start_recording()
-
+# get the end-effector link
+end_effector = panda.get_link('hand')
 
 import time
 
-end_effector = panda.get_link('hand')
-position = end_effector.get_pos()
-print(position)
+# starting position
+qpos = panda.inverse_kinematics(
+    link = end_effector,
+    pos = np.array([0.65, 0.0, 0.25]),
+    quat = np.array([0, 1, 0, 0]),
+)
 
-for i in range(150):
-    scene.step()
-    cam1.render()
-    cam2.render()
-    if(i%10 == 0):
-        cam2.render()
-        cam2.stop_recording(save_to_filename='openVLA/references/clip.mp4')
-        currentPos = end_effector.get_pos()
-        print(currentPos)
+panda.control_dofs_position(qpos[:-2], motors_dof)
 
-        something = np.array([0.65, 0.0, 0.25])
-        print(currentPos[0])
-        print(currentPos[0]+something[0])
-        currentQuat = end_effector.get_quat()
-        video = cv2.VideoCapture('openVLA/references/clip.mp4')
-        video.set(cv2.CAP_PROP_POS_FRAMES, 8)
-        ret, frame = video.read()
-        if ret:
-            cv2.imwrite('openVLA/references/pic.png', frame)
-            image = Image.open('pic.png')
-            # Predict Action (7-DoF; un-normalize for BridgeData V2)
-            inputs = processor(prompt, image).to("cuda:0", dtype=torch.bfloat16)
-            action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
+#   for i in range(100):
+#     scene.step()
+#     cam1.render()
+
+# currentPos = end_effector.get_pos()
+# print("currentPos:"+currentPos)    
+# for i in range(150):
+#     scene.step()
+#     cam1.render()
+#     cam2.render()
+#     if(i%10 == 0):
+#         cam2.render()
+#         cam2.stop_recording(save_to_filename='openVLA/references/clip.mp4')
+#         currentPos = end_effector.get_pos()
+#         print(currentPos)
+
+#         something = np.array([0.65, 0.0, 0.25])
+#         print(currentPos[0])
+#         print(currentPos[0]+something[0])
+#         currentQuat = end_effector.get_quat()
+#         video = cv2.VideoCapture('openVLA/references/clip.mp4')
+#         video.set(cv2.CAP_PROP_POS_FRAMES, 8)
+#         ret, frame = video.read()
+#         if ret:
+#             cv2.imwrite('openVLA/references/pic.png', frame)
+#             image = Image.open('pic.png')
+#             # Predict Action (7-DoF; un-normalize for BridgeData V2)
+#             inputs = processor(prompt, image).to("cuda:0", dtype=torch.bfloat16)
+#             action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
 
         
-            currentPos  = panda.get_dofs_position(dofs_idx)
-            qpos=panda.inverse_kinematics(
-                link = end_effector,
-                pos = np.array([0.65,0.0, 0.135])
-                # pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
-                # quat = np.array([currentQuat[0]+action[3], currentQuat[1]+action[4], currentQuat[2]+action[5]]),
-                #init_qpos = currentPos,
-            )
-            print (qpos)
-            print(np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]))
-            panda.control_dofs_position(qpos[:-2], motors_dof)
-            print(action)
-            # path = panda.plan_path(
-            #     qpos_goal = qpos,
-            #     qpos_start = currentPos,
-            #     num_waypoints = 20,
-            # )
+#             currentPos  = panda.get_dofs_position(dofs_idx)
+#             qpos=panda.inverse_kinematics(
+#                 link = end_effector,
+#                 pos = np.array([0.65,0.0, 0.135])
+#                 # pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
+#                 # quat = np.array([currentQuat[0]+action[3], currentQuat[1]+action[4], currentQuat[2]+action[5]]),
+#                 #init_qpos = currentPos,
+#             )
+#             print (qpos)
+#             print(np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]))
+#             panda.control_dofs_position(qpos[:-2], motors_dof)
+#             print(action)
+#             # path = panda.plan_path(
+#             #     qpos_goal = qpos,
+#             #     qpos_start = currentPos,
+#             #     num_waypoints = 20,
+#             # )
 
-            print("path")
-            for i in range(200):
-                scene.step()
-                cam1.render()
-            # for waypoint in path:
-            #     print("waypoint")
-            #     panda.control_dofs_position(waypoint)
-            #     scene.step()
-        print("restarting recording")
-        cam2.start_recording()
+#             print("path")
+#             for i in range(200):
+#                 scene.step()
+#                 cam1.render()
+#             # for waypoint in path:
+#             #     print("waypoint")
+#             #     panda.control_dofs_position(waypoint)
+#             #     scene.step()
+#         print("restarting recording")
+#         cam2.start_recording()
+
+for i in range(100):
+    cam.start_recording()
+    for i in range(25):
+        scene.step()
+        cam.render()
+        camFilm.render()
+
+    cam.stop_recording(save_to_filename='clip.mp4')
+
+    currentPos = end_effector.get_pos()
+    print(currentPos)
+
+    video = cv2.VideoCapture('clip.mp4')
+    video.set(cv2.CAP_PROP_POS_FRAMES, 9)
+    ret, frame = video.read()
+    print(ret)
+    cv2.imwrite('frame.jpg', frame)
+    image = Image.open('frame.jpg')
+
+    inputs = processor(prompt, image).to("cuda:0", dtype=torch.bfloat16)
+    action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
+
+    qpos= panda.inverse_kinematics(
+        link = end_effector,
+        pos = np.array([currentPos[0]-action[1], currentPos[1]-action[0], currentPos[2]+action[2]]),
+    )
+
+    panda.control_dofs_position(qpos[:-2], motors_dof)
 
 
-
-cam1.stop_recording(save_to_filename='openVLA/picsAndVids/test.mp4')
+camFilm.stop_recording(save_to_filename='openVLA/picsAndVids/test.mp4')
 # Execute...
 # robot.act(action, ...)
 # print(robot.act(action, ...))
