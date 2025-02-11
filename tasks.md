@@ -21,6 +21,8 @@ _Items with strikethrough are completed_
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
+    * Make guide for integrating genesis with VLAs
+    * how to use euler rotations instead of quaternions
 * [nVidia WARP](https://github.com/NVIDIA/warp)
     * plugin system for omniverse
 * [nVidia COSMOS](https://www.nvidia.com/en-us/ai/cosmos/)
@@ -37,7 +39,7 @@ _Items with strikethrough are completed_
 ## Generative AI Ramp up
 * ~~[Understanding ChatGPT](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/)~~
 * ~~Understand Concepts in GenAI (LLM, LAM, LBM, VLM, VLA, MobileVLA)~~
-* [video series explaining neural networks](https://youtube.com/playlist?list=PLiaHhY2iBX9hdHaRr6b7XevZtgZRa1PoU&si=tJoAmN8yy1aROMlW)
+* ~~[video series explaining neural networks](https://youtube.com/playlist?list=PLiaHhY2iBX9hdHaRr6b7XevZtgZRa1PoU&si=tJoAmN8yy1aROMlW)~~
 
 ## Software
 * [VScode and dev containers](https://code.visualstudio.com/docs/devcontainers/tutorial)

@@ -65,3 +65,8 @@
 * began working on getting the official pi0 to work
 * got pi0 to work!
     * It was not easy. The example code sucked!
+
+# 2/11/25
+* Ran into some issues with connecting to servers
+* Began looking into docker and dev containers for vscode
+* Researched quaternions to understand VLA outputs
