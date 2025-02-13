@@ -1,5 +1,5 @@
 # List of investigations
-_Items with strikethrough are completed_
+~~Items with strikethrough are completed~~
 
 ***Items in bold Italics are in progress***
 ## Robot Analysis
