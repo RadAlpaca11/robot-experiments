@@ -17,8 +17,9 @@
 * ***[Pi0](https://github.com/allenzren/open-pi-zero?utm_source=tldraihttps://www.physicalintelligence.company/download/pi0.pdf)***
     * Get model up and summarize
 * [OpenPi](https://github.com/Physical-Intelligence/openpi)
-* [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
 * [OCTO](https://octo-models.github.io/)
+* [DexterityGen](https://zhaohengyin.github.io/dexteritygen/)
+* [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
