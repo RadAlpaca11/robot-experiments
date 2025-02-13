@@ -18,6 +18,7 @@
     * Get model up and summarize
 * [OpenPi](https://github.com/Physical-Intelligence/openpi)
 * [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
+* [OCTO](https://octo-models.github.io/)
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
