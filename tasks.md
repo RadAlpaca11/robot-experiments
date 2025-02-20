@@ -20,6 +20,7 @@
 * [OCTO](https://octo-models.github.io/)
 * [DexterityGen](https://zhaohengyin.github.io/dexteritygen/)
 * [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
+* [Magma](https://microsoft.github.io/Magma/)
 * OpenVLA and xARM
 
 ## Simulation
