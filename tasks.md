@@ -21,6 +21,7 @@
 * [DexterityGen](https://zhaohengyin.github.io/dexteritygen/)
 * [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
 * [Magma](https://microsoft.github.io/Magma/)
+* [Helix](https://www.figure.ai/news/helix)
 * OpenVLA and xARM
 
 ## Simulation
