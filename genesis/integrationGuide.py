@@ -109,6 +109,7 @@ for i in range(100): # This is how many times the vla will evaluate the scene
     # The output is a tensor array that might look something like this: 
     # tensor([ 6.4834e-01, -4.6508e-04,  2.4258e-01]) 
     currentPos = end_effector.get_pos()
+    currentQuat = end_effector.get_quat()
 
 
     video = cv2.VideoCapture('clip.mp4')
@@ -119,11 +120,12 @@ for i in range(100): # This is how many times the vla will evaluate the scene
     image = Image.open('frame.jpg')
 
     # Add code here to feed image and prompt to VLA
-    # Add code here to get the output from the VLA
+    action = output # Add code here to get the output from the VLA, which should be an array of floats
 
     qpos = panda.inverse_kinematics(
         link = end_effector,
-        pos = np.array([0.65, 0.0, 0.25]),
-        quat = np.array([0, 1, 0, 0]), # If your VLA outputs seven values, that means that the rotational values are an euler transformation, if it is 8 it is quaterion
+        pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
+        # If your VLA outputs seven values, that means that the rotational values are an euler transformation, if it is 8 it is quaterion
+        quat = np.array([currentPos[3]+action[3], currentPos[4]+action[4], currentPos[5]+action[5], currentPos[6]+action[6]]),
 
     )
