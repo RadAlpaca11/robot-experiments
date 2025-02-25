@@ -1,5 +1,5 @@
 # List of investigations
-_Items with strikethrough are completed_
+~~Items with strikethrough are completed~~
 
 ***Items in bold Italics are in progress***
 ## Robot Analysis
@@ -17,7 +17,12 @@ _Items with strikethrough are completed_
 * ***[Pi0](https://github.com/allenzren/open-pi-zero?utm_source=tldraihttps://www.physicalintelligence.company/download/pi0.pdf)***
     * Get model up and summarize
 * [OpenPi](https://github.com/Physical-Intelligence/openpi)
+* [OCTO](https://octo-models.github.io/)
+* [DexterityGen](https://zhaohengyin.github.io/dexteritygen/)
 * [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
+* [Magma](https://microsoft.github.io/Magma/)
+* [Helix](https://www.figure.ai/news/helix)
+* OpenVLA and xARM
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
@@ -32,9 +37,11 @@ _Items with strikethrough are completed_
 * ***[Omniverse](https://www.nvidia.com/en-us/omniverse/)***
     * [IssacSim tutorials](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/index.html#)
 * ***Genesis with OpenVLA***
+* Genesis with OpenVLA AND xARM
 * Comparsion of Genesis, Mujoco and Omniverse (IsaacSim)
 * [Simulately](https://simulately.wiki/docs/)
 * [Glomap](https://github.com/colmap/glomap)
+* [WHAM](https://www.microsoft.com/en-us/research/blog/introducing-muse-our-first-generative-ai-model-designed-for-gameplay-ideation/)
  
 ## Generative AI Ramp up
 * ~~[Understanding ChatGPT](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/)~~
