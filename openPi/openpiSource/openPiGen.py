@@ -40,7 +40,7 @@ scene = gs.Scene( # This is just an example scene
 plane = scene.add_entity(gs.morphs.Plane())
 
 panda = scene.add_entity(
-    gs.morphs.MJCF(file='path/to/file',) # Replace the path with the path to your model
+    gs.morphs.MJCF(file='././genesis/mujoco_menagerie/franka_emika_panda/panda.xml',)
 )
 
 cube = scene.add_entity(
@@ -53,8 +53,22 @@ cube = scene.add_entity(
     )
 )
 
-# Camera setup
-# camFilm is the camera that is used to film the scene so that you have a video at the end
+# for long video
+camFilm = scene.add_camera(
+    res    = (640, 480),
+    pos    = (3.5, 0.0, 2.5),
+    lookat = (0.65, 0, 0.25),
+    fov    = 20,
+    GUI    = True,
+)
+# for openVLA
+cam = scene.add_camera(
+    res    = (640, 480),
+    pos    = (1.25, -2.5, 1.3),
+    lookat = (0.65, 0, 0.25),
+    fov    = 20,
+    GUI    = True,
+)
 
 scene.build()
 camFilm.start_recording()
@@ -96,7 +110,7 @@ checkpoint_dir = download.maybe_download("s3://openpi-assets/checkpoints/pi0_fas
 policy = policy_config.create_trained_policy(config, checkpoint_dir)
 
 
-for i in range(100): # This is how many times the vla will evaluate the scene
+for i in range(5): # This is how many times the vla will evaluate the scene
     cam.start_recording()
     for i in range(25): # This is how many times the scene will step in between evaluations
         scene.step()
@@ -121,21 +135,26 @@ for i in range(100): # This is how many times the vla will evaluate the scene
     image = Image.open('frame.jpg')
 
     jointPositions= panda.get_dofs_position()
+    print (jointPositions[:7])
+    print(jointPositions[7:8])
     inputs = {
     "observation/exterior_image_1_left": image,
+    "observation/wrist_image_left": image,
     # might be able to add other camera perspectives here
     "observation/joint_position": jointPositions[:7],
-    "observation/gripper_position": jointPositions[7],
+    "observation/gripper_position": jointPositions[7:8],
     "prompt": "touch the yellow block"
-}
+    }
     action_chunk = policy.infer(inputs)["actions"]
-    print(action_chunk)
-    action = action_chunk
-
-    qpos = panda.inverse_kinematics(
-        link = end_effector,
-        pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
-        # If your VLA outputs seven values, that means that the rotational values are an euler transformation, if it is 8 it is quaterion
-        quat = np.array([currentPos[3]+action[3], currentPos[4]+action[4], currentPos[5]+action[5], currentPos[6]+action[6]]),
-
-    )
+    print(action_chunk[1])
+    for action in action_chunk:
+        qpos = panda.inverse_kinematics(
+            link = end_effector,
+            pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
+            # If your VLA outputs seven values, that means that the rotational values are an euler transformation, if it is 8 it is quaterion
+            quat = np.array([currentQuat[0]+action[3], currentQuat[1]+action[4], currentQuat[2]+action[5], currentQuat[3]+action[6]]),
+        )
+        panda.control_dofs_position(qpos[:-2], motors_dof)
+        for i in range(50):
+            scene.step()
+            camFilm.render()

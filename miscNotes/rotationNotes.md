@@ -10,4 +10,4 @@ https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rot
 * Is the output from openPi use scalar first or last quaternions?
 
 ## Thoughts
-* We have to get the current quat from the model. We can then either convert the current quat to euler, use the euler output, and set the euler in qpos. Or we can convert the euler output to quat and just use the quat output.
+* We have to get the current quat from the model. We can then either convert the current quat to euler, use the euler output, and set the euler in qpos. Or we can convert the euler output to quat and just use the quat output. (for cogact and openvla)

@@ -28,6 +28,7 @@
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
     * Make guide for integrating genesis with VLAs
     * how to use euler rotations instead of quaternions
+    * add rotation to working genesis and openvla code
 * [nVidia WARP](https://github.com/NVIDIA/warp)
     * plugin system for omniverse
 * [nVidia COSMOS](https://www.nvidia.com/en-us/ai/cosmos/)

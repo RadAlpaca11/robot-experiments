@@ -55,8 +55,23 @@ cube = scene.add_entity(
     )
 )
 
-# Camera setup
+# Camera setup, you should finetune the settings to fit your needs
 # camFilm is the camera that is used to film the scene so that you have a video at the end
+cam = scene.add_camera(
+    res = (640, 480),
+    pos = (0.5, -1.5, 0.5),
+    lookat = (0.5, 0.0, 0.5),
+    fov = 30,
+    GUI = True,
+)
+
+camFilm = scene.add_camera(
+    res = (640, 480),
+    pos = (0.5, -1.5, 0.5),
+    lookat = (0.5, 0.0, 0.5),
+    fov = 30,
+    GUI = True,
+)
 
 scene.build()
 camFilm.start_recording()
@@ -127,5 +142,8 @@ for i in range(100): # This is how many times the vla will evaluate the scene
         pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
         # If your VLA outputs seven values, that means that the rotational values are an euler transformation, if it is 8 it is quaterion
         quat = np.array([currentPos[3]+action[3], currentPos[4]+action[4], currentPos[5]+action[5], currentPos[6]+action[6]]),
-
     )
+    
+    panda.control_dofs_position(qpos[:-2], motors_dof)  # This is the code that actually moves the arm. The [:-2] is because the last two values are the fingers, and we are not using those
+
+camFilm.stop_recording(save_to_filename='film.mp4') # Save the final video
