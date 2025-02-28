@@ -19,3 +19,6 @@
 [submodule "openpi"]
 	path = openpi
 	url = https://github.com/Physical-Intelligence/openpi.git
+[submodule "Magma"]
+	path = Magma
+	url = https://github.com/microsoft/Magma.git
