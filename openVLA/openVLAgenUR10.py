@@ -57,11 +57,11 @@ plane = scene.add_entity(
     gs.morphs.Plane(),
 )
 ur10 = scene.add_entity(
-    gs.morphs.URDF(file='./ur_description/ur10_robot.urdf', pos = (0, 0, 0.12),),
+    gs.morphs.URDF(file='../ur_description/ur10_robot.urdf'),
 )
 box = scene.add_entity(
     gs.morphs.Box(
-        size=(0.2, 0.2, 0.2),
+        size=(0.05, 0.1, 0.1),
         pos=(0.65, 0, 0.25),
     ),
     surface=gs.surfaces.Default(
@@ -82,8 +82,8 @@ camFilm = scene.add_camera(
 # for openVLA
 cam = scene.add_camera(
     res    = (640, 480),
-    pos    = (1.25, -2.5, 1.3),
-    lookat = (0.65, 0, 0.25),
+    pos    = (0.75, -1.5, 1),
+    lookat = (0.75, 0.5, 0),
     fov    = 20,
     GUI    = True,
 )
@@ -93,54 +93,109 @@ cam = scene.add_camera(
 scene.build()
 camFilm.start_recording()
 
-motors_dof = np.arange(7)
-fingers_dof = np.arange(7,8)
-print(motors_dof)
-print(fingers_dof)
-
-dofs_idx = np.concatenate((motors_dof, fingers_dof))
-lower = np.array([-50, -50, -30, -30, -30, -20, -20, -50])
-upper = np.array([50, 50, 30, 30, 30, 20, 20, 50])
-
-# Set the DOFs force range
-ur10.set_dofs_force_range(lower, upper, dofs_idx)
+dofs_idx = np.array([0, 1, 2, 3, 4, 5])
 
 
-# size1 -50 50
-# size2 -30 30
-# size3 -20 20
+kp = np.array([4500, 4500, 3500, 3500, 2000, 2000])
+if len(kp) != len(dofs_idx):
+    print(len(kp))
+    print(len(dofs_idx))
+    raise ValueError("Length of kp does not match length of motors_dof")
 
-# ur10.set_dofs_kp(
-#     np.array([4500, 4500, 3500, 3500, 2000, 2000, 2000, 100]),
-# )
-# ur10.set_dofs_kv(
-#     np.array([450, 450, 350, 350, 200, 200, 200, 10]),
-# )
-# ur10.set_dofs_force_range(
-#     np.array([-50, -50, -30, -30, -30, -20, -20, -50]),
-#     np.array([50, 50, 30, 30, 30, 20, 20, 50]),
-# )
+if kp.ndim != 1:
+    raise ValueError("kp must be a 1D array")
+
+if dofs_idx.ndim != 1:
+    raise ValueError("dofs_idx must be a 1D array")
+
+
+
+ur10.set_dofs_kp(
+    np.array([4500, 4500, 3500, 3500, 2000, 2000]),
+)
+ur10.set_dofs_kv(
+    np.array([450, 450, 350, 350, 200, 200]),
+)
+ur10.set_dofs_force_range(
+    np.array([-87, -87, -87, -87, -12, -12]),
+    np.array([87, 87, 87, 87, 12, 12]),
+)
 
 # get the end-effector link
-end_effector = ur10.get_link('ur10_gripper_base_link')
+end_effector = ur10.get_link('wrist_3_link')
+
+import time
 
 # starting position
 qpos = ur10.inverse_kinematics(
     link = end_effector,
-    pos = np.array([0.65, 0.0, 0.25]),
+    pos = np.array([0.65, 0.5, 0.25]),
     quat = np.array([0, 1, 0, 0]),
 )
-print(len(qpos))
-print(len(qpos[:-1]))
-print(len(qpos[:-2]))
-print(len(qpos[:-3]))
-print(len(qpos[:-4]))
-print(len(qpos[:-5]))
-print(len(qpos[:-6]))
 
-ur10.control_dofs_position(qpos[:-6], motors_dof)
+ur10.control_dofs_position(qpos[:6], motors_dof)
 
-for i in range(20):
+for i in range(500):
+    scene.step()
+    camFilm.render()
+
+# currentPos = end_effector.get_pos()
+# print("currentPos:"+currentPos)    
+# for i in range(150):
+#     scene.step()
+#     cam1.render()
+#     cam2.render()
+#     if(i%10 == 0):
+#         cam2.render()
+#         cam2.stop_recording(save_to_filename='openVLA/references/clip.mp4')
+#         currentPos = end_effector.get_pos()
+#         print(currentPos)
+
+#         something = np.array([0.65, 0.0, 0.25])
+#         print(currentPos[0])
+#         print(currentPos[0]+something[0])
+#         currentQuat = end_effector.get_quat()
+#         video = cv2.VideoCapture('openVLA/references/clip.mp4')
+#         video.set(cv2.CAP_PROP_POS_FRAMES, 8)
+#         ret, frame = video.read()
+#         if ret:
+#             cv2.imwrite('openVLA/references/pic.png', frame)
+#             image = Image.open('pic.png')
+#             # Predict Action (7-DoF; un-normalize for BridgeData V2)
+#             inputs = processor(prompt, image).to("cuda:0", dtype=torch.bfloat16)
+#             action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
+
+        
+#             currentPos  = ur10.get_dofs_position(dofs_idx)
+#             qpos=ur10.inverse_kinematics(
+#                 link = end_effector,
+#                 pos = np.array([0.65,0.0, 0.135])
+#                 # pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
+#                 # quat = np.array([currentQuat[0]+action[3], currentQuat[1]+action[4], currentQuat[2]+action[5]]),
+#                 #init_qpos = currentPos,
+#             )
+#             print (qpos)
+#             print(np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]))
+#             ur10.control_dofs_position(qpos[:-2], motors_dof)
+#             print(action)
+#             # path = ur10.plan_path(
+#             #     qpos_goal = qpos,
+#             #     qpos_start = currentPos,
+#             #     num_waypoints = 20,
+#             # )
+
+#             print("path")
+#             for i in range(200):
+#                 scene.step()
+#                 cam1.render()
+#             # for waypoint in path:
+#             #     print("waypoint")
+#             #     ur10.control_dofs_position(waypoint)
+#             #     scene.step()
+#         print("restarting recording")
+#         cam2.start_recording()
+
+for i in range(100):
     cam.start_recording()
     for i in range(25):
         scene.step()
@@ -167,11 +222,12 @@ for i in range(20):
         pos = np.array([currentPos[0]-action[1], currentPos[1]-action[0], currentPos[2]+action[2]]),
     )
 
-    ur10.control_dofs_position(qpos[:-6], motors_dof)
+    ur10.control_dofs_position(qpos[:6], motors_dof)
 
 
-camFilm.stop_recording(save_to_filename='openVLA/picsAndVids/test.mp4')
+camFilm.stop_recording(save_to_filename='picsAndVids/u10Test.mp4')
 # Execute...
 # robot.act(action, ...)
 # print(robot.act(action, ...))
 #print(action)
+

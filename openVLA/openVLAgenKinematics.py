@@ -61,7 +61,7 @@ panda = scene.add_entity(
 )
 box = scene.add_entity(
     gs.morphs.Box(
-        size=(0.2, 0.2, 0.2),
+        size=(0.05, 0.1, 0.1),
         pos=(0.65, 0, 0.25),
     ),
     surface=gs.surfaces.Default(
@@ -82,8 +82,8 @@ camFilm = scene.add_camera(
 # for openVLA
 cam = scene.add_camera(
     res    = (640, 480),
-    pos    = (1.25, -2.5, 1.3),
-    lookat = (0.65, 0, 0.25),
+    pos    = (0.5, -1.5, 1),
+    lookat = (0.75, 0.5, 0),
     fov    = 20,
     GUI    = True,
 )
@@ -116,15 +116,15 @@ import time
 # starting position
 qpos = panda.inverse_kinematics(
     link = end_effector,
-    pos = np.array([0.65, 0.0, 0.25]),
+    pos = np.array([0.65, 0.5, 0.25]),
     quat = np.array([0, 1, 0, 0]),
 )
 
 panda.control_dofs_position(qpos[:-2], motors_dof)
 
-#   for i in range(100):
-#     scene.step()
-#     cam1.render()
+for i in range(500):
+    scene.step()
+    camFilm.render()
 
 # currentPos = end_effector.get_pos()
 # print("currentPos:"+currentPos)    
@@ -212,7 +212,7 @@ for i in range(100):
     panda.control_dofs_position(qpos[:-2], motors_dof)
 
 
-camFilm.stop_recording(save_to_filename='openVLA/picsAndVids/test.mp4')
+camFilm.stop_recording(save_to_filename='picsAndVids/test.mp4')
 # Execute...
 # robot.act(action, ...)
 # print(robot.act(action, ...))
