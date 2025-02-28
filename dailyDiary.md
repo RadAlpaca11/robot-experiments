@@ -70,3 +70,12 @@
 * Ran into some issues with connecting to servers
 * Began looking into docker and dev containers for vscode
 * Researched quaternions to understand VLA outputs
+
+# 2/25/25
+* Looked into using xARM with genesis
+* Looked into magma
+
+
+# 2/27/25
+* Got magma running
+    * not with actions just observations
