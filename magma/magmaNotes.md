@@ -6,8 +6,9 @@ To run the example inference with local code, you do need to get access to the [
 The [local inference code](./gettingStarted.py) does not output anything, but if you get it to go through without any errors, you should be good to go.
 
 # How we got it working
+We used the terminal on the linux simulation machine in the lab and navigated to the directory where we wanted to install magma.
 
-First we cloned the repository and navigated to the directory:
+We then cloned the repository and navigated to the directory:
 ```bash
 git clone https://github.com/microsoft/Magma
 cd Magma
@@ -32,6 +33,10 @@ dtype = torch.bfloat16
 model = MagmaForCausalLM.from_pretrained("microsoft/Magma-8B", trust_remote_code=True, torch_dtype=dtype)
 processor = MagmaProcessor.from_pretrained("microsoft/Magma-8B", trust_remote_code=True)
 model.to("cuda")
+```
+And running with:
+```bash 
+python gettingStarted.py
 ```
 
 After that ran through without errors, we ran the [huggingface inference code](./huggingStarted.py):
@@ -75,6 +80,11 @@ response = processor.decode(generate_ids[0], skip_special_tokens=True).strip()
 
 print(response)
 ```
+Using the command
+```bash
+python huggingStarted.py
+```
+
 This worked right away!
 
 We have also spent some time experimenting with input images, and what we can ask magma to do.
