@@ -61,8 +61,8 @@ panda = scene.add_entity(
 )
 box = scene.add_entity(
     gs.morphs.Box(
-        size=(0.05, 0.1, 0.1),
-        pos=(0.65, 0, 0.25),
+        size=(0.05, 0.05, 0.05),
+        pos=(0.65, 0.3, 0.25),
     ),
     surface=gs.surfaces.Default(
         color=(1, 0.8, 0),
@@ -82,9 +82,9 @@ camFilm = scene.add_camera(
 # for openVLA
 cam = scene.add_camera(
     res    = (640, 480),
-    pos    = (0.5, -1.5, 1),
-    lookat = (0.75, 0.5, 0),
-    fov    = 20,
+    pos    = (0.1, 0.2, 0.2),
+    lookat = (0.65, 0.15, 0),
+    fov    = 70,
     GUI    = True,
 )
 
@@ -116,13 +116,13 @@ import time
 # starting position
 qpos = panda.inverse_kinematics(
     link = end_effector,
-    pos = np.array([0.65, 0.5, 0.25]),
+    pos = np.array([0.65, -0.2, 0.25]),
     quat = np.array([0, 1, 0, 0]),
 )
 
 panda.control_dofs_position(qpos[:-2], motors_dof)
 
-for i in range(500):
+for i in range(150):
     scene.step()
     camFilm.render()
 
@@ -182,7 +182,7 @@ for i in range(500):
 #         print("restarting recording")
 #         cam2.start_recording()
 
-for i in range(100):
+for i in range(50):
     cam.start_recording()
     for i in range(25):
         scene.step()
@@ -203,16 +203,18 @@ for i in range(100):
 
     inputs = processor(prompt, image).to("cuda:0", dtype=torch.bfloat16)
     action = vla.predict_action(**inputs, unnorm_key="bridge_orig", do_sample=False)
+    print(action)
 
     qpos= panda.inverse_kinematics(
         link = end_effector,
-        pos = np.array([currentPos[0]-action[1], currentPos[1]-action[0], currentPos[2]+action[2]]),
+        pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
     )
+    print(np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]))
 
     panda.control_dofs_position(qpos[:-2], motors_dof)
 
 
-camFilm.stop_recording(save_to_filename='picsAndVids/test.mp4')
+camFilm.stop_recording(save_to_filename='picsAndVids/test2.mp4')
 # Execute...
 # robot.act(action, ...)
 # print(robot.act(action, ...))
