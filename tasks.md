@@ -23,6 +23,8 @@
 * ***[Magma](https://microsoft.github.io/Magma/)***
 * [Helix](https://www.figure.ai/news/helix)
 * ***OpenVLA and xARM***
+* [RDT](https://arxiv.org/abs/2410.07864)
+* (OpenVLA OF)[https://openvla-oft.github.io/]
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
