@@ -1,20 +1,50 @@
-Currently have it working, with example code! unable to use our own inputs or evaluate, but it works!
+Currently have it working with example code! unable to use our own inputs or evaluate, but it works!
 
 # Notes:
 - Optimized for fine-tuning
     - we plan to use it to fine-tune on a dataset we make for specific tasks in genesis
     - hopefully we will be able to make a system to collect data so that we can easily fine tune it for different tasks in the simulator
 
-# Getting it working:
+# Getting it working (short version):
+* Setup conda environment from the setup guide in the repository
+* Install the requirements (also included in setup guide)
+    * Note: if you install torch, and you get errors, follow the instructions through. For us this solved the issue
+* Install robosuite
+```bash
+pip install robosuite==1.4
+```
+* You may get error with evdev, not being able to build installable wheels. We fixed this with the following commands:
+```bash
+export CFLAGS="-I/usr/include"
+export LDFLAGS="-L/usr/lib"
+export CC=/usr/bin/gcc
+export CXX=/usr/bin/g++
+pip install evdev
+```
+* After this works, you can install robosuite again
+* Install robosuite_models
+```bash
+pip install robosuite_models
+```
+* There are also a few more packages you need to install:
+```bash
+pip install bddl
+pip install easydict
+```
+* You need to use git lfs to get the huggingface checkpoints
+* You can then run the example code in the repository
+
+
+# Getting it working (long version):
 Followed the setup guide for the conda environment
 
-tried to use example code but had to follow libero instrucitons?
+tried to use example code but had to follow libero instrucitons
 
 got further
 
 no module named 'robosuite'
 
-had to manually install 'robosuite' which caused many issues.
+had to manually install 'robosuite' which caused many issues because 'evdev' wouldn't install. Failed to build wheels.
 we ended up needing to 
 
 
@@ -28,26 +58,29 @@ we ended up needing to
 
 
 
-then we get this:
-
+Then we got this:
+```
 ModuleNotFoundError: No module named 'robosuite.environments.manipulation.single_arm_env'
+```
+we also installed robosuite_models:
+```bash
+pip install robosuite_models
+```
 
-we also isntalled robosuite_models
+We also had to go back to robosuite==1.4 because SingleArmEnv is gone in 1.5
 
-we had to go back to robosuite==1.4 because the SingleArmEnv thing is just straight up gone in 1.5
-
-also
+Also needed to install:
 
 ```bash
 pip install bddl
 
 pip install easydict
-
 ```
 
+You need to use git lfs to get the huggingface checkpoints
 
-you need to use git lfs to get the huggingface checkpoints
 
+# Example code results
 Generated action chunk:
 [0.031 0.062 0.055 -0.000 0.010 -0.000 1.000]
 [0.080 0.116 0.051 -0.000 0.012 -0.000 1.000]
