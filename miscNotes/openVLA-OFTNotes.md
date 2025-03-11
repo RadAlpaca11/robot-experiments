@@ -79,10 +79,13 @@ pip install easydict
 
 You need to use git lfs to get the huggingface checkpoints
 
+<<<<<<< HEAD
 Needed to change sys.path.append("../..") to (note for hayden to update this lol)
 we also had to use sys.path.append a lot everywhere and modify the import statements accordingly
 
 The example libero evaluation needed a ton of paths fixed, and also just didnt exactly work right away. So lovely.
+=======
+>>>>>>> d5a63d58667c95e55dea7f76677bea0758b7a54f
 
 # Example code results
 Generated action chunk:
