@@ -1,0 +1,9 @@
+[submodule "openvla-7b-oft-finetuned-libero-spatial"]
+	path = openvla-7b-oft-finetuned-libero-spatial
+	url = https://huggingface.co/moojink/openvla-7b-oft-finetuned-libero-spatial
+[submodule "LIBERO"]
+	path = LIBERO
+	url = https://github.com/Lifelong-Robot-Learning/LIBERO.git
+[submodule "experiments/robot/libero/LIBERO"]
+	path = experiments/robot/libero/LIBERO
+	url = https://github.com/Lifelong-Robot-Learning/LIBERO.git

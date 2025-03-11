@@ -1,0 +1,2 @@
+Task suite: libero_spatial
+Using default initial states
