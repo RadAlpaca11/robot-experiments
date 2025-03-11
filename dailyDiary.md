@@ -79,3 +79,6 @@
 # 2/27/25
 * Got magma running
     * not with actions just observations
+
+# 3/11/25
+* worked with openvla-oft 

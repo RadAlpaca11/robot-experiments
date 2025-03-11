@@ -22,3 +22,6 @@
 [submodule "Magma"]
 	path = Magma
 	url = https://github.com/microsoft/Magma.git
+[submodule "openvla-oft"]
+	path = openvla-oft
+	url = https://github.com/moojink/openvla-oft.git
