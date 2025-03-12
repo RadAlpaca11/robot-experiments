@@ -25,6 +25,7 @@
 * ***OpenVLA and xARM***
 * [RDT](https://arxiv.org/abs/2410.07864)
 * (OpenVLA OF)[https://openvla-oft.github.io/]
+* (Gemini Robotics)[https://deepmind.google/discover/blog/gemini-robotics-brings-ai-into-the-physical-world/]
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
