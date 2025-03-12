@@ -47,7 +47,7 @@ no module named 'robosuite'
 had to manually install 'robosuite' which caused many issues because 'evdev' wouldn't install. Failed to build wheels.
 we ended up needing to 
 
-
+```bash
 (openvla-oft) a3r@A3R-Omniverse-Sim:~/Interns/robosuite$ export CFLAGS="-I/usr/include"
 (openvla-oft) a3r@A3R-Omniverse-Sim:~/Interns/robosuite$ export LDFLAGS="-L/usr/lib"
 (openvla-oft) a3r@A3R-Omniverse-Sim:~/Interns/robosuite$ which gcc
@@ -55,7 +55,7 @@ we ended up needing to
 (openvla-oft) a3r@A3R-Omniverse-Sim:~/Interns/robosuite$ export CC=/usr/bin/gcc
 (openvla-oft) a3r@A3R-Omniverse-Sim:~/Interns/robosuite$ export CXX=/usr/bin/g++
 (openvla-oft) a3r@A3R-Omniverse-Sim:~/Interns/robosuite$ pip install evdev
-
+```
 
 
 Then we got this:
@@ -79,24 +79,41 @@ pip install easydict
 
 You need to use git lfs to get the huggingface checkpoints
 
-<<<<<<< HEAD
-Needed to change sys.path.append("../..") to (note for hayden to update this lol)
-we also had to use sys.path.append a lot everywhere and modify the import statements accordingly
+Using ```sys.path.append("../..")``` as used in the code kept leading the libraries to be imported from openvla not openVLA-oft.
+This was a problem because it wouldn't work with the code it was finding in openvla.
 
-The example libero evaluation needed a ton of paths fixed, and also just didnt exactly work right away. So lovely.
-=======
->>>>>>> d5a63d58667c95e55dea7f76677bea0758b7a54f
+We had to add more paths in various places to get it to work.
+```python
+sys.path.append("/home/a3r/Interns/internship2024-25/openvlaOFT/experiments/robot")
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT')
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/prismatic')
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/prismatic/models')
 
-# Example code results
-Generated action chunk:
+```
+
+Not only was this such a pain on it's own, but it also meant that we had to change a bunch of the import statements in the code to get it to work. This was also a pain.
+
+# Example code results (gettingStarted.py):
+Generated action chunk (euler rotations):
+
 [0.031 0.062 0.055 -0.000 0.010 -0.000 1.000]
+
 [0.080 0.116 0.051 -0.000 0.012 -0.000 1.000]
+
 [0.212 0.242 0.101 0.007 0.017 0.002 1.000]
+
 [0.412 0.343 0.161 0.012 0.019 0.003 1.008]
+
 [0.671 0.409 0.167 0.016 0.023 0.001 1.000]
+
 [0.796 0.463 0.138 0.007 0.021 0.001 1.000]
+
 [0.865 0.507 0.114 0.004 0.011 0.001 0.996]
+
 [0.898 0.486 0.094 0.016 0.006 0.002 0.992]
+
+
+
 
 cloned LIBERO
 
