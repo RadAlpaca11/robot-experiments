@@ -28,3 +28,4 @@
 [submodule "magma/magmaSource"]
 	path = magma/magmaSource
 	url = https://github.com/microsoft/Magma.git
+	branch = main
