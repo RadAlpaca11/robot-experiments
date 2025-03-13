@@ -13,6 +13,8 @@ We then cloned the repository and navigated to the directory:
 git clone https://github.com/microsoft/Magma
 cd Magma
 ```
+(Later we actually added it in this repository as a submodule.)
+
 Then created a conda environment and activated it:
 ```bash
 conda create -n magma python=3.10 -y
