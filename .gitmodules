@@ -25,3 +25,6 @@
 [submodule "openvla-oft"]
 	path = openvla-oft
 	url = https://github.com/moojink/openvla-oft.git
+[submodule "magma/magmaSource"]
+	path = magma/magmaSource
+	url = https://github.com/microsoft/Magma.git
