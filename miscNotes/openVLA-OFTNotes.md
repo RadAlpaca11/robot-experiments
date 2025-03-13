@@ -84,10 +84,10 @@ This was a problem because it wouldn't work with the code it was finding in open
 
 We had to add more paths in various places to get it to work.
 ```python
-sys.path.append("/home/a3r/Interns/internship2024-25/openvlaOFT/experiments/robot")
-sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT')
-sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/prismatic')
-sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/prismatic/models')
+sys.path.append("/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft/experiments/robot")
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft')
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft/prismatic')
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft/prismatic/models')
 
 ```
 

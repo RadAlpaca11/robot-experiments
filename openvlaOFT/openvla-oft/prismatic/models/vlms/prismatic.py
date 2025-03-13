@@ -24,8 +24,8 @@ from ..backbones.llm import LLMBackbone
 from ..backbones.llm.prompting import PromptBuilder
 from ..backbones.vision import VisionBackbone
 from .base_vlm import VLM
-from ...overwatch import initialize_overwatch
-from ...util.nn_utils import FusedMLPProjector, LinearProjector, MLPProjector
+from overwatch import initialize_overwatch
+from util.nn_utils import FusedMLPProjector, LinearProjector, MLPProjector
 
 # Initialize Overwatch =>> Wraps `logging.Logger`
 overwatch = initialize_overwatch(__name__)

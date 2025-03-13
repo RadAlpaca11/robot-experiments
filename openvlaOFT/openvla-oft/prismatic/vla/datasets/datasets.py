@@ -15,13 +15,13 @@ from PIL import Image
 from torch.utils.data import Dataset, IterableDataset
 from transformers import PreTrainedTokenizerBase
 
-from ...models.backbones.llm.prompting import PromptBuilder
-from ...models.backbones.vision import ImageTransform
-from ...util.data_utils import tree_map
-from ...vla.action_tokenizer import ActionTokenizer
-from ...vla.constants import ACTION_DIM, ACTION_PROPRIO_NORMALIZATION_TYPE, ACTION_TOKEN_BEGIN_IDX, IGNORE_INDEX, NUM_ACTIONS_CHUNK, PROPRIO_DIM, STOP_INDEX
-from ...vla.datasets.rlds import make_interleaved_dataset, make_single_dataset
-from ...vla.datasets.rlds.oxe import OXE_NAMED_MIXTURES, get_oxe_dataset_kwargs_and_weights
+from models.backbones.llm.prompting import PromptBuilder
+from models.backbones.vision import ImageTransform
+from util.data_utils import tree_map
+from vla.action_tokenizer import ActionTokenizer
+from vla.constants import ACTION_DIM, ACTION_PROPRIO_NORMALIZATION_TYPE, ACTION_TOKEN_BEGIN_IDX, IGNORE_INDEX, NUM_ACTIONS_CHUNK, PROPRIO_DIM, STOP_INDEX
+from vla.datasets.rlds import make_interleaved_dataset, make_single_dataset
+from vla.datasets.rlds.oxe import OXE_NAMED_MIXTURES, get_oxe_dataset_kwargs_and_weights
 
 @dataclass
 class RLDSBatchTransform:

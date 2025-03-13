@@ -15,11 +15,11 @@ import numpy as np
 import tensorflow as tf
 import tensorflow_datasets as tfds
 
-from ....overwatch import initialize_overwatch
-from ....vla.constants import ACTION_DIM, ACTION_PROPRIO_NORMALIZATION_TYPE, ACTION_TOKEN_BEGIN_IDX, IGNORE_INDEX, NUM_ACTIONS_CHUNK, PROPRIO_DIM, STOP_INDEX
-from ....vla.datasets.rlds import obs_transforms, traj_transforms
-from ....vla.datasets.rlds.utils import goal_relabeling, task_augmentation
-from ....vla.datasets.rlds.utils.data_utils import (
+from overwatch import initialize_overwatch
+from vla.constants import ACTION_DIM, ACTION_PROPRIO_NORMALIZATION_TYPE, ACTION_TOKEN_BEGIN_IDX, IGNORE_INDEX, NUM_ACTIONS_CHUNK, PROPRIO_DIM, STOP_INDEX
+from vla.datasets.rlds import obs_transforms, traj_transforms
+from vla.datasets.rlds.utils import goal_relabeling, task_augmentation
+from vla.datasets.rlds.utils.data_utils import (
     allocate_threads,
     get_dataset_statistics,
     normalize_action_and_proprio,

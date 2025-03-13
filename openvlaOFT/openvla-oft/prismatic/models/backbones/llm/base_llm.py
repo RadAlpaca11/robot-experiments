@@ -24,7 +24,7 @@ from transformers import AutoConfig, AutoTokenizer, PreTrainedModel, PreTrainedT
 from transformers.modeling_outputs import CausalLMOutputWithPast
 
 from .prompting import PromptBuilder
-from ....overwatch import initialize_overwatch
+from overwatch import initialize_overwatch
 
 # Suppress HF Deprecation Warnings
 warnings.filterwarnings("ignore", category=FutureWarning)

@@ -12,13 +12,13 @@ from typing import List, Optional, Union
 
 from huggingface_hub import HfFileSystem, hf_hub_download
 
-from ..conf import ModelConfig
+from conf.models import ModelConfig # modified from just conf to ModelConfig
 from .materialize import get_llm_backbone_and_tokenizer, get_vision_backbone_and_transform
 from .registry import GLOBAL_REGISTRY, MODEL_REGISTRY
 from .vlas import OpenVLA
 from .vlms import PrismaticVLM
-from ..overwatch import initialize_overwatch
-from ..vla.action_tokenizer import ActionTokenizer
+from overwatch import initialize_overwatch
+from vla.action_tokenizer import ActionTokenizer
 
 # Initialize Overwatch =>> Wraps `logging.Logger`
 overwatch = initialize_overwatch(__name__)

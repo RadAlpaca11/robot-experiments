@@ -22,7 +22,7 @@ from libero.libero import benchmark
 import wandb
 
 # Append current directory so that interpreter can find experiments.robot
-sys.path.append("/home/a3r/Interns/internship2024-25/openvlaOFT/experiments/robot")
+sys.path.append("/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft/experiments/robot")
 from libero.libero_utils import(
 #from libero_utils import (
     get_libero_dummy_action,

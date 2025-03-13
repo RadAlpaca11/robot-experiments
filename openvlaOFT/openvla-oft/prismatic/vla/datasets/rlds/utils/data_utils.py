@@ -14,8 +14,8 @@ import numpy as np
 import tensorflow as tf
 from tqdm import tqdm
 
-from .....overwatch import initialize_overwatch
-from .....vla.constants import NormalizationType
+from overwatch import initialize_overwatch
+from vla.constants import NormalizationType
 
 # Initialize Overwatch =>> Wraps `logging.Logger`
 overwatch = initialize_overwatch(__name__)

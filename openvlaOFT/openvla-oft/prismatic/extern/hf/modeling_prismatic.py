@@ -21,7 +21,7 @@ from timm.models.vision_transformer import LayerScale
 from transformers import AutoModelForCausalLM, PretrainedConfig, PreTrainedModel
 from transformers.modeling_outputs import ModelOutput
 
-from training.train_utils import (
+from prismatic.training.train_utils import (
     get_current_action_mask,
     get_next_actions_mask,
 )

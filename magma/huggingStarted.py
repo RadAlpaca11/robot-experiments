@@ -9,11 +9,11 @@ processor = AutoProcessor.from_pretrained("microsoft/Magma-8B", trust_remote_cod
 model.to("cuda")
 
 # Inference
-image = Image.open("assets/images/frame.jpg").convert("RGB")
+image = Image.open("assets/images/magma_logo.jpg").convert("RGB")
 
 convs = [
     {"role": "system", "content": "You are an agent that can see, talk, and act."},            
-    {"role": "user", "content": "<image_start><image><image_end>\nWhat should the robot do next?"},
+    {"role": "user", "content": "<image_start><image><image_end>\nWhat letter is on the robot?"},
 ]
 prompt = processor.tokenizer.apply_chat_template(convs, tokenize=False, add_generation_prompt=True)
 inputs = processor(images=[image], texts=prompt, return_tensors="pt")

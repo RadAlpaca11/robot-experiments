@@ -26,7 +26,7 @@ Configuration adopts the following structure:
 
 from enum import IntEnum
 
-from .....vla.datasets.rlds.oxe.utils.droid_utils import zero_action_filter
+from vla.datasets.rlds.oxe.utils.droid_utils import zero_action_filter
 
 
 # Defines Proprioceptive State Encoding Schemes

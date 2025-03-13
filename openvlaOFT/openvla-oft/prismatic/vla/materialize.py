@@ -11,9 +11,9 @@ from typing import Tuple, Type
 from torch.utils.data import Dataset
 from transformers import PreTrainedTokenizerBase
 
-from ..models.backbones.llm.prompting import PromptBuilder
-from ..models.backbones.vision import ImageTransform
-from ..util.data_utils import PaddedCollatorForActionPrediction
+from models.backbones.llm.prompting import PromptBuilder
+from models.backbones.vision import ImageTransform
+from util.data_utils import PaddedCollatorForActionPrediction
 from .action_tokenizer import ActionTokenizer
 from .datasets import EpisodicRLDSDataset, RLDSBatchTransform, RLDSDataset
 

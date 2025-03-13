@@ -7,9 +7,9 @@ python experiments/robot/libero/run_libero_eval.py \
 
 torchrun --standalone --nnodes 1 --nproc-per-node 1 vla-scripts/finetune.py \
   --vla_path openvla/openvla-7b \
-  --data_root_dir /prismatic/vla/datasets/rlds/oxe/configs \
   --dataset_name libero_spatial_no_noops \
-  --run_root_dir logs/log1 \
+  --data_root_dir prismatic/vla/datasets/rlds/oxe/config \
+  --run_root_dir logs/log2 \
   --use_l1_regression True \
   --use_diffusion False \
   --use_film False \

@@ -4,3 +4,4 @@ Using LIBERO constants:
   PROPRIO_DIM = 8
   ACTION_PROPRIO_NORMALIZATION_TYPE = bounds_q99
 If needed, manually set the correct constants in `prismatic/vla/constants.py`!
+{'name': 'libero_spatial_no_noops', 'data_dir': '/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft/prismatic/vla/datasets/rlds/oxe/configs', 'image_obs_keys': {'primary': 'image'}, 'state_obs_keys': ['EEF_state', 'gripper_state'], 'absolute_action_mask': [False, False, False, False, False, False, True], 'action_normalization_mask': [True, True, True, True, True, True, False], 'action_proprio_normalization_type': 'none', 'language_key': 'language_instruction', 'standardize_fn': <function libero_dataset_transform at 0x7ba93376b370>}

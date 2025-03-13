@@ -29,10 +29,10 @@ from transformers.modeling_outputs import CausalLMOutputWithPast
 import wandb
 
 import sys
-sys.path.append("/home/a3r/Interns/internship2024-25/openvlaOFT/experiments/robot")
-sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT')
-sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/prismatic')
-sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/prismatic/models')
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft/experiments/robot')
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft')
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft/prismatic')
+sys.path.append('/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft/prismatic/models')
 
 
 from openvla_utils import (
@@ -41,9 +41,9 @@ from openvla_utils import (
     update_auto_map,
 )
 
-from extern.hf.configuration_prismatic import OpenVLAConfig
-from extern.hf.modeling_prismatic import OpenVLAForActionPrediction
-from extern.hf.processing_prismatic import PrismaticImageProcessor, PrismaticProcessor
+from prismatic.extern.hf.configuration_prismatic import OpenVLAConfig
+from prismatic.extern.hf.modeling_prismatic import OpenVLAForActionPrediction
+from prismatic.extern.hf.processing_prismatic import PrismaticImageProcessor, PrismaticProcessor
 from models.action_heads import DiffusionActionHead, L1RegressionActionHead
 from models.backbones.llm.prompting import PurePromptBuilder
 from models.film_vit_wrapper import FiLMedPrismaticVisionBackbone

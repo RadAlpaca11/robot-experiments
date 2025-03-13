@@ -20,7 +20,7 @@
 	path = openpi
 	url = https://github.com/Physical-Intelligence/openpi.git
 [submodule "Magma"]
-	path = Magma
+	path = magma/magmaSource
 	url = https://github.com/microsoft/Magma.git
 [submodule "openvla-oft"]
 	path = openvla-oft
