@@ -1,5 +1,5 @@
-from magma.processing_magma import MagmaProcessor
-from magma.modeling_magma import MagmaForCausalLM
+from magmaSource.magma.processing_magma import MagmaProcessor
+from magmaSource.magma.modeling_magma import MagmaForCausalLM
 import torch
 
 dtype = torch.bfloat16
