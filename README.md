@@ -19,6 +19,12 @@
 * [mujocoPlayground](mujocoPlayground): Overall folder for mujoco playground work. The folder currently mainly contains jupyter notebooks that are from the website, that we have slightly modified to learn how the software works.
     * [mujocoTutorials](mujocoPlayground/mujocoTutorials): Tutorials from the mujoco playground website
 * [openPi0](openPi0): Overall folder for openPi0 work.
+* [openPi](openPi): Overall folder for openPi work.
+* [openvla-oft](openvlaOFT/openvla-oft): Overall folder for openvla-oft work.
+* [magma](magma): Folder of Magma work.
+    * [magmaSource](magma/magmaSource): The source code for magma (this is a submodule so you may have to pull it separately)
+
+
 
 
 # Links

@@ -82,3 +82,8 @@
 
 # 3/11/25
 * worked with openvla-oft 
+    * able to get outputs, unsuccessful with our own inputs so far
+
+# 3/13/25
+* continued working on openvla-oft 
+* explored magma robot demo
