@@ -29,7 +29,3 @@
 [submodule "openvlaOFT/openvla-oft/modified_libero_rlds"]
 	path = openvlaOFT/openvla-oft/modified_libero_rlds
 	url = https://huggingface.co/datasets/openvla/modified_libero_rlds
-
-[submodule "openvla-oft/openvla-oftSource"]
-	path = openvla-oft/openvla-oftSource
-	url = https://github.com/moojink/openvla-oft.git
