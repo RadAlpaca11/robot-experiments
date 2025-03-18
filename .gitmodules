@@ -26,3 +26,6 @@
 	path = magma/magmaSource
 	url = https://github.com/microsoft/Magma.git
 	branch = main
+[submodule "openvlaOFT/openvla-oft"]
+	path = openvlaOFT/openvla-oft
+	url = https://huggingface.co/datasets/openvla/modified_libero_rlds
