@@ -19,8 +19,8 @@
 [submodule "openpi"]
 	path = openpi
 	url = https://github.com/Physical-Intelligence/openpi.git
-[submodule "openvla-oft"]
-	path = openvla-oft
+[submodule "openVLA/openvla-oft"]
+	path = openVLA/openvla-oft
 	url = https://github.com/moojink/openvla-oft.git
 [submodule "magma/magmaSource"]
 	path = magma/magmaSource
