@@ -9,7 +9,7 @@ processor = AutoProcessor.from_pretrained("microsoft/Magma-8B", trust_remote_cod
 model.to("cuda")
 
 # Inference
-image = Image.open("assets/images/magma_logo.jpg").convert("RGB")
+image = Image.open("magmaSource/assets/images/magma_logo.jpg").convert("RGB")
 
 convs = [
     {"role": "system", "content": "You are an agent that can see, talk, and act."},            
