@@ -22,7 +22,7 @@
 * [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
 * ***[Magma](https://microsoft.github.io/Magma/)***
 * [Helix](https://www.figure.ai/news/helix)
-* ***OpenVLA and xARM***
+* ***OpenVLA and KUKA IIWA 14***
 * [RDT](https://arxiv.org/abs/2410.07864)
 * [OpenVLA OFT](https://openvla-oft.github.io/)
 * [Gemini Robotics](https://deepmind.google/discover/blog/gemini-robotics-brings-ai-into-the-physical-world/)
