@@ -23,9 +23,12 @@
 * ***[Magma](https://microsoft.github.io/Magma/)***
 * [Helix](https://www.figure.ai/news/helix)
 * ***OpenVLA and xARM***
-* [RDT](https://arxiv.org/abs/2410.07864)
-* (OpenVLA OFT)[https://openvla-oft.github.io/]
-* (Gemini Robotics)[https://deepmind.google/discover/blog/gemini-robotics-brings-ai-into-the-physical-world/]
+* (RDT)(https://arxiv.org/abs/2410.07864)
+* [OpenVLA OFT](https://openvla-oft.github.io/)
+* [Gemini Robotics](https://deepmind.google/discover/blog/gemini-robotics-brings-ai-into-the-physical-world/)
+* [nVidia Physical AI Dataset](https://huggingface.co/collections/nvidia/physical-ai-67c643edbb024053dcbcd6d8)
+* [nVidia GR00T 1 Humanoid AI Model](https://developer.nvidia.com/blog/accelerate-generalist-humanoid-robot-development-with-nvidia-isaac-gr00t-n1/)
+* 
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
