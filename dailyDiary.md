@@ -87,3 +87,7 @@
 # 3/13/25
 * continued working on openvla-oft 
 * explored magma robot demo
+
+# 3/20/25
+* worked on getting openvla to work so we could use it for the kuka arm, but it wasn't working and being weird
+* began using Issac-GR00T, getting it installed and through the inference example code

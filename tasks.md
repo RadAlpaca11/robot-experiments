@@ -44,7 +44,7 @@
 * ***[Omniverse](https://www.nvidia.com/en-us/omniverse/)***
     * [IssacSim tutorials](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/index.html#)
 * ***Genesis with OpenVLA***
-* Genesis with OpenVLA AND xARM
+* Genesis with OpenVLA AND Kuka
 * Comparsion of Genesis, Mujoco and Omniverse (IsaacSim)
 * [Simulately](https://simulately.wiki/docs/)
 * [Glomap](https://github.com/colmap/glomap)

@@ -6,8 +6,6 @@ from PIL import Image
 import sys
 sys.path.append('/openvlaSource/prismatic/conf')
 
-from openvlaSource.prismatic.conf import vla
-
 import torch
 
 # Load Processor & VLA
@@ -19,6 +17,7 @@ model = AutoModelForVision2Seq.from_pretrained(
     low_cpu_mem_usage=True, 
     trust_remote_code=True
 ).to("cuda:0")
+
 
 # Grab image input & format prompt
 #image: Image.Image = 'get_from_camera(...)'
