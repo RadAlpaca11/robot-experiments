@@ -31,7 +31,7 @@ scene = gs.Scene(
 plane = scene.add_entity(gs.morphs.Plane())
 
 kuka = scene.add_entity(
-    gs.morphs.MJCF(file='genesis/mujoco_menagerie/franka_emika_panda/panda.xml',)
+    gs.morphs.MJCF(file='mujoco_menagerie/kuka_iiwa_14/iiwa14.xml',)
 )
 
 cube = scene.add_entity(
@@ -86,16 +86,16 @@ kuka.set_dofs_force_range(
 end_effector = kuka.get_link('link7')
 # end_effector = kuka.get_link('attachment_site')
 # move to pose before grasp
-qpos = kuka.inverse_kinematics(
-    link = end_effector,
-    pos = np.array([0.65, 0.0, 0.25]),
-    quat = np.array([0, 1, 0, 0]),
-)
+# qpos = kuka.inverse_kinematics(
+#     link = end_effector,
+#     pos = np.array([0.65, 0.0, 0.25]),
+#     quat = np.array([0, 1, 0, 0]),
+# )
 
-# execute path
-for waypoint in path:
-    kuka.control_dofs_position(waypoint)
-    scene.step()
+# # execute path
+# for waypoint in qpos:
+#     kuka.control_dofs_position(waypoint)
+#     scene.step()
 
 # let robot reach waypoint
 for i in range(100):

@@ -1,8 +1,8 @@
 [submodule "mujoco_menagerie"]
 	path = mujoco_menagerie
 	url = https://github.com/google-deepmind/mujoco_menagerie.git
-[submodule "openvla"]
-	path = openvla
+[submodule "openVLA/openvlaSource"]
+	path = openVLA/openvlaSource
 	url = https://github.com/openvla/openvla.git
 [submodule "openPi0/open-pi-zero"]
 	path = openPi0/open-pi-zero
