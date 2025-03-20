@@ -37,4 +37,5 @@
 * [Omniverse Notes](miscNotes/omniverseNotes.md): Notes on omniverse, a simulator we are experimenting with
 * [Mujoco Playground Notes](mujocoPlayground/mujocoPlaygroundNotes.md): Notes on mujoco playground, another simulator that we are learning how to utilize
 * [Pi0 Notes](openPi0/pi0Notes.md): Notes on openPi0, an open source vla that is based on a paper describing a VLA
+* [Magma Notes](magma/magmaNotes.md): notes on magma and a guide to get it working
 
