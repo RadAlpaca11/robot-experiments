@@ -57,3 +57,4 @@
 
 ## Software
 * [VScode and dev containers](https://code.visualstudio.com/docs/devcontainers/tutorial)
+* [UV python manager](https://docs.astral.sh/uv/)
