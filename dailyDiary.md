@@ -86,7 +86,7 @@
 
 # 3/13/25
 * continued working on openvla-oft 
-* explored magma robot demo
+* explored [magma robot demo](magma/magmaSource/agents/robot_traj/app.py)
     * This is not great yet, it only really draws random lines
 
 # 3/20/25
