@@ -36,3 +36,18 @@ From the github README:
 Note: OpenVLA typically requires fine-tuning on a small demonstration dataset (~100 demos) from your target domain robot. Out-of-the-box, it only works well on domains from the training dataset.
 
 Fine-tuning and fully fine-tuning would require server class machines.
+
+
+
+# Solving pip install vla issues
+
+* switched to use opencv-python-headless to use with the debugger
+* Checked ~/.bashrc and removed pi0 vla configs
+* removed and reinstalled conda
+* recreated the openvla conda environment with python=3.10 as openvla2 (using the instructions from openvla README)
+* created launch.json file through vscode and used copilot to set jusMyCode to false in the launch file for debugging other files
+* deleted huggingface cache for openvla to force a redownload
+
+Side note
+Also ompl version corresponds to the python version!
+python 3.10 means cp310 in the name!
