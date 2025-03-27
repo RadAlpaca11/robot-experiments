@@ -108,7 +108,7 @@ kuka.set_dofs_force_range(
 )
 
 # get the end-effector link
-end_effector = kuka.get_link('hand')
+end_effector = kuka.get_link('link7')
 
 import time
 
@@ -119,7 +119,7 @@ qpos = kuka.inverse_kinematics(
     quat = np.array([0, 1, 0, 0]),
 )
 
-kuka.control_dofs_position(qpos[:-2], motors_dof)
+kuka.control_dofs_position(qpos, motors_dof)
 
 for i in range(150):
     scene.step()
@@ -206,14 +206,14 @@ for i in range(50):
 
     qpos= kuka.inverse_kinematics(
         link = end_effector,
-        pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
+        pos = np.array([currentPos[1]-action[1], currentPos[0]+action[0], currentPos[2]+action[2]]),
     )
-    print(np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]))
+    print(np.array([currentPos[1]-action[1], currentPos[0]+action[0], currentPos[2]+action[2]]))
 
-    kuka.control_dofs_position(qpos[:-2], motors_dof)
+    kuka.control_dofs_position(qpos, motors_dof)
 
 
-camFilm.stop_recording(save_to_filename='picsAndVids/test2.mp4')
+camFilm.stop_recording(save_to_filename='picsAndVids/test3.mp4')
 # Execute...
 # robot.act(action, ...)
 # print(robot.act(action, ...))

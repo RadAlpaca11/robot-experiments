@@ -23,7 +23,13 @@ conda activate magma
 Then upgraded pip before installing the requirements:
 ```bash
 pip install --upgrade pip
+
+# Don't run this unless in the cloned folder
 pip install -e .
+```
+Other packages we had to install manually afterward:
+```bash
+pip install wandb
 ```
 
 We created a file called [gettingStarted.py](./gettingStarted.py) and copied the example local code from the README:
