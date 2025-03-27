@@ -182,7 +182,7 @@ for i in range(150):
 #         print("restarting recording")
 #         cam2.start_recording()
 
-for i in range(50):
+for i in range(25):
     cam.start_recording()
     for i in range(25):
         scene.step()
@@ -207,9 +207,9 @@ for i in range(50):
 
     qpos= panda.inverse_kinematics(
         link = end_effector,
-        pos = np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]),
+        pos = np.array([currentPos[0]+action[0], currentPos[1]-action[1], currentPos[2]+action[2]]),
     )
-    print(np.array([currentPos[0]+action[0], currentPos[1]+action[1], currentPos[2]+action[2]]))
+    print(np.array([currentPos[0]+action[0], currentPos[1]-action[1], currentPos[2]+action[2]]))
 
     panda.control_dofs_position(qpos[:-2], motors_dof)
 
