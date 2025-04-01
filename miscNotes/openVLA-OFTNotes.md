@@ -131,3 +131,15 @@ in run_libero_eval.py needed to change paths to get rid of the experiments.robot
 
 
 the imports in run_libero_eval.py want to use files from openVLA for some reason
+
+
+When running
+```bash
+pip3 install torch torchvision torchaudio
+```
+we got an error
+```
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+generate-parameter-library-py 0.4.0 requires pyyaml, which is not installed.
+generate-parameter-library-py 0.4.0 requires typeguard, which is not installed
+```
