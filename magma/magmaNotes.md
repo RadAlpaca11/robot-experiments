@@ -26,10 +26,33 @@ pip install --upgrade pip
 
 # Don't run this unless in the cloned folder
 pip install -e .
+
+pip install -e ".[train]"
+pip install -e ".[agent]"
 ```
 Other packages we had to install manually afterward:
 ```bash
 pip install wandb
+```
+We also installed these packages reccomended in the README from magma:
+```bash
+# ran these in an outside folder (Interns)
+# Install co-tracker
+git clone https://github.com/facebookresearch/co-tracker
+cd co-tracker
+pip install -e .
+pip install imageio[ffmpeg]
+cd ../
+# Install kmeans_pytorch, note: install with pip will leads to error
+git clone https://github.com/subhadarship/kmeans_pytorch
+cd kmeans_pytorch
+pip install -e .
+cd ../
+
+# These we ran like normal
+pip install ipython
+pip install faiss-cpu
+pip install decord
 ```
 
 We created a file called [gettingStarted.py](./gettingStarted.py) and copied the example local code from the README:
@@ -103,3 +126,5 @@ One interesting thing is that whenever we ask it to do an action, it spits out g
 - The easiest to get running fast
     - example code works right away
 - ran on omniverse simulation machine
+
+4/1/25: The agents were not working today

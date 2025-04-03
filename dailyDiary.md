@@ -93,3 +93,13 @@
 * worked on getting openvla to work so we could use it for the kuka arm, but it wasn't working and being weird
     * It wanted us to install vla, which is not a thing
 * began using [Issac-GR00T](Isaac-GR00T), getting it installed and through the inference example code in the [getting_started](Isaac-GR00T/getting_started/) folder
+
+# 4/1/25
+* worked on openvla-oft on server
+    * cuda devices not working. I believe this is because it has a version of cuda that it can't handle?
+* worked on getting octo up and running
+* experimented with magma
+    * currently none of the agents are working for some reason
+    * ValueError: When localhost is not accessible, a shareable link must be created. Please set share=True or check your proxy settings to allow access to localhost.
+    * even when we do this and open the site we get: Internal Server Error
+    * Other errors in the terminal as well: TypeError: argument of type 'bool' is not iterable
