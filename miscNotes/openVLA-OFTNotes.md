@@ -21,7 +21,7 @@ export CC=/usr/bin/gcc
 export CXX=/usr/bin/g++
 pip install evdev
 ```
-* After this works, you can install robosuite again using the same command as before
+* After this works, you can install robosuite again
 * Install robosuite_models
 ```bash
 pip install robosuite_models
@@ -43,11 +43,6 @@ tried to use example code but had to follow libero instrucitons
 got further
 
 no module named 'robosuite'
-
-we first tried to just pip install:
-```bash
-pip install robosuite==1.4
-```
 
 had to manually install 'robosuite' which caused many issues because 'evdev' wouldn't install. Failed to build wheels.
 we ended up needing to 
@@ -143,3 +138,12 @@ ERROR: pip's dependency resolver does not currently take into account all the pa
 generate-parameter-library-py 0.4.0 requires pyyaml, which is not installed.
 generate-parameter-library-py 0.4.0 requires typeguard, which is not installed
 ```
+
+
+
+ValueError: Could not find a backend to open `./rollouts/2025_04_03/2025_04_03-13_53_09--episode=1--success=True--task=pick_up_the_black_bowl_between_the_plate_and_the_r.mp4`` with iomode `w?`.
+Based on the extension, the following plugins might add capable backends:
+  FFMPEG:  pip install imageio[ffmpeg]
+  pyav:  pip install imageio[pyav]
+
+pip installing both of those things
