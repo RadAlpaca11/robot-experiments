@@ -21,7 +21,7 @@ export CC=/usr/bin/gcc
 export CXX=/usr/bin/g++
 pip install evdev
 ```
-* After this works, you can install robosuite again
+* After this works, you can install robosuite again using the same command as before
 * Install robosuite_models
 ```bash
 pip install robosuite_models
@@ -43,6 +43,11 @@ tried to use example code but had to follow libero instrucitons
 got further
 
 no module named 'robosuite'
+
+we first tried to just pip install:
+```bash
+pip install robosuite==1.4
+```
 
 had to manually install 'robosuite' which caused many issues because 'evdev' wouldn't install. Failed to build wheels.
 we ended up needing to 

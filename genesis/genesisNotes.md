@@ -64,6 +64,11 @@ pip install genesis-world
 ```
 and installing PyTorch.
 
+Side note
+Also ompl version corresponds to the python version!
+python 3.10 means cp310 in the name!
+
+
 # Key findings
 - Genesis is very user-friendly and quick to get started with.
 - We found the guides and API Reference very helpful in learning how to use the simulator.
