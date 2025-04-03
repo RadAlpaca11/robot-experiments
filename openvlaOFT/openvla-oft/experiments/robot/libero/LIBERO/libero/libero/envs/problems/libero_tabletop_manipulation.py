@@ -1,10 +1,10 @@
 from robosuite.utils.mjcf_utils import new_site
-from libero.libero.envs.bddl_base_domain import BDDLBaseDomain, register_problem
-from libero.libero.envs.robots import *
-from libero.libero.envs.objects import *
-from libero.libero.envs.predicates import *
-from libero.libero.envs.regions import *
-from libero.libero.envs.utils import rectangle2xyrange
+from libero.LIBERO.libero.libero.envs.bddl_base_domain import BDDLBaseDomain, register_problem
+from libero.LIBERO.libero.libero.envs.robots import *
+from libero.LIBERO.libero.libero.envs.objects import *
+from libero.LIBERO.libero.libero.envs.predicates import *
+from libero.LIBERO.libero.libero.envs.regions import *
+from libero.LIBERO.libero.libero.envs.utils import rectangle2xyrange
 
 
 @register_problem

@@ -8,7 +8,7 @@ import pathlib
 
 absolute_path = pathlib.Path(__file__).parent.parent.parent.absolute()
 
-from libero.libero.envs.base_object import register_object
+from libero.LIBERO.libero.libero.envs.base_object import register_object
 
 
 class HopeBaseObject(MujocoXMLObject):

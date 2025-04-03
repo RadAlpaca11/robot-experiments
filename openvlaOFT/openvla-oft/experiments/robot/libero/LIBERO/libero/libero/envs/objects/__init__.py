@@ -1,6 +1,6 @@
 import re
 
-from libero.libero.envs.base_object import OBJECTS_DICT, VISUAL_CHANGE_OBJECTS_DICT
+from libero.LIBERO.libero.libero.envs.base_object import OBJECTS_DICT, VISUAL_CHANGE_OBJECTS_DICT
 
 from .hope_objects import *
 from .google_scanned_objects import *

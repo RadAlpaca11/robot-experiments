@@ -12,13 +12,13 @@ import robosuite.macros as macros
 
 import mujoco
 
-import libero.libero.envs.bddl_utils as BDDLUtils
-from libero.libero.envs.robots import *
-from libero.libero.envs.utils import *
-from libero.libero.envs.object_states import *
-from libero.libero.envs.objects import *
-from libero.libero.envs.regions import *
-from libero.libero.envs.arenas import *
+import libero.LIBERO.libero.libero.envs.bddl_utils as BDDLUtils
+from libero.LIBERO.libero.libero.envs.robots import *
+from libero.LIBERO.libero.libero.envs.utils import *
+from libero.LIBERO.libero.libero.envs.object_states import *
+from libero.LIBERO.libero.libero.envs.objects import *
+from libero.LIBERO.libero.libero.envs.regions import *
+from libero.LIBERO.libero.libero.envs.arenas import *
 
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))

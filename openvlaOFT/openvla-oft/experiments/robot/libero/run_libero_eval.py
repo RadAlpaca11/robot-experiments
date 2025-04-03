@@ -14,15 +14,17 @@ from enum import Enum
 from pathlib import Path
 from typing import Optional, Union
 
-import draccus
-import numpy as np
-import tqdm
-from libero.libero import benchmark
-
-import wandb
 
 # Append current directory so that interpreter can find experiments.robot
 sys.path.append("/home/a3r/Interns/internship2024-25/openvlaOFT/openvla-oft/experiments/robot")
+
+import draccus
+import numpy as np
+import tqdm
+from libero.LIBERO.libero.libero import benchmark
+
+import wandb
+
 from libero.libero_utils import(
 #from libero_utils import (
     get_libero_dummy_action,

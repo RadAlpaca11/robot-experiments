@@ -5,8 +5,8 @@ import matplotlib.cm as cm
 
 from robosuite.utils.errors import RandomizationError
 
-import libero.libero.envs.bddl_utils as BDDLUtils
-from libero.libero.envs import *
+import libero.LIBERO.libero.libero.envs.bddl_utils as BDDLUtils
+from libero.LIBERO.libero.libero.envs import *
 
 
 class ControlEnv:

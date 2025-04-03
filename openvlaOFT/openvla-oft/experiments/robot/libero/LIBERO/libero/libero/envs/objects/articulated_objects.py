@@ -10,7 +10,7 @@ import pathlib
 
 absolute_path = pathlib.Path(__file__).parent.parent.parent.absolute()
 
-from libero.libero.envs.base_object import (
+from libero.LIBERO.libero.libero.envs.base_object import (
     register_visual_change_object,
     register_object,
 )

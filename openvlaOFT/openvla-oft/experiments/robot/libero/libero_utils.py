@@ -6,8 +6,8 @@ import os
 import imageio
 import numpy as np
 import tensorflow as tf
-from libero.libero import get_libero_path
-from libero.libero.envs import OffScreenRenderEnv
+from libero.LIBERO.libero.libero import get_libero_path
+from libero.LIBERO.libero.libero.envs import OffScreenRenderEnv
 
 from experiments.robot.robot_utils import (
     DATE,

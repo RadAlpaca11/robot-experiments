@@ -1,4 +1,4 @@
-from libero.libero.envs.arenas.style import STYLE_MAPPING
+from libero.LIBERO.libero.libero.envs.arenas.style import STYLE_MAPPING
 import numpy as np
 
 from robosuite.models.arenas import Arena
@@ -8,7 +8,7 @@ from robosuite.utils.mjcf_utils import (
     xml_path_completion,
 )
 
-from libero.libero.envs.arenas.style import get_texture_filename
+from libero.LIBERO.libero.libero.envs.arenas.style import get_texture_filename
 
 
 class TableArena(Arena):
