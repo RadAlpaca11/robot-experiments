@@ -130,3 +130,6 @@ One interesting thing is that whenever we ask it to do an action, it spits out g
 4/1/25: The agents were not working today
 
 兄弟 direnงเศส肃 المنطقة Yatırımุษย
+
+When asking coordinates of end effector:
+兄弟 Yatırım aktivitريع радянційнаุษย

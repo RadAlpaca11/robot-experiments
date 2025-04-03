@@ -1,0 +1,38 @@
+[core]
+reloadable = true
+order = 0
+
+[package]
+version = "1.0.0"
+category = "Simulation"
+title = "Isaac Sim Demo"
+description = "Isaac Sim Demo for Simulately."
+authors = ["Jane Doe"]
+repository = ""
+keywords = ["simulately", "simulation", "robot"]
+writeTarget.kit = true
+
+[dependencies]
+"omni.kit.uiapp" = {}
+"omni.physx" = {}
+"omni.isaac.dynamic_control" = {}
+"omni.isaac.motion_planning" = {}
+"omni.isaac.synthetic_utils" = {}
+"omni.isaac.ui" = {}
+"omni.isaac.core" = {}
+"omni.isaac.franka" = {}
+"omni.isaac.manipulators" = {}
+"omni.isaac.dofbot" = {}
+"omni.isaac.universal_robots" = {}
+"omni.isaac.motion_generation" = {}
+"omni.graph.action" = {}
+"omni.graph.nodes" = {}
+"omni.graph.core" = {}
+"omni.isaac.quadruped" = {}
+"omni.isaac.wheeled_robots" = {}
+
+[[python.module]]
+name = "scripts"
+
+[[test]]
+timeout = 960

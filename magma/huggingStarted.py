@@ -13,7 +13,7 @@ image = Image.open("../openVLA/picsAndVids/magmaPic.png").convert("RGB")
 
 convs = [
     {"role": "system", "content": "You are an agent that can see, talk, and act."},            
-    {"role": "user", "content": "<image_start><image><image_end>\n Move the robot's gripper to the yellow block"},
+    {"role": "user", "content": "<image_start><image><image_end>\n What are the coordinates of the end effector of the robot?"},
 ]
 prompt = processor.tokenizer.apply_chat_template(convs, tokenize=False, add_generation_prompt=True)
 inputs = processor(images=[image], texts=prompt, return_tensors="pt")
