@@ -1,5 +1,6 @@
 from PIL import Image
 import torch
+import numpy as np
 from transformers import AutoModelForCausalLM
 from transformers import AutoProcessor 
 
@@ -13,7 +14,7 @@ image = Image.open("../openVLA/picsAndVids/magmaPic.png").convert("RGB")
 
 convs = [
     {"role": "system", "content": "You are an agent that can see, talk, and act."},            
-    {"role": "user", "content": "<image_start><image><image_end>\n What are the coordinates of the end effector of the robot?"},
+    {"role": "user", "content": "<image_start><image><image_end>\n Move the robot's gripper to the yellow block"},
 ]
 prompt = processor.tokenizer.apply_chat_template(convs, tokenize=False, add_generation_prompt=True)
 inputs = processor(images=[image], texts=prompt, return_tensors="pt")
@@ -32,7 +33,10 @@ generation_args = {
 with torch.inference_mode():
     generate_ids = model.generate(**inputs, **generation_args)
 
-generate_ids = generate_ids[:, inputs["input_ids"].shape[-1] :]
-response = processor.decode(generate_ids[0], skip_special_tokens=True).strip()
+# get the last action, and convert the action (as token) to a discretized action
+generate_ids = generate_ids[0, -8:-1].cpu().tolist()
 
-print(response)
+predicted_action_ids = np.array(generate_ids).astype(np.int64)
+discretized_actions = processor.tokenizer.vocab_size - predicted_action_ids
+
+print(discretized_actions)
