@@ -49,6 +49,7 @@
 * [Simulately](https://simulately.wiki/docs/)
 * [Glomap](https://github.com/colmap/glomap)
 * [WHAM](https://www.microsoft.com/en-us/research/blog/introducing-muse-our-first-generative-ai-model-designed-for-gameplay-ideation/)
+* [Mujoco WARP - NVIDIA GPU optimized Mujoco](https://github.com/google-deepmind/mujoco_warp)
  
 ## Generative AI Ramp up
 * ~~[Understanding ChatGPT](https://writings.stephenwolfram.com/2023/02/what-is-chatgpt-doing-and-why-does-it-work/)~~
