@@ -14,7 +14,7 @@ image = Image.open("../openVLA/picsAndVids/magmaPic.png").convert("RGB")
 
 convs = [
     {"role": "system", "content": "You are an agent that can see, talk, and act."},            
-    {"role": "user", "content": "<image_start><image><image_end>\n Move the robot's gripper to the yellow block"},
+    {"role": "user", "content": "<image_start><image><image_end>\n What is the first step to move the robot to touch the yellow block?"},
 ]
 prompt = processor.tokenizer.apply_chat_template(convs, tokenize=False, add_generation_prompt=True)
 inputs = processor(images=[image], texts=prompt, return_tensors="pt")
@@ -40,3 +40,15 @@ predicted_action_ids = np.array(generate_ids).astype(np.int64)
 discretized_actions = processor.tokenizer.vocab_size - predicted_action_ids
 
 print(discretized_actions)
+
+
+# i=0
+
+# for id in generate_ids:
+#     nextId = id.cpu().tolist()
+#     predictedId = np.array(nextId).astype(np.int64)
+#     discretizedId = processor.tokenizer.vocab_size - predictedId
+#     print(discretizedId)
+#     i+=1
+#     print(i)
+

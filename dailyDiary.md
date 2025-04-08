@@ -103,3 +103,10 @@
     * ValueError: When localhost is not accessible, a shareable link must be created. Please set share=True or check your proxy settings to allow access to localhost.
     * even when we do this and open the site we get: Internal Server Error
     * Other errors in the terminal as well: TypeError: argument of type 'bool' is not iterable
+
+# 4/8/25
+* Worked on integrating magma with genesis
+    * [notes](magma/magmaNotes.md)
+    * [code](magma/magmaGen.py)
+    * Able to integrate, but not perform successfully. The output actions are quite large numbers and we are struggling to understand how to interpret them in our code.
+* Created a table of the robot arms in the lab, models if we have them, and the status if we've worked on them [file](robots.md)

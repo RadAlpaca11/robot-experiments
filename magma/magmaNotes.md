@@ -121,6 +121,21 @@ This worked right away!
 We have also spent some time experimenting with input images, and what we can ask magma to do.
 
 One interesting thing is that whenever we ask it to do an action, it spits out gibberish.
+Update:
+We figured this out! In the paper it mentions using a practice that transforms all the output into text so the robot actions get represented with the last 256 discrete language tokens that are barely used in LLMs. Hence the gibberish.
+
+
+Once we finally got action outputs, we made some changes to the environment so that we could integrate it with genesis.
+```bash
+pip install genesis-world
+
+# in our downloads folder (we had this file downloaded)
+pip install ompl-1.6.0-cp310-cp310-manylinux_2_28_x86_64
+```
+
+We were able to get the model running with genesis and the kuka arm ([code](magmaGen.py)). However this did not yield the results we were hoping. ([videos](picsAndVids))
+
+The outputs of [huggingStarted](huggingStarted.py) were quite large, and we are having some trouble figuring out how to scale them to work in the simulator.
 
 # Notes:
 - The easiest to get running fast
@@ -129,7 +144,26 @@ One interesting thing is that whenever we ask it to do an action, it spits out g
 
 4/1/25: The agents were not working today
 
+
+
+# Output logs:
 兄弟 direnงเศส肃 المنطقة Yatırımุษย
 
 When asking coordinates of end effector:
 兄弟 Yatırım aktivitريع радянційнаุษย
+
+
+
+[143 129  59 141 181 127 256]
+
+What is the first step you need to take to move the robot's gripper to the yellow block\
+[141 127 101 128 120 143 256]
+
+What is the first step you need to take to move the robot's gripper upwards?\
+[143 133  73 137 189 130 256]
+
+How would you move to touch the yellow block?\
+[148 133 157 255 126 178 128]
+
+How would you move the robot's gripper to the left?\
+[143 133  98 122 133 124 128]
