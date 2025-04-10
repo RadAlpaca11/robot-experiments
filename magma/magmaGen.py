@@ -186,17 +186,19 @@ for i in range(75):
         cam.render()
         camFilm.render()
 
-    cam.stop_recording(save_to_filename='clip.mp4')
-
     currentPos = end_effector.get_pos()
     print(currentPos)
+
+    cam.stop_recording(save_to_filename='clip.mp4')
 
     video = cv2.VideoCapture('clip.mp4')
     video.set(cv2.CAP_PROP_POS_FRAMES, 23)
     ret, frame = video.read()
     print(ret)
-    cv2.imwrite('frame.jpg', frame)
-    image = Image.open('frame.jpg')
+    image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+
+    # cv2.imwrite('frame.jpg', frame)
+    # image = Image.open('frame.jpg')
 
     prompt = processor.tokenizer.apply_chat_template(convs, tokenize=False, add_generation_prompt=True)
     inputs = processor(images=[image], texts=prompt, return_tensors="pt")
