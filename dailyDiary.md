@@ -110,3 +110,13 @@
     * [code](magma/magmaGen.py)
     * Able to integrate, but not perform successfully. The output actions are quite large numbers and we are struggling to understand how to interpret them in our code.
 * Created a table of the robot arms in the lab, models if we have them, and the status if we've worked on them [file](robots.md)
+
+# 4/10/25
+* worked on integrating magma with genesis
+* looked at xarm movement code, and made sure it still worked
+* got [xarm urdf](ManiSkill-XArm6/xarm6_robotiq.urdf) loaded with ``` gs view models/ManiSkill-XArm6/xarm6_robotiq.urdf```
+* worked on [xarm6MagmaGen.py](magma/xarm6MagmaGen.py)
+    * we increased the mass of the base from 2.6 to 20.6 so that the arm would not topple over
+    * joint control now works, but not through inverse kinematics yet
+    * inverse kinematics seems to move the robot as a whole, not the joints
+    

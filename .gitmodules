@@ -40,3 +40,6 @@
 	path = openvlaOFT/openvla-oft/moojink/openvla-7b-oft-finetuned-libero-spatial
 	url = https://huggingface.co/moojink/openvla-7b-oft-finetuned-libero-spatial
 
+[submodule "models/ManiSkill-XArm6"]
+	path = models/ManiSkill-XArm6
+	url = https://github.com/haosulab/ManiSkill-XArm6.git

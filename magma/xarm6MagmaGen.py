@@ -1,12 +1,12 @@
-import abc
+# import abc
 import numpy as np
-import cv2
-from PIL import Image
-import torch
-from transformers import AutoModelForCausalLM, AutoProcessor
-# from xarm.wrapper import XArmAPI  # Import xarm-python-sdk
-import cv2
-import time
+# import cv2
+# from PIL import Image
+# import torch
+# from transformers import AutoModelForCausalLM, AutoProcessor
+# # from xarm.wrapper import XArmAPI  # Import xarm-python-sdk
+# import cv2
+# import time
 import genesis as gs
 
 gs.init(backend=gs.cpu)
@@ -40,7 +40,7 @@ plane = scene.add_entity(
     gs.morphs.Plane(),
 )
 xarm6 = scene.add_entity(
-    gs.morphs.URDF(file='../ManiSkill-XArm6/xarm6_robotiq.urdf'),
+    gs.morphs.URDF(file='../models/ManiSkill-XArm6/xarm6_nogripper.urdf'),
 )
 box1 = scene.add_entity(
     gs.morphs.Box(
@@ -84,37 +84,57 @@ camFilm.start_recording()
 
 motors_dof = np.arange(6)
 
+jnt_names = [
+    'joint1',
+    'joint2',
+    'joint3',
+    'joint4',
+    'joint5',
+    'joint6'
+]
+dofs_idx = [xarm6.get_joint(name).dof_idx_local for name in jnt_names]
+
+# pulled from urdf
 xarm6.set_dofs_kp(
-    np.array([4500, 4500, 3500, 3500, 2000, 2000]),
+    np.array([100, 100, 100, 100, 100, 100]),
     motors_dof
 )
 xarm6.set_dofs_kv(
-    np.array([450, 450, 350, 350, 200, 200]),
+    np.array([40, 40, 40, 40, 40, 40]),
     motors_dof
 )
 xarm6.set_dofs_force_range(
-    np.array([-87, -87, -87, -87, -12, -12]),
-    np.array([87, 87, 87, 87, 12, 12]),
+    np.array([-6.28318530718, -2.059, -3.8, -6.28318530718, -1.69297, -6.28318530718]),
+    np.array([6.28318530718, 2.0944, 0.19198, 6.28318530718, 3.14159265359, 6.28318530718]),
     motors_dof
 )
 
 # get the end-effector link
 end_effector = xarm6.get_link('link6')
 
-import time
+print(end_effector.get_pos())
+print(xarm6.get_dofs_position())
+
+xarm6.control_dofs_position(
+    np.array([0, 0, 0, 1, 1.25, 1.25]),
+    dofs_idx,
+)
+
+for i in range(150):
+    scene.step()
 
 # starting position
 qpos = xarm6.inverse_kinematics(
     link = end_effector,
-    pos = np.array([0.65, -0.2, 0.25]),
+    pos = np.array([0.065, -0.02, 0.025]),
     quat = np.array([0, 1, 0, 0]),
 )
 
-xarm6.control_dofs_position(qpos[:6], motors_dof)
+xarm6.set_dofs_position(qpos[:6], motors_dof)
 
 for i in range(150):
     scene.step()
-    camFilm.render()
+    # camFilm.render()
 
 
 # STARTING_STATE = [207.000366, 0.0, 112.002014]
