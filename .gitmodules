@@ -39,3 +39,4 @@
 [submodule "openvlaOFT/openvla-oft/moojink/openvla-7b-oft-finetuned-libero-spatial"]
 	path = openvlaOFT/openvla-oft/moojink/openvla-7b-oft-finetuned-libero-spatial
 	url = https://huggingface.co/moojink/openvla-7b-oft-finetuned-libero-spatial
+
