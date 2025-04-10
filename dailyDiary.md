@@ -119,4 +119,3 @@
     * we increased the mass of the base from 2.6 to 20.6 so that the arm would not topple over
     * joint control now works, but not through inverse kinematics yet
     * inverse kinematics seems to move the robot as a whole, not the joints
-    
