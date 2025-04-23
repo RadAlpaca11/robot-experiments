@@ -119,3 +119,10 @@
     * we increased the mass of the base from 2.6 to 20.6 so that the arm would not topple over
     * joint control now works, but not through inverse kinematics yet
     * inverse kinematics seems to move the robot as a whole, not the joints
+
+# 4/22/25
+[code](magma/xarm6MagmaGen.py)
+[video](magma/video1.mp4)
+* Worked on getting xArm6 working with genesis. The issue was inverse kinematics not working with the arm in genesis. We figured it would work if we called the xarm api, and used that inverse kinematics. Later I wrote code that makes a 'digital twin' of the xarm in the lab. I went and moved the xarm around while it was in mode 2, and then genesis would control the robot in the simulator to do the same thing.
+    * The physical arm in the lab is raised up, so the base (which all coordinates are based off of) is off of the table a bit, so sometimes the simulation arm would drag on the ground
+    * We could potentially add a platform to the urdf file to have a completely accurate model in the simulator

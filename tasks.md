@@ -21,10 +21,12 @@
 * [DexterityGen](https://zhaohengyin.github.io/dexteritygen/)
 * [Deepseek](https://github.com/deepseek-ai/DeepSeek-V3)
 * ***[Magma](https://microsoft.github.io/Magma/)***
+    * [Magma finetuning]
+    * Magma with xarm
 * [Helix](https://www.figure.ai/news/helix)
 * ***OpenVLA and KUKA IIWA 14***
 * [RDT](https://arxiv.org/abs/2410.07864)
-* [OpenVLA OFT](https://openvla-oft.github.io/)
+* ***[OpenVLA OFT](https://openvla-oft.github.io/)***
 * [Gemini Robotics](https://deepmind.google/discover/blog/gemini-robotics-brings-ai-into-the-physical-world/)
 * [nVidia Physical AI Dataset](https://huggingface.co/collections/nvidia/physical-ai-67c643edbb024053dcbcd6d8)
 * [nVidia GR00T 1 Humanoid AI Model](https://developer.nvidia.com/blog/accelerate-generalist-humanoid-robot-development-with-nvidia-isaac-gr00t-n1/)
@@ -32,7 +34,7 @@
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
-    * Make guide for integrating genesis with VLAs
+    * ~~Make guide for integrating genesis with VLAs~~
     * how to use euler rotations instead of quaternions
     * add rotation to working genesis and openvla code
 * [nVidia WARP](https://github.com/NVIDIA/warp)
@@ -44,7 +46,7 @@
 * ***[Omniverse](https://www.nvidia.com/en-us/omniverse/)***
     * [IssacSim tutorials](https://docs.omniverse.nvidia.com/isaacsim/latest/introductory_tutorials/index.html#)
 * ***Genesis with OpenVLA***
-* Genesis with OpenVLA AND Kuka
+* ~~Genesis with OpenVLA AND Kuka~~ Not working great, needs finetuning
 * Comparsion of Genesis, Mujoco and Omniverse (IsaacSim)
 * [Simulately](https://simulately.wiki/docs/)
 * [Glomap](https://github.com/colmap/glomap)

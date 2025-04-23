@@ -4,10 +4,24 @@ import numpy as np
 # from PIL import Image
 # import torch
 # from transformers import AutoModelForCausalLM, AutoProcessor
-# # from xarm.wrapper import XArmAPI  # Import xarm-python-sdk
+from xarm.wrapper import XArmAPI  # Import xarm-python-sdk
 # import cv2
-# import time
+import time
 import genesis as gs
+
+
+arm = XArmAPI('172.20.5.100')
+
+# Initialize the robot.
+def initialize_robot(arm):
+    arm.clean_warn()
+    arm.clean_error()
+    arm.motion_enable(True)
+    arm.set_mode(2)
+    arm.set_state(0)
+    # arm.move_gohome()
+
+initialize_robot(arm)
 
 gs.init(backend=gs.cpu)
 
@@ -70,6 +84,7 @@ camFilm = scene.add_camera(
     fov    = 20,
     GUI    = True,
 )
+
 # for vla
 cam = scene.add_camera(
     res    = (640, 480),
@@ -112,28 +127,67 @@ xarm6.set_dofs_force_range(
 # get the end-effector link
 end_effector = xarm6.get_link('link6')
 
-print(end_effector.get_pos())
-print(xarm6.get_dofs_position())
+# print(end_effector.get_pos())
+# print(xarm6.get_dofs_position())
 
 xarm6.control_dofs_position(
-    np.array([0, 0, 0, 1, 1.25, 1.25]),
+    np.array([0, 0, -2, 0, 0, 0]),
     dofs_idx,
 )
 
-for i in range(150):
+for i in range(100):
     scene.step()
+# print('joints done')
+
+for i in range(25):
+
+    # The physical robot's base (which everything is relative to) is mounted slightly off the surface
+    # so if the end effector goes below the base, it will just drag along the ground
+    # We could just add a cube under the base of the robot in the urdf if we want...
+    position = arm.get_position(is_radian=True)
+    print(position)
+    ik = arm.get_inverse_kinematics(position[1], input_is_radian=True, return_is_radian=True)
+
+    print(ik)
+
+    #scaledIK = [num * 10 for num in ik[1][:6]]
+    #print(scaledIK)
+
+    xarm6.control_dofs_position(
+        ik[1][:6],
+        # scaledIK,
+        dofs_idx
+    )
+    for i in range(25):
+        scene.step()
+        camFilm.render()
+
+print(ik[1][:6])
+print(position[1])
+#print(scaledIK)
+camFilm.stop_recording(save_to_filename='video.mp4')
+
+
+# Note: Arm uses mm while genesis uses m. I don't fully know if the size of the arm is actually to scale in the simulator though.
+
+
+time.sleep(5)
+position = arm.get_position(is_radian=True)
+print(position)
+ik = arm.get_inverse_kinematics(position[1], input_is_radian=True, return_is_radian=True)
 
 # starting position
-qpos = xarm6.inverse_kinematics(
-    link = end_effector,
-    pos = np.array([0.065, -0.02, 0.025]),
-    quat = np.array([0, 1, 0, 0]),
-)
+# qpos = xarm6.inverse_kinematics(
+#     link = end_effector,
+#     pos = np.array([0.65, -0.2, 0.25]),
+#     quat = np.array([0, 1, 0, 0]),
+# )
+# print(qpos)
+# print(len(qpos))
+# xarm6.control_dofs_position(qpos, motors_dof)
 
-xarm6.set_dofs_position(qpos[:6], motors_dof)
-
-for i in range(150):
-    scene.step()
+# for i in range(500):
+#     scene.step()
     # camFilm.render()
 
 
