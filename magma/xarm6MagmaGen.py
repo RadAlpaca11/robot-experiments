@@ -1,28 +1,45 @@
 # import abc
 import numpy as np
-# import cv2
-# from PIL import Image
-# import torch
-# from transformers import AutoModelForCausalLM, AutoProcessor
+import cv2
+from PIL import Image
+import torch
+from transformers import AutoModelForCausalLM, AutoProcessor
 from xarm.wrapper import XArmAPI  # Import xarm-python-sdk
-# import cv2
-import time
 import genesis as gs
+from scipy.spatial.transform import Rotation
 
+def quatToEuler(q, scalarFirst=True, order='xyz', degrees=False):
+    if scalarFirst:
+        q = [q[1], q[2], q[3], q[0]]
+    r = Rotation.from_quat(q)
+    return r.as_euler(order, degrees=degrees)
 
-arm = XArmAPI('172.20.5.100')
+# Initialize magma
+dtype = torch.bfloat16
+model = AutoModelForCausalLM.from_pretrained("microsoft/Magma-8B", trust_remote_code=True, torch_dtype=dtype)
+processor = AutoProcessor.from_pretrained("microsoft/Magma-8B", trust_remote_code=True)
+model.to("cuda")
+
+convs = [
+    {"role": "system", "content": "You are an agent that can see, talk, and act."},
+    {"role": "user", "content": "<image_start><image><image_end>\n What action should I take to move the robot to touch the yellow block?"},
+]
 
 # Initialize the robot.
-def initialize_robot(arm):
-    arm.clean_warn()
-    arm.clean_error()
-    arm.motion_enable(True)
-    arm.set_mode(2)
-    arm.set_state(0)
+remoteArm = XArmAPI('172.20.5.100')
+
+
+def initialize_robot(remoteArm):
+    remoteArm.clean_warn()
+    remoteArm.clean_error()
+    remoteArm.motion_enable(True)
+    remoteArm.set_mode(2)
+    remoteArm.set_state(0)
     # arm.move_gohome()
 
-initialize_robot(arm)
+initialize_robot(remoteArm)
 
+# Initialize Genesis
 gs.init(backend=gs.cpu)
 
 scene = gs.Scene(
@@ -54,26 +71,26 @@ plane = scene.add_entity(
     gs.morphs.Plane(),
 )
 xarm6 = scene.add_entity(
-    gs.morphs.URDF(file='../models/ManiSkill-XArm6/xarm6_nogripper.urdf'),
+    gs.morphs.URDF(file='../models/ManiSkill-XArm6/mod_xarm6_nogripper.urdf'),
 )
-box1 = scene.add_entity(
-    gs.morphs.Box(
-        size=(0.05, 0.05, 0.05),
-        pos=(0.65, 0.3, 0.25),
-    ),
-    surface=gs.surfaces.Default(
-        color=(1, 0.8, 0),
-    )
-)
-# box2 = scene.add_entity(
+# box1 = scene.add_entity(
 #     gs.morphs.Box(
-#         size=(0.05, 0.05, 0.05),
-#         pos=(0.65, -0.3, 0.25),
+#         size=(0.1, 0.1, 0.1),
+#         pos=(0, 0, 0.05),
 #     ),
 #     surface=gs.surfaces.Default(
-#         color=(0, 0.6, 0.3),
+#         color=(1, 0.8, 0),
 #     )
 # )
+box2 = scene.add_entity(
+    gs.morphs.Box(
+        size=(0.05, 0.05, 0.05),
+        pos=(0.65, -0.3, 0.25),
+    ),
+    surface=gs.surfaces.Default(
+        color=(0, 0.6, 0.3),
+    )
+)
 
 
 # for long video
@@ -82,7 +99,7 @@ camFilm = scene.add_camera(
     pos    = (3.5, 0.0, 2.5),
     lookat = (0.65, 0, 0.25),
     fov    = 20,
-    GUI    = True,
+    GUI    = False,
 )
 
 # for vla
@@ -91,7 +108,7 @@ cam = scene.add_camera(
     pos    = (0.1, 0.2, 0.75),
     lookat = (0.65, 0.15, 0),
     fov    = 70,
-    GUI    = True,
+    GUI    = False,
 )
 
 scene.build()
@@ -127,43 +144,94 @@ xarm6.set_dofs_force_range(
 # get the end-effector link
 end_effector = xarm6.get_link('link6')
 
-# print(end_effector.get_pos())
-# print(xarm6.get_dofs_position())
+print(end_effector.get_pos())
+print(xarm6.get_dofs_position())
 
 xarm6.control_dofs_position(
     np.array([0, 0, -2, 0, 0, 0]),
     dofs_idx,
 )
 
+
+camFilm.start_recording()
+
 for i in range(100):
     scene.step()
+
 # print('joints done')
 
 for i in range(25):
-
-    # The physical robot's base (which everything is relative to) is mounted slightly off the surface
-    # so if the end effector goes below the base, it will just drag along the ground
-    # We could just add a cube under the base of the robot in the urdf if we want...
-    position = arm.get_position(is_radian=True)
-    print(position)
-    ik = arm.get_inverse_kinematics(position[1], input_is_radian=True, return_is_radian=True)
-
-    print(ik)
-
-    #scaledIK = [num * 10 for num in ik[1][:6]]
-    #print(scaledIK)
-
-    xarm6.control_dofs_position(
-        ik[1][:6],
-        # scaledIK,
-        dofs_idx
-    )
+    cam.start_recording()
     for i in range(25):
+        scene.step()
+        cam.render()
+        camFilm.render()
+    
+    # video and image processing
+    cam.stop_recording(save_to_filename='references/clip.mp4')
+    clip = cv2.VideoCapture('references/clip.mp4')
+    ret, frame = clip.read()
+    print(ret)
+    if ret:
+        image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+
+        # magma setup
+        prompt = processor.tokenizer.apply_chat_template(convs, tokenize=False, add_generation_prompt=True)
+        inputs = processor(images=[image], texts=prompt, return_tensors="pt")
+        inputs['pixel_values'] = inputs['pixel_values'].unsqueeze(0)
+        inputs['image_sizes'] = inputs['image_sizes'].unsqueeze(0)
+        inputs = inputs.to("cuda").to(dtype)
+
+        generation_args = {
+            "max_new_tokens": 500,
+            "temperature": 0.0,
+            "do_sample": False,
+            "use_cache": True,
+            "num_beams": 1,
+        }
+
+        with torch.inference_mode():
+            generate_ids = model.generate(**inputs, **generation_args)
+        
+        # get the last action, and convert the action (as token) to a discretized action
+        generate_ids = generate_ids[0, -8:-1].cpu().tolist()
+        predicted_action_ids = np.array(generate_ids).astype(np.int64)
+        discretized_actions = processor.tokenizer.vocab_size - predicted_action_ids
+        print(discretized_actions)
+
+        # robot information
+
+        currentPos = end_effector.get_pos()
+        currentQuat = end_effector.get_quat()
+        currentEuler = quatToEuler(currentQuat)
+        simPosition = [currentPos[0], currentPos[1], currentPos[2], currentEuler[0], currentEuler[1], currentEuler[2]]
+
+        simTarget = np.array([currentPos[0] + (discretized_actions[0] / 100), currentPos[1] + (discretized_actions[1] / 100), currentPos[2] + (discretized_actions[2] / 100), currentEuler[0]+(discretized_actions[3]/100), currentEuler[1]+(discretized_actions[4]/100), currentEuler[2]+(discretized_actions[5]/100)])
+
+        ik = remoteArm.get_inverse_kinematics(discretized_actions, input_is_radian=True, return_is_radian=True)
+        
+        # position = remoteArm.get_position(is_radian=True)
+        # print(position)
+        # truePosition = [i+0.105 for i in position[1][:6]]
+        # print(truePosition)
+        
+        # # we could use the position from the simulator if we want to use the ik only in genesis, so just use the api to do the calculations
+        # ik = remoteArm.get_inverse_kinematics(truePosition, input_is_radian=True, return_is_radian=True)
+
+        # print(ik)
+
+
+        xarm6.control_dofs_position(
+            ik[1][:6],
+            # scaledIK,
+            dofs_idx
+        )
+    for i in range(50):
         scene.step()
         camFilm.render()
 
-print(ik[1][:6])
-print(position[1])
+# print(ik[1][:6])
+# print(position[1])
 #print(scaledIK)
 camFilm.stop_recording(save_to_filename='video.mp4')
 
@@ -171,10 +239,11 @@ camFilm.stop_recording(save_to_filename='video.mp4')
 # Note: Arm uses mm while genesis uses m. I don't fully know if the size of the arm is actually to scale in the simulator though.
 
 
-time.sleep(5)
-position = arm.get_position(is_radian=True)
-print(position)
-ik = arm.get_inverse_kinematics(position[1], input_is_radian=True, return_is_radian=True)
+# time.sleep(5)
+# position = remoteArm.get_position(is_radian=True)
+# print(position)
+# ik = remoteArm.get_inverse_kinematics(position[1], input_is_radian=True, return_is_radian=True)
+
 
 # starting position
 # qpos = xarm6.inverse_kinematics(

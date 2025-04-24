@@ -126,3 +126,7 @@
 * Worked on getting xArm6 working with genesis. The issue was inverse kinematics not working with the arm in genesis. We figured it would work if we called the xarm api, and used that inverse kinematics. Later I wrote code that makes a 'digital twin' of the xarm in the lab. I went and moved the xarm around while it was in mode 2, and then genesis would control the robot in the simulator to do the same thing.
     * The physical arm in the lab is raised up, so the base (which all coordinates are based off of) is off of the table a bit, so sometimes the simulation arm would drag on the ground
     * We could potentially add a platform to the urdf file to have a completely accurate model in the simulator
+
+# 4/24/25
+* Added a box for the xarm to stand on, so that it would be more accurate to the lab
+* got xarm integrated with magma and genesis.
