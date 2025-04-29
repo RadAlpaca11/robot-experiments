@@ -130,3 +130,8 @@
 # 4/24/25
 * Added a box for the xarm to stand on, so that it would be more accurate to the lab
 * got xarm integrated with magma and genesis.
+
+# 4/29/25
+* Updated camera view for xarm
+* updated method of taking pictures with genesis
+* began working on code to generate points in space for robot
