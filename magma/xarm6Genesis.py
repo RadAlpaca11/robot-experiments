@@ -58,7 +58,7 @@ plane = scene.add_entity(
     gs.morphs.Plane(),
 )
 xarm6 = scene.add_entity(
-    gs.morphs.URDF(file='../models/ManiSkill-XArm6/mod_xarm6_nogripper.urdf'),
+    gs.morphs.URDF(file='../models/ManiSkill-XArm6/mod_xarm6_robotiq.urdf'),
 )
 
 box1 = scene.add_entity(
@@ -128,15 +128,16 @@ print(xarm6.get_dofs_position())
 
 import numpy as np
 from itertools import product
+import random
 
 # Define the ranges for each joint
 jointRanges = [
-    [0, 360],  # Joint 1 range
-    [-118, 120],  # Joint 2 range
-    [-225, 11],  # Joint 3 range
-    [0, 360],  # Joint 4 range
-    [-97, 180],  # Joint 5 range
-    [0, 360],  # Joint 6 range
+    [0, 6.28319],  # Joint 1 range
+    [-2.05949, 2.0944],  # Joint 2 range
+    [-3.92699, 0.191986],  # Joint 3 range
+    [0, 6.28319],  # Joint 4 range
+    [-1.69297, 3.14159],  # Joint 5 range
+    [0, 6.28319],  # Joint 6 range
 ]
 
 # Number of steps per joint
@@ -150,19 +151,12 @@ discretizedJoints = [
 # Generate all combinations of joint positions
 jointCombinations = list(product(*discretizedJoints))
 print(f"Total combinations: {len(jointCombinations)}")
+print(jointCombinations[:10])
 
-# Number of combinations to sample
-k = 100  # Adjust this based on how many samples you want
+randomSamples = random.sample(jointCombinations, 100)
+print(f"Random samples: {randomSamples}")
 
-# Systematic sampling
-m = len(jointCombinations) // k  # Step size for sampling
-sampledCombinations = jointCombinations[::m]
-
-# Print sampled combinations
-for combination in sampledCombinations:
-    print(combination)
-
-for sample in sampledCombinations:
+for sample in randomSamples:
     print(sample)
     xarm6.control_dofs_position(
         np.array(sample),

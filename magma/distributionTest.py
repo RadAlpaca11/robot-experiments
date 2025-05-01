@@ -69,3 +69,33 @@ print(f"The nearest factorial to {number} is {nearestFact} ({factOf}!).")
 
 inverseFact(100) # 5
 print(inverseFact(100))
+
+import numpy as np
+from itertools import product
+import random
+
+# Define the ranges for each joint
+jointRanges = [
+    [0, 360],  # Joint 1 range
+    [-118, 120],  # Joint 2 range
+    [-225, 11],  # Joint 3 range
+    [0, 360],  # Joint 4 range
+    [-97, 180],  # Joint 5 range
+    [0, 360],  # Joint 6 range
+]
+
+# Number of steps per joint
+n = 10  # Adjust this based on how fine you want the discretization
+
+# Discretize each joint's range
+discretizedJoints = [
+    np.linspace(r[0], r[1], n) for r in jointRanges
+]
+
+# Generate all combinations of joint positions
+jointCombinations = list(product(*discretizedJoints))
+print(f"Total combinations: {len(jointCombinations)}")
+print(joint_combinations[:10])
+
+randomSamples = random.sample(jointCombinations, 10)
+print(f"Random samples: {randomSamples}")

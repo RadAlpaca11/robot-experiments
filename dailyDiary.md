@@ -135,3 +135,10 @@
 * Updated camera view for xarm
 * updated method of taking pictures with genesis
 * began working on code to generate points in space for robot
+
+# 5/1/25
+* Updated distribution code
+* remembered that we needed to use radians
+* Tested code with simulation
+* Modified robot model with hand
+* Tested code with robot with hand
