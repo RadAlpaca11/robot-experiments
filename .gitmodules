@@ -46,3 +46,4 @@
 [submodule "lerobot/lerobotSource"]
 	path = lerobot/lerobotSource
 	url = https://github.com/huggingface/lerobot.git
+	branch = main
