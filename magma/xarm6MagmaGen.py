@@ -160,6 +160,7 @@ for i in range(25):
     output = cam.render()
     imageData = output[0]
     image = cv2.cvtColor(imageData, cv2.COLOR_BGR2RGB)
+    cv2.imwrite('frame.jpg', image)
 
     # magma setup
     prompt = processor.tokenizer.apply_chat_template(convs, tokenize=False, add_generation_prompt=True)

@@ -12,6 +12,12 @@ def quatToEuler(q, scalarFirst=True, order='xyz', degrees=False):
     r = Rotation.from_quat(q)
     return r.as_euler(order, degrees=degrees)
 
+def getFrame(cam):
+    output = cam.render()
+    imageData = output[0]
+    frame = cv2.cvtColor(imageData, cv2.COLOR_BGR2RGB)
+    return frame
+
 # Initialize the robot.
 remoteArm = XArmAPI('172.20.5.100')
 
@@ -51,6 +57,9 @@ scene = gs.Scene(
         dt = 0.01,
         substeps = 4,
     ),
+    rigid_options=gs.options.RigidOptions(
+        enable_self_collision=True,
+    ),
     renderer=gs.renderers.Rasterizer(),
 )
 
@@ -59,6 +68,7 @@ plane = scene.add_entity(
 )
 xarm6 = scene.add_entity(
     gs.morphs.URDF(file='../models/ManiSkill-XArm6/mod_xarm6_robotiq.urdf'),
+
 )
 
 box1 = scene.add_entity(
@@ -153,8 +163,10 @@ jointCombinations = list(product(*discretizedJoints))
 print(f"Total combinations: {len(jointCombinations)}")
 print(jointCombinations[:10])
 
-randomSamples = random.sample(jointCombinations, 100)
+randomSamples = random.sample(jointCombinations, 50)
 print(f"Random samples: {randomSamples}")
+
+f = 0
 
 for sample in randomSamples:
     print(sample)
@@ -166,5 +178,8 @@ for sample in randomSamples:
     for i in range(100):
         scene.step()
         camFilm.render()
+    frame = getFrame(cam)
+    cv2.imwrite('picsAndVids/frame' + str(f) + '.jpg', frame)
+    f += 1
 
 camFilm.stop_recording(save_to_filename='video.mp4')
