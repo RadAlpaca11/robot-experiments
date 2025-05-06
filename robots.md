@@ -5,4 +5,4 @@
 | Universal robots UR 10 (with shadow hand)| [UR10e arm](genesis/mujoco_menagerie/universal_robots_ur10e/ur10e.xml) |
 |Shadow hand| [Shadow Hand (right)](genesis/mujoco_menagerie/shadow_hand/right_hand.xml) |
 | Dobot CR5 |
-| XARM 6 | No exact model currently. 2 potentially similar models. [lite6](genesis/mujoco_menagerie/ufactory_lite6/lite6.xml) and [xarm7](genesis/mujoco_menagerie/ufactory_xarm7/xarm7.xml). The xarm7 model does not show up however.
+| XARM 6 | [xarm6 (no gripper)](models/ManiSkill-XArm6/xarm6_nogripper.urdf) [xarm6 modified to be raised like the arm in the lab (no gripper)](models/ManiSkill-XArm6/mod_xarm6_nogripper.urdf) [xarm6 modified to be raised like the arm in the lab (with gripper)](models/ManiSkill-XArm6/mod_xarm6_robotiq.urdf) | [working with genesis and magma](magma/xarm6MagmaGen.py) [digital twin](magma/xarm6DigitalTwin.py) and more in the [magma folder](magma)

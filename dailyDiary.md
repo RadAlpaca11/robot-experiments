@@ -128,17 +128,30 @@
     * We could potentially add a platform to the urdf file to have a completely accurate model in the simulator
 
 # 4/24/25
-* Added a box for the xarm to stand on, so that it would be more accurate to the lab
-* got xarm integrated with magma and genesis.
+* [Added a box for the xarm to stand on](models/ManiSkill-XArm6/mod_xarm6_nogripper.urdf), so that it would be more accurate to the lab
+* got [xarm integrated with magma and genesis](magma/xarm6MagmaGen.py)
 
 # 4/29/25
-* Updated camera view for xarm
-* updated method of taking pictures with genesis
-* began working on code to generate points in space for robot
+* [Updated camera view for xarm](magma/xarm6Genesis.py)
+* updated method of taking [pictures with genesis](magma/xarm6Genesis.py)
+```python
+output = cam.render()
+imageData = output[0]
+frame = cv2.cvtColor(imageData, cv2.COLOR_BGR2RGB)
+cv2.imwrite('frame.jpg', frame)
+```
+* began working on [code to generate points in space for robot](magma/distributionTest.py)
 
 # 5/1/25
-* Updated distribution code
+* Updated [distribution code](magma/distributionTest.py)
 * remembered that we needed to use radians
 * Tested code with simulation
-* Modified robot model with hand
-* Tested code with robot with hand
+* Modified [robot model with hand](models/ManiSkill-XArm6/mod_xarm6_robotiq.urdf)
+* Tested [code with robot with hand](magma/xarm6Genesis.py)
+
+# 5/6/25
+* added frame capture to [xarm and genesis code](magma/xarm6Genesis.py) with the hope of this helping with data collection later
+* researched [lerobot](lerobot/lerobotNotes.md) data collection
+    * started working on adapting code to work with genesis
+* found a potentially helpful (genesis and lerobot source)[https://github.com/alexis779/slobot]
+* turned on collision in [xarm with genesis](magma/xarm6Genesis.py)
