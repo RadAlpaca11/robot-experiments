@@ -136,9 +136,29 @@ end_effector = xarm6.get_link('link6')
 print(end_effector.get_pos())
 print(xarm6.get_dofs_position())
 
+# # zero position
+# zeroPos = np.array([0, 0, 0, 0, 0, 0])
+# xarm6.control_dofs_position(
+#     zeroPos,
+#     dofs_idx
+# )
+# for i in range(250):
+#     scene.step()
+#     camFilm.render()
+# frame = getFrame(cam)
+# cv2.imwrite('picsAndVids/positions/zeroPos.jpg', frame)
+
+# rotated position
+
+# rest position
+
+
 import numpy as np
 from itertools import product
 import random
+import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 # Define the ranges for each joint
 jointRanges = [
@@ -163,10 +183,38 @@ jointCombinations = list(product(*discretizedJoints))
 print(f"Total combinations: {len(jointCombinations)}")
 print(jointCombinations[:10])
 
-randomSamples = random.sample(jointCombinations, 50)
+randomSamples = random.sample(jointCombinations, 5)
 print(f"Random samples: {randomSamples}")
 
-f = 0
+fingers = (0.81, 0.88, 0.81, 0.88, -0.8, -0.8)
+columns = ['episodeIdx', 'observedPosition', 'controlPosition', 'image']
+
+episodeIdx = np.array([])
+observedPosition = np.array([])
+controlPosition = np.array([])
+image = np.array([])
+
+
+ep = 0
+# zero position
+zeroPos = np.array([0, 0, 0, 0, 0, 0])
+xarm6.control_dofs_position(
+    zeroPos,
+    dofs_idx
+)
+for i in range(250):
+    scene.step()
+    camFilm.render()
+frame = getFrame(cam)
+cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
+
+currentPos = xarm6.get_dofs_position()
+
+episodeIdx = np.append(episodeIdx, ep)
+observedPosition = np.append(observedPosition, currentPos)
+controlPosition = np.append(controlPosition, zeroPos)
+image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
+ep += 1
 
 for sample in randomSamples:
     print(sample)
@@ -179,7 +227,34 @@ for sample in randomSamples:
         scene.step()
         camFilm.render()
     frame = getFrame(cam)
-    cv2.imwrite('picsAndVids/frame' + str(f) + '.jpg', frame)
-    f += 1
+    cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
+    
+    currentPos = xarm6.get_dofs_position()
+
+    episodeIdx = np.append(episodeIdx, ep)
+    observedPosition = np.vstack((observedPosition, currentPos))
+    controlPosition = np.vstack((controlPosition, np.array(sample)))
+    image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
+    ep += 1
 
 camFilm.stop_recording(save_to_filename='video.mp4')
+print(len(episodeIdx))
+print(episodeIdx)
+print(len(observedPosition))
+observedPosition = observedPosition.tolist()
+print(observedPosition)
+print(len(controlPosition))
+controlPosition = controlPosition.tolist()
+print(controlPosition)
+print(len(image))
+
+
+df = pd.DataFrame({
+    'episodeIdx': episodeIdx,
+    'observedPosition': observedPosition,
+    'controlPosition': controlPosition,
+    'image': image
+})
+
+table = pa.Table.from_pandas(df)
+pq.write_table(table, 'lerobotTests/robotDataTest.parquet')

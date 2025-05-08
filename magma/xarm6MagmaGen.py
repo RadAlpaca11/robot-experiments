@@ -106,6 +106,7 @@ cam = scene.add_camera(
 scene.build()
 camFilm.start_recording()
 
+# there are 6 main joints on the robot, and 6 additional with the gripper we have. We 
 motors_dof = np.arange(6)
 
 jnt_names = [

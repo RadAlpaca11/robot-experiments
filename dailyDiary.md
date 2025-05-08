@@ -151,7 +151,10 @@ cv2.imwrite('frame.jpg', frame)
 
 # 5/6/25
 * added frame capture to [xarm and genesis code](magma/xarm6Genesis.py) with the hope of this helping with data collection later
-* researched [lerobot](lerobot/lerobotNotes.md) data collection
+* researched [lerobot](miscNotes/lerobotNotes.md) data collection
     * started working on adapting code to work with genesis
 * found a potentially helpful (genesis and lerobot source)[https://github.com/alexis779/slobot]
 * turned on collision in [xarm with genesis](magma/xarm6Genesis.py)
+
+# 5/8/25
+* added to [xarm genesis code](magma/xarm6Genesis.py) to be able to generate a lerobot-formatted [dataset](magma/lerobotTests/robotDataTest.parquet) and uploaded it to [HuggingFace](RadAlpaca11/lerobotTests) to see if it looked like others, which it did.

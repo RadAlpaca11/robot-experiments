@@ -1,0 +1,21 @@
+{
+    "data_path": "data/robotDataTest.parquet",
+    "features": {
+        "episodeIdx": {
+            "dtype": "int",
+            "description": "Index of the episode in the dataset"
+        },
+        "observedPosition": {
+            "dtype": "float32",
+            "description": "Observed position of the robot"
+        },
+        "controlPosition": {
+            "dtype": "float32",
+            "description": "Position sent to control the robot"
+        },
+        "image": {
+            "dtype": "image",
+            "description": "Image captured by the robot's camera"
+        }
+    }
+}

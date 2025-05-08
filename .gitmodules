@@ -43,6 +43,7 @@
 [submodule "models/ManiSkill-XArm6"]
 	path = models/ManiSkill-XArm6
 	url = https://github.com/haosulab/ManiSkill-XArm6.git
+	
 [submodule "lerobot/lerobotSource"]
 	path = lerobot/lerobotSource
 	url = https://github.com/huggingface/lerobot.git
