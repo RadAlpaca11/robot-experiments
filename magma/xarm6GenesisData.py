@@ -27,19 +27,19 @@ def getFrame(cam):
     frame = cv2.cvtColor(imageData, cv2.COLOR_BGR2RGB)
     return frame
 
-# Initialize the robot.
-remoteArm = XArmAPI('172.20.5.100')
+# # Initialize the robot.
+# remoteArm = XArmAPI('172.20.5.100')
 
 
-def initialize_robot(remoteArm):
-    remoteArm.clean_warn()
-    remoteArm.clean_error()
-    remoteArm.motion_enable(True)
-    remoteArm.set_mode(2)
-    remoteArm.set_state(0)
-    # arm.move_gohome()
+# def initialize_robot(remoteArm):
+#     remoteArm.clean_warn()
+#     remoteArm.clean_error()
+#     remoteArm.motion_enable(True)
+#     remoteArm.set_mode(2)
+#     remoteArm.set_state(0)
+#     # arm.move_gohome()
 
-initialize_robot(remoteArm)
+# initialize_robot(remoteArm)
 
 # Initialize Genesis
 gs.init(backend=gs.cpu)
@@ -111,9 +111,10 @@ cam = scene.add_camera(
 
 scene.build()
 camFilm.start_recording()
+cam.start_recording()
 
 # set up motors and joints
-motors_dof = np.arange(6)
+motors_dof = np.arange(10)
 
 jnt_names = [
     'joint1',
@@ -121,22 +122,26 @@ jnt_names = [
     'joint3',
     'joint4',
     'joint5',
-    'joint6'
+    'joint6',
+    'left_outer_knuckle_joint',
+    'left_inner_finger_joint',
+    'right_outer_knuckle_joint',
+    'right_inner_finger_joint'
 ]
 dofs_idx = [xarm6.get_joint(name).dof_idx_local for name in jnt_names]
 
 # pulled from urdf
 xarm6.set_dofs_kp(
-    np.array([100, 100, 100, 100, 100, 100]),
+    np.array([100, 100, 100, 100, 100, 100, 10, 10, 10, 10]),
     motors_dof
 )
 xarm6.set_dofs_kv(
-    np.array([40, 40, 40, 40, 40, 40]),
+    np.array([40, 40, 40, 40, 40, 40, 2, 2, 2, 2]),
     motors_dof
 )
 xarm6.set_dofs_force_range(
-    np.array([-6.28318530718, -2.059, -3.8, -6.28318530718, -1.69297, -6.28318530718]),
-    np.array([6.28318530718, 2.0944, 0.19198, 6.28318530718, 3.14159265359, 6.28318530718]),
+    np.array([-6.28318530718, -2.059, -3.8, -6.28318530718, -1.69297, -6.28318530718,  -1, -1, -1, -1]),
+    np.array([6.28318530718, 2.0944, 0.19198, 6.28318530718, 3.14159265359, 6.28318530718, 1, 1, 1, 1]),
     motors_dof
 )
 
@@ -161,7 +166,9 @@ end_effector = xarm6.get_link('link6')
 # rotated position
 # rest position
 
-
+# defining the gripper positions
+gripperOpenPos = (0, 0, 0, 0)
+gripperClosePos = (0.81, -0.88, 0.81, -0.88)
 
 # Define the ranges for each joint
 jointRanges = [
@@ -175,6 +182,7 @@ jointRanges = [
 
 # Number of steps per joint
 n = 10  # Adjust this based on how fine you want the discretization
+# n = 10 will give 6,000,000 combinations
 
 # Discretize each joint's range
 discretizedJoints = [
@@ -186,25 +194,24 @@ jointCombinations = list(product(*discretizedJoints))
 # print(f"Total combinations: {len(jointCombinations)}")
 
 # number of positions you want to use
-# the data will record the zero position, and then 5 random positions
-# so 6 total
+# the data will record the zero position, and 5 random positions, each with both gripper open and close
+# so if you put 5, you will have 12 positions in the end
 randomSamples = random.sample(jointCombinations, 5)
 # print(f"Random samples: {randomSamples}")
 
-# Defining finger joints
-fingers = (0.81, 0.88, 0.81, 0.88, -0.8, -0.8)
-
 # Setting up the data for the file
-columns = ['episodeIdx', 'observedPosition', 'controlPosition', 'image']
+columns = ['episodeIdx', 'worldPosition', 'observedPosition', 'controlPosition', 'gripperOpen', 'image']
 
 episodeIdx = np.array([])
+worldPosition = np.array([])
 observedPosition = np.array([])
 controlPosition = np.array([])
+gripperOpen = np.array([])
 image = np.array([])
 
 ep = 0
-# zero position
-zeroPos = np.array([0, 0, 0, 0, 0, 0])
+# zero positions
+zeroPos = np.array([0, 0, 0, 0, 0, 0, gripperOpenPos[0], gripperOpenPos[1], gripperOpenPos[2], gripperOpenPos[3]])
 xarm6.control_dofs_position(
     zeroPos,
     dofs_idx
@@ -215,12 +222,46 @@ for i in range(250):
 # getting the data from the simulation
 frame = getFrame(cam)
 cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
-currentPos = xarm6.get_dofs_position()
+currentPos = xarm6.get_dofs_position(dofs_idx)
+currentWorldPos = end_effector.get_pos()
+currentWorldQuat = end_effector.get_quat()
+currentWorldEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
+currentWorldPos = np.append(currentWorldPos, currentWorldEuler)
 
 # Adding the data to the lists
 episodeIdx = np.append(episodeIdx, ep)
+worldPosition = np.append(worldPosition, currentWorldPos)
 observedPosition = np.append(observedPosition, currentPos)
 controlPosition = np.append(controlPosition, zeroPos)
+gripperOpen = np.append(gripperOpen, 'True')
+image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
+
+# incrementing the episode index
+ep += 1
+
+zeroPos = np.array([0, 0, 0, 0, 0, 0, gripperClosePos[0], gripperClosePos[1], gripperClosePos[2], gripperClosePos[3]])
+xarm6.control_dofs_position(
+    zeroPos,
+    dofs_idx
+)
+for i in range(250):
+    scene.step()
+    camFilm.render()
+# getting the data from the simulation
+frame = getFrame(cam)
+cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
+currentPos = xarm6.get_dofs_position(dofs_idx)
+currentWorldPos = end_effector.get_pos()
+currentWorldQuat = end_effector.get_quat()
+currentWorldEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
+currentWorldPos = np.append(currentWorldPos, currentWorldEuler)
+
+# Adding the data to the lists
+episodeIdx = np.append(episodeIdx, ep)
+worldPosition = np.vstack((worldPosition, currentWorldPos))
+observedPosition = np.vstack((observedPosition, currentPos))
+controlPosition = np.vstack((controlPosition, zeroPos))
+gripperOpen = np.append(gripperOpen, 'False')
 image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
 
 # incrementing the episode index
@@ -229,36 +270,77 @@ ep += 1
 # goes through and uses the random positions to move, get the data, and add the data to the lists
 for sample in randomSamples:
     print(sample)
+    sample1 = np.array(sample)
+    goToPos = np.append(sample1, gripperOpenPos)
     xarm6.control_dofs_position(
-        np.array(sample),
+        goToPos,
         dofs_idx,
     )
-    for i in range(100):
+    for i in range(250):
         scene.step()
         camFilm.render()
     frame = getFrame(cam)
     cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
     
-    currentPos = xarm6.get_dofs_position()
+    currentPos = xarm6.get_dofs_position(dofs_idx)
+    currentWorldPos = end_effector.get_pos()
+    currentWorldQuat = end_effector.get_quat()
+    currentWolrdEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
+    currentWorldPos = np.append(currentWorldPos, currentWolrdEuler)
+    # print(currentPos)
+    # print(len(currentPos))
 
     episodeIdx = np.append(episodeIdx, ep)
+    worldPosition = np.vstack((worldPosition, currentWorldPos))
     observedPosition = np.vstack((observedPosition, currentPos))
-    controlPosition = np.vstack((controlPosition, np.array(sample)))
+    controlPosition = np.vstack((controlPosition, goToPos))
+    gripperOpen = np.append(gripperOpen, 'True')
     image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
     ep += 1
 
+    sample2 = np.array(sample)
+    goToPos = np.append(sample2, gripperClosePos)
+    xarm6.control_dofs_position(
+        goToPos,
+        dofs_idx,
+    )
+    for i in range(250):
+        scene.step()
+        camFilm.render()
+    frame = getFrame(cam)
+    cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
+    
+    currentPos = xarm6.get_dofs_position(dofs_idx)
+    currentWorldPos = end_effector.get_pos()
+    currentWorldQuat = end_effector.get_quat()
+    currentWolrdEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
+    currentWorldPos = np.append(currentWorldPos, currentWolrdEuler)
+    # print(currentPos)
+    # print(len(currentPos))
+
+    episodeIdx = np.append(episodeIdx, ep)
+    worldPosition = np.vstack((worldPosition, currentWorldPos))
+    observedPosition = np.vstack((observedPosition, currentPos))
+    controlPosition = np.vstack((controlPosition, goToPos))
+    gripperOpen = np.append(gripperOpen, 'False')
+    image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
+    ep += 1
 # saves the recorded video
 camFilm.stop_recording(save_to_filename='video.mp4')
+cam.stop_recording(save_to_filename='robotCam.mp4')
 
 # Converts the data that is arrays, to a list that can be written to the file
+worldPosition = worldPosition.tolist()
 observedPosition = observedPosition.tolist()
 controlPosition = controlPosition.tolist()
 
 # puts the data into a pandas dataframe
 df = pd.DataFrame({
     'episodeIdx': episodeIdx,
+    'worldPosition': worldPosition,
     'observedPosition': observedPosition,
     'controlPosition': controlPosition,
+    'gripperOpen': gripperOpen,
     'image': image
 })
 

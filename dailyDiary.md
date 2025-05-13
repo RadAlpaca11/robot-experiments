@@ -157,4 +157,12 @@ cv2.imwrite('frame.jpg', frame)
 * turned on collision in [xarm with genesis](magma/xarm6Genesis.py)
 
 # 5/8/25
-* added to [xarm genesis code](magma/xarm6Genesis.py) to be able to generate a lerobot-formatted [dataset](magma/lerobotTests/robotDataTest.parquet) and uploaded it to [HuggingFace](RadAlpaca11/lerobotTests) to see if it looked like others, which it did.
+* added to [xarm genesis code](magma/xarm6Genesis.py) to be able to generate a lerobot-formatted [dataset](magma/lerobotTests/robotDataTest.parquet) and uploaded it to [HuggingFace](https://huggingface.co/datasets/RadAlpaca11/lerobotTests) to see if it looked like others, which it did.
+
+# 5/13/25
+* worked on [genesis data collection](magma/xarm6GenesisData.py)
+    * added the gripper
+        * had to modify the [model](models/ManiSkill-XArm6/mod_xarm6_robotiq.urdf) so that the extra piece on the gripper wasn't colliding with the important pieces
+    * got world position record
+* updated [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests) with newer tests
+* updated debug config to fix directory issues
