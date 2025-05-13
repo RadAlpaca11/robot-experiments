@@ -1,5 +1,7 @@
 # Notes
-In genesis we made a [test dataset](RadAlpaca11/lerobotTests)
+In genesis we made a [test dataset](https://huggingface.co/datasets/RadAlpaca11/lerobotTests)
+
+Initially, we were thinking about how to modify the lerobot scripts to fit our needs, but we realized that we could just find out how lerobot datasets are formatted, and just take that data in our own [code](../magma/xarm6GenesisData.py)
 
 
 ## Main structure of a dataset (taken from the README)

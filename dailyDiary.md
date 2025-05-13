@@ -132,8 +132,8 @@
 * got [xarm integrated with magma and genesis](magma/xarm6MagmaGen.py)
 
 # 4/29/25
-* [Updated camera view for xarm](magma/xarm6Genesis.py)
-* updated method of taking [pictures with genesis](magma/xarm6Genesis.py)
+* [Updated camera view for xarm](magma/xarm6GenesisData.py)
+* updated method of taking [pictures with genesis](magma/xarm6GenesisData.py)
 ```python
 output = cam.render()
 imageData = output[0]
@@ -147,10 +147,10 @@ cv2.imwrite('frame.jpg', frame)
 * remembered that we needed to use radians
 * Tested code with simulation
 * Modified [robot model with hand](models/ManiSkill-XArm6/mod_xarm6_robotiq.urdf)
-* Tested [code with robot with hand](magma/xarm6Genesis.py)
+* Tested [code with robot with hand](magma/xarm6GenesisData.py)
 
 # 5/6/25
-* added frame capture to [xarm and genesis code](magma/xarm6Genesis.py) with the hope of this helping with data collection later
+* added frame capture to [xarm and genesis code](magma/xarm6GenesisData.py) with the hope of this helping with data collection later
 * researched [lerobot](miscNotes/lerobotNotes.md) data collection
     * started working on adapting code to work with genesis
 * found a potentially helpful (genesis and lerobot source)[https://github.com/alexis779/slobot]

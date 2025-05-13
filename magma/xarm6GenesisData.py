@@ -1,17 +1,26 @@
 import numpy as np
 import cv2
 from PIL import Image
-import torch
+# import torch
 from xarm.wrapper import XArmAPI  # Import xarm-python-sdk
 import genesis as gs
 from scipy.spatial.transform import Rotation
 
+# libraries for data collection
+from itertools import product
+import random
+import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
+
+# Function to convert quaternion to Euler angles
 def quatToEuler(q, scalarFirst=True, order='xyz', degrees=False):
     if scalarFirst:
         q = [q[1], q[2], q[3], q[0]]
     r = Rotation.from_quat(q)
     return r.as_euler(order, degrees=degrees)
 
+# Function to get the frame from the camera
 def getFrame(cam):
     output = cam.render()
     imageData = output[0]
@@ -103,6 +112,7 @@ cam = scene.add_camera(
 scene.build()
 camFilm.start_recording()
 
+# set up motors and joints
 motors_dof = np.arange(6)
 
 jnt_names = [
@@ -133,8 +143,9 @@ xarm6.set_dofs_force_range(
 # get the end-effector link
 end_effector = xarm6.get_link('link6')
 
-print(end_effector.get_pos())
-print(xarm6.get_dofs_position())
+
+# print(end_effector.get_pos())
+# print(xarm6.get_dofs_position())
 
 # # zero position
 # zeroPos = np.array([0, 0, 0, 0, 0, 0])
@@ -147,18 +158,10 @@ print(xarm6.get_dofs_position())
 #     camFilm.render()
 # frame = getFrame(cam)
 # cv2.imwrite('picsAndVids/positions/zeroPos.jpg', frame)
-
 # rotated position
-
 # rest position
 
 
-import numpy as np
-from itertools import product
-import random
-import pandas as pd
-import pyarrow as pa
-import pyarrow.parquet as pq
 
 # Define the ranges for each joint
 jointRanges = [
@@ -180,20 +183,24 @@ discretizedJoints = [
 
 # Generate all combinations of joint positions
 jointCombinations = list(product(*discretizedJoints))
-print(f"Total combinations: {len(jointCombinations)}")
-print(jointCombinations[:10])
+# print(f"Total combinations: {len(jointCombinations)}")
 
+# number of positions you want to use
+# the data will record the zero position, and then 5 random positions
+# so 6 total
 randomSamples = random.sample(jointCombinations, 5)
-print(f"Random samples: {randomSamples}")
+# print(f"Random samples: {randomSamples}")
 
+# Defining finger joints
 fingers = (0.81, 0.88, 0.81, 0.88, -0.8, -0.8)
+
+# Setting up the data for the file
 columns = ['episodeIdx', 'observedPosition', 'controlPosition', 'image']
 
 episodeIdx = np.array([])
 observedPosition = np.array([])
 controlPosition = np.array([])
 image = np.array([])
-
 
 ep = 0
 # zero position
@@ -205,24 +212,27 @@ xarm6.control_dofs_position(
 for i in range(250):
     scene.step()
     camFilm.render()
+# getting the data from the simulation
 frame = getFrame(cam)
 cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
-
 currentPos = xarm6.get_dofs_position()
 
+# Adding the data to the lists
 episodeIdx = np.append(episodeIdx, ep)
 observedPosition = np.append(observedPosition, currentPos)
 controlPosition = np.append(controlPosition, zeroPos)
 image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
+
+# incrementing the episode index
 ep += 1
 
+# goes through and uses the random positions to move, get the data, and add the data to the lists
 for sample in randomSamples:
     print(sample)
     xarm6.control_dofs_position(
         np.array(sample),
         dofs_idx,
     )
-
     for i in range(100):
         scene.step()
         camFilm.render()
@@ -237,18 +247,14 @@ for sample in randomSamples:
     image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
     ep += 1
 
+# saves the recorded video
 camFilm.stop_recording(save_to_filename='video.mp4')
-print(len(episodeIdx))
-print(episodeIdx)
-print(len(observedPosition))
+
+# Converts the data that is arrays, to a list that can be written to the file
 observedPosition = observedPosition.tolist()
-print(observedPosition)
-print(len(controlPosition))
 controlPosition = controlPosition.tolist()
-print(controlPosition)
-print(len(image))
 
-
+# puts the data into a pandas dataframe
 df = pd.DataFrame({
     'episodeIdx': episodeIdx,
     'observedPosition': observedPosition,
@@ -256,5 +262,7 @@ df = pd.DataFrame({
     'image': image
 })
 
+# converts the data to a parquet file
 table = pa.Table.from_pandas(df)
+# writes the data to a parquet file
 pq.write_table(table, 'lerobotTests/robotDataTest.parquet')
