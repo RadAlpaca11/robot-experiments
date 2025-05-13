@@ -52,7 +52,7 @@ scene = gs.Scene(
         camera_pos    = (3.5, 0.0, 2.5),
         camera_lookat = (0.0, 0.0, 0.5),
         camera_fov    = 30,
-        max_FPS       = 60,
+        max_FPS       = 60
     ),
     vis_options = gs.options.VisOptions(
         show_world_frame = True,
@@ -140,8 +140,8 @@ xarm6.set_dofs_kv(
     motors_dof
 )
 xarm6.set_dofs_force_range(
-    np.array([-6.28318530718, -2.059, -3.8, -6.28318530718, -1.69297, -6.28318530718,  -1, -1, -1, -1]),
-    np.array([6.28318530718, 2.0944, 0.19198, 6.28318530718, 3.14159265359, 6.28318530718, 1, 1, 1, 1]),
+    np.array([-50, -50, -32, -32, -32, -20,  -1000, -1000, -1000, -1000]),
+    np.array([50, 50, 32, 32, 32, 20, 1000, 1000, 1000, 1000]),
     motors_dof
 )
 
@@ -200,12 +200,12 @@ randomSamples = random.sample(jointCombinations, 5)
 # print(f"Random samples: {randomSamples}")
 
 # Setting up the data for the file
-columns = ['episodeIdx', 'worldPosition', 'observedPosition', 'controlPosition', 'gripperOpen', 'image']
+columns = ['episodeIdx', 'endEffectorPosition', 'observedJointAngles', 'targetJointAngles', 'gripperOpen', 'image']
 
 episodeIdx = np.array([])
-worldPosition = np.array([])
-observedPosition = np.array([])
-controlPosition = np.array([])
+endEffectorPosition = np.array([])
+observedJointAngles = np.array([])
+targetJointAngles = np.array([])
 gripperOpen = np.array([])
 image = np.array([])
 
@@ -230,9 +230,9 @@ currentWorldPos = np.append(currentWorldPos, currentWorldEuler)
 
 # Adding the data to the lists
 episodeIdx = np.append(episodeIdx, ep)
-worldPosition = np.append(worldPosition, currentWorldPos)
-observedPosition = np.append(observedPosition, currentPos)
-controlPosition = np.append(controlPosition, zeroPos)
+endEffectorPosition = np.append(endEffectorPosition, currentWorldPos)
+observedJointAngles = np.append(observedJointAngles, currentPos)
+targetJointAngles = np.append(targetJointAngles, zeroPos)
 gripperOpen = np.append(gripperOpen, 'True')
 image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
 
@@ -258,9 +258,9 @@ currentWorldPos = np.append(currentWorldPos, currentWorldEuler)
 
 # Adding the data to the lists
 episodeIdx = np.append(episodeIdx, ep)
-worldPosition = np.vstack((worldPosition, currentWorldPos))
-observedPosition = np.vstack((observedPosition, currentPos))
-controlPosition = np.vstack((controlPosition, zeroPos))
+endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
+observedJointAngles = np.vstack((observedJointAngles, currentPos))
+targetJointAngles = np.vstack((targetJointAngles, zeroPos))
 gripperOpen = np.append(gripperOpen, 'False')
 image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
 
@@ -291,9 +291,9 @@ for sample in randomSamples:
     # print(len(currentPos))
 
     episodeIdx = np.append(episodeIdx, ep)
-    worldPosition = np.vstack((worldPosition, currentWorldPos))
-    observedPosition = np.vstack((observedPosition, currentPos))
-    controlPosition = np.vstack((controlPosition, goToPos))
+    endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
+    observedJointAngles = np.vstack((observedJointAngles, currentPos))
+    targetJointAngles = np.vstack((targetJointAngles, goToPos))
     gripperOpen = np.append(gripperOpen, 'True')
     image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
     ep += 1
@@ -319,9 +319,9 @@ for sample in randomSamples:
     # print(len(currentPos))
 
     episodeIdx = np.append(episodeIdx, ep)
-    worldPosition = np.vstack((worldPosition, currentWorldPos))
-    observedPosition = np.vstack((observedPosition, currentPos))
-    controlPosition = np.vstack((controlPosition, goToPos))
+    endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
+    observedJointAngles = np.vstack((observedJointAngles, currentPos))
+    targetJointAngles = np.vstack((targetJointAngles, goToPos))
     gripperOpen = np.append(gripperOpen, 'False')
     image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
     ep += 1
@@ -330,16 +330,16 @@ camFilm.stop_recording(save_to_filename='video.mp4')
 cam.stop_recording(save_to_filename='robotCam.mp4')
 
 # Converts the data that is arrays, to a list that can be written to the file
-worldPosition = worldPosition.tolist()
-observedPosition = observedPosition.tolist()
-controlPosition = controlPosition.tolist()
+endEffectorPosition = endEffectorPosition.tolist()
+observedJointAngles = observedJointAngles.tolist()
+targetJointAngles = targetJointAngles.tolist()
 
 # puts the data into a pandas dataframe
 df = pd.DataFrame({
     'episodeIdx': episodeIdx,
-    'worldPosition': worldPosition,
-    'observedPosition': observedPosition,
-    'controlPosition': controlPosition,
+    'endEffectorPosition': endEffectorPosition,
+    'observedJointAngles': observedJointAngles,
+    'targetJointAngles': targetJointAngles,
     'gripperOpen': gripperOpen,
     'image': image
 })
