@@ -1,8 +1,8 @@
 import numpy as np
 import cv2
-from PIL import Image
-# import torch
-from xarm.wrapper import XArmAPI  # Import xarm-python-sdk
+# from PIL import Image
+import torch
+# from xarm.wrapper import XArmAPI  # Import xarm-python-sdk
 import genesis as gs
 from scipy.spatial.transform import Rotation
 
@@ -13,8 +13,14 @@ import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
 
+# for huggingface
+from huggingface_hub import HfApi
+api = HfApi()
+
 # Function to convert quaternion to Euler angles
 def quatToEuler(q, scalarFirst=True, order='xyz', degrees=False):
+    q = q[0]
+    print(q)
     if scalarFirst:
         q = [q[1], q[2], q[3], q[0]]
     r = Rotation.from_quat(q)
@@ -52,7 +58,7 @@ scene = gs.Scene(
         camera_pos    = (3.5, 0.0, 2.5),
         camera_lookat = (0.0, 0.0, 0.5),
         camera_fov    = 30,
-        max_FPS       = 60
+        max_FPS       = 60,
     ),
     vis_options = gs.options.VisOptions(
         show_world_frame = True,
@@ -70,6 +76,7 @@ scene = gs.Scene(
         enable_self_collision=True,
     ),
     renderer=gs.renderers.Rasterizer(),
+    show_FPS=False
 )
 
 plane = scene.add_entity(
@@ -100,7 +107,7 @@ camFilm = scene.add_camera(
     GUI    = False,
 )
 
-# for vla
+# for data
 cam = scene.add_camera(
     res    = (640, 480),
     pos    = (-2.5, 3, 1.8),
@@ -109,7 +116,8 @@ cam = scene.add_camera(
     GUI    = False,
 )
 
-scene.build()
+envNum = 100
+scene.build(n_envs=envNum, env_spacing=(2, 2))
 camFilm.start_recording()
 cam.start_recording()
 
@@ -130,20 +138,21 @@ jnt_names = [
 ]
 dofs_idx = [xarm6.get_joint(name).dof_idx_local for name in jnt_names]
 
-# pulled from urdf
-xarm6.set_dofs_kp(
-    np.array([100, 100, 100, 100, 100, 100, 10, 10, 10, 10]),
-    motors_dof
-)
-xarm6.set_dofs_kv(
-    np.array([40, 40, 40, 40, 40, 40, 2, 2, 2, 2]),
-    motors_dof
-)
-xarm6.set_dofs_force_range(
-    np.array([-50, -50, -32, -32, -32, -20,  -1000, -1000, -1000, -1000]),
-    np.array([50, 50, 32, 32, 32, 20, 1000, 1000, 1000, 1000]),
-    motors_dof
-)
+# Turns out these were making things worse, and we could just let the model do it's thing.
+# # pulled from urdf
+# xarm6.set_dofs_kp(
+#     np.array([100, 100, 100, 100, 100, 100, 10, 10, 10, 10]),
+#     motors_dof
+# )
+# xarm6.set_dofs_kv(
+#     np.array([40, 40, 40, 40, 40, 40, 2, 2, 2, 2]),
+#     motors_dof
+# )
+# xarm6.set_dofs_force_range(
+#     np.array([-50, -50, -32, -32, -32, -20,  -1000, -1000, -1000, -1000]),
+#     np.array([50, 50, 32, 32, 32, 20, 1000, 1000, 1000, 1000]),
+#     motors_dof
+# )
 
 # get the end-effector link
 end_effector = xarm6.get_link('link6')
@@ -169,6 +178,22 @@ end_effector = xarm6.get_link('link6')
 # defining the gripper positions
 gripperOpenPos = (0, 0, 0, 0)
 gripperClosePos = (0.81, -0.88, 0.81, -0.88)
+
+# for i in range(envNum):
+#     if i%2 == 0:
+#         xarm6.control_dofs_position(
+#             np.array([0, 0, 0, 0, 0, 0, gripperClosePos[0], gripperClosePos[1], gripperClosePos[2], gripperClosePos[3]]),
+#             dofs_idx,
+#             envs_idx=[i]
+#         )
+#     print(f"env {i}")
+#     print(xarm6.get_dofs_position(dofs_idx, [i]))
+
+# for f in range(250):
+#     scene.step()
+#     camFilm.render()
+
+# camFilm.stop_recording(save_to_filename='video.mp4')
 
 # Define the ranges for each joint
 jointRanges = [
@@ -196,71 +221,104 @@ jointCombinations = list(product(*discretizedJoints))
 # number of positions you want to use
 # the data will record the zero position, and 5 random positions, each with both gripper open and close
 # so if you put 5, you will have 12 positions in the end
-randomSamples = random.sample(jointCombinations, 5)
+randomSamples = random.sample(jointCombinations, 49)
 # print(f"Random samples: {randomSamples}")
 
 # Setting up the data for the file
-columns = ['episodeIdx', 'endEffectorPosition', 'observedJointAngles', 'targetJointAngles', 'gripperOpen', 'image']
+columns = ['episodeIdx', 'endEffectorPosition', 'observedJointAngles', 'targetJointAngles', 'deltaAngles', 'gripperOpen', 'image']
 
-episodeIdx = np.array([])
-endEffectorPosition = np.array([])
-observedJointAngles = np.array([])
-targetJointAngles = np.array([])
-gripperOpen = np.array([])
-image = np.array([])
+episodeIdx = np.array([]) # the episode number
+endEffectorPosition = np.array([]) # the end effector position in world coordinates with euler rotation
+observedJointAngles = np.array([]) # the joint angles of the robot
+targetJointAngles = np.array([]) # the target joint angles of the robot
+deltaAngles = np.array([]) # the difference between the joint angles and the target joint angles
+gripperOpen = np.array([]) # if the gripper is open or closed (boolean)
+image = np.array([]) # path to the image
 
 ep = 0
 # zero positions
 zeroPos = np.array([0, 0, 0, 0, 0, 0, gripperOpenPos[0], gripperOpenPos[1], gripperOpenPos[2], gripperOpenPos[3]])
 xarm6.control_dofs_position(
     zeroPos,
-    dofs_idx
+    dofs_idx,
+    envs_idx=[ep],
 )
-for i in range(250):
-    scene.step()
-    camFilm.render()
+# for i in range(250):
+#     scene.step()
+#     camFilm.render()
 # getting the data from the simulation
 frame = getFrame(cam)
 cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
-currentPos = xarm6.get_dofs_position(dofs_idx)
-currentWorldPos = end_effector.get_pos()
-currentWorldQuat = end_effector.get_quat()
+currentPos = xarm6.get_dofs_position(dofs_idx, [ep])
+print(currentPos)
+#currentPos = currentPos[1]
+currentWorldPos = end_effector.get_pos([ep])
+print(currentWorldPos)
+#currentWorldPos = currentWorldPos[1]
+currentWorldQuat = end_effector.get_quat([ep])
+print(currentWorldQuat)
 currentWorldEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
 currentWorldPos = np.append(currentWorldPos, currentWorldEuler)
+currentDelta = np.subtract(currentPos, zeroPos)
+
+print("observedJointAngles shape:", observedJointAngles.shape)
+print("currentPos shape:", currentPos.shape)
+print("endEffectorPosition shape:", endEffectorPosition.shape)
+print("currentWorldPos shape:", currentWorldPos.shape)
+print("targetJointAngles shape:", targetJointAngles.shape)
+print("zeroPos shape:", zeroPos.shape)
+print("deltaAngles shape:", deltaAngles.shape)
+print("currentDelta shape:", currentDelta.shape)
 
 # Adding the data to the lists
 episodeIdx = np.append(episodeIdx, ep)
-endEffectorPosition = np.append(endEffectorPosition, currentWorldPos)
-observedJointAngles = np.append(observedJointAngles, currentPos)
+# endEffectorPosition = np.append(endEffectorPosition, currentWorldPos)
+# observedJointAngles = np.append(observedJointAngles, currentPos)
 targetJointAngles = np.append(targetJointAngles, zeroPos)
+# deltaAngles = np.append(deltaAngles, currentDelta)
 gripperOpen = np.append(gripperOpen, 'True')
 image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
 
 # incrementing the episode index
 ep += 1
 
+print("ep:", ep)
 zeroPos = np.array([0, 0, 0, 0, 0, 0, gripperClosePos[0], gripperClosePos[1], gripperClosePos[2], gripperClosePos[3]])
 xarm6.control_dofs_position(
     zeroPos,
-    dofs_idx
+    dofs_idx,
+    envs_idx=[ep]
 )
-for i in range(250):
-    scene.step()
-    camFilm.render()
+# for i in range(250):
+#     scene.step()
+#     camFilm.render()
 # getting the data from the simulation
 frame = getFrame(cam)
 cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
-currentPos = xarm6.get_dofs_position(dofs_idx)
-currentWorldPos = end_effector.get_pos()
-currentWorldQuat = end_effector.get_quat()
+currentPos = xarm6.get_dofs_position(dofs_idx, [ep])
+# currentPos = currentPos[2]
+currentWorldPos = end_effector.get_pos([ep])
+# currentWorldPos = currentWorldPos[1]
+currentWorldQuat = end_effector.get_quat([ep])
 currentWorldEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
 currentWorldPos = np.append(currentWorldPos, currentWorldEuler)
+currentDelta = np.subtract(currentPos, zeroPos)
+
+print("observedJointAngles shape:", observedJointAngles.shape)
+print("currentPos shape:", currentPos.shape)
+print("endEffectorPosition shape:", endEffectorPosition.shape)
+print("currentWorldPos shape:", currentWorldPos.shape)
+print("targetJointAngles shape:", targetJointAngles.shape)
+print("zeroPos shape:", zeroPos.shape)
+print("deltaAngles shape:", deltaAngles.shape)
+print("currentDelta shape:", currentDelta.shape)
 
 # Adding the data to the lists
 episodeIdx = np.append(episodeIdx, ep)
-endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
-observedJointAngles = np.vstack((observedJointAngles, currentPos))
+# endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
+# observedJointAngles = np.vstack((observedJointAngles, currentPos))
 targetJointAngles = np.vstack((targetJointAngles, zeroPos))
+# deltaAngles = np.vstack((deltaAngles, currentDelta))
 gripperOpen = np.append(gripperOpen, 'False')
 image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
 
@@ -269,70 +327,109 @@ ep += 1
 
 # goes through and uses the random positions to move, get the data, and add the data to the lists
 for sample in randomSamples:
+    print("ep:", ep)
     print(sample)
     sample1 = np.array(sample)
     goToPos = np.append(sample1, gripperOpenPos)
     xarm6.control_dofs_position(
         goToPos,
         dofs_idx,
+        envs_idx=[ep]
     )
-    for i in range(250):
-        scene.step()
-        camFilm.render()
+    # for i in range(250): # What if this could end when all joints are close enough to the position?
+    #     scene.step()
+    #     camFilm.render()
     frame = getFrame(cam)
     cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
     
-    currentPos = xarm6.get_dofs_position(dofs_idx)
-    currentWorldPos = end_effector.get_pos()
-    currentWorldQuat = end_effector.get_quat()
+    currentPos = xarm6.get_dofs_position(dofs_idx, [ep])
+    print(currentPos)
+    currentWorldPos = end_effector.get_pos([ep])
+    currentWorldQuat = end_effector.get_quat([ep])
     currentWolrdEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
     currentWorldPos = np.append(currentWorldPos, currentWolrdEuler)
+    currentDelta = np.subtract(currentPos, goToPos)
     # print(currentPos)
     # print(len(currentPos))
 
     episodeIdx = np.append(episodeIdx, ep)
-    endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
-    observedJointAngles = np.vstack((observedJointAngles, currentPos))
+    # endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
+    # observedJointAngles = np.vstack((observedJointAngles, currentPos))
     targetJointAngles = np.vstack((targetJointAngles, goToPos))
+    # deltaAngles = np.vstack((deltaAngles, currentDelta))
     gripperOpen = np.append(gripperOpen, 'True')
     image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
     ep += 1
 
+    print("ep:", ep)
     sample2 = np.array(sample)
     goToPos = np.append(sample2, gripperClosePos)
     xarm6.control_dofs_position(
         goToPos,
         dofs_idx,
+        envs_idx=[ep]
     )
-    for i in range(250):
-        scene.step()
-        camFilm.render()
+    # for i in range(250):
+    #     scene.step()
+    #     camFilm.render()
     frame = getFrame(cam)
     cv2.imwrite('lerobotTests/picsAndVids/ep' + str(ep) + '.jpg', frame)
     
-    currentPos = xarm6.get_dofs_position(dofs_idx)
-    currentWorldPos = end_effector.get_pos()
-    currentWorldQuat = end_effector.get_quat()
-    currentWolrdEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
-    currentWorldPos = np.append(currentWorldPos, currentWolrdEuler)
+    #currentPos = xarm6.get_dofs_position(dofs_idx, [ep])
+    # currentWorldPos = end_effector.get_pos([ep])
+    # currentWorldQuat = end_effector.get_quat([ep])
+    # currentWolrdEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
+    # currentWorldPos = np.append(currentWorldPos, currentWolrdEuler)
+    # currentDelta = np.subtract(currentPos, goToPos)
     # print(currentPos)
     # print(len(currentPos))
 
     episodeIdx = np.append(episodeIdx, ep)
-    endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
-    observedJointAngles = np.vstack((observedJointAngles, currentPos))
+    # endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
+    # observedJointAngles = np.vstack((observedJointAngles, currentPos))
     targetJointAngles = np.vstack((targetJointAngles, goToPos))
+    # deltaAngles = np.vstack((deltaAngles, currentDelta))
     gripperOpen = np.append(gripperOpen, 'False')
     image = np.append(image, 'picsAndVids/ep' + str(ep) + '.jpg')
     ep += 1
+for i in range(250):
+    scene.step()
+    camFilm.render()
 # saves the recorded video
 camFilm.stop_recording(save_to_filename='video.mp4')
 cam.stop_recording(save_to_filename='robotCam.mp4')
+
+for env in range(envNum):
+    print("env:", env)
+    currentPos = xarm6.get_dofs_position(dofs_idx, [env])
+    currentWorldPos = end_effector.get_pos([env])
+    currentWorldQuat = end_effector.get_quat([env])
+    currentWolrdEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
+    currentWorldPos = np.append(currentWorldPos, currentWolrdEuler)
+    currentDelta = np.subtract(currentPos, targetJointAngles[env])
+    if env == 0:
+        endEffectorPosition = np.append(endEffectorPosition, currentWorldPos)
+        observedJointAngles = np.append(observedJointAngles, currentPos)
+        deltaAngles = np.append(deltaAngles, currentDelta)
+
+    else:
+        endEffectorPosition = np.vstack((endEffectorPosition, currentWorldPos))
+        observedJointAngles = np.vstack((observedJointAngles, currentPos))
+        deltaAngles = np.vstack((deltaAngles, currentDelta))
 
 # Converts the data that is arrays, to a list that can be written to the file
 endEffectorPosition = endEffectorPosition.tolist()
 observedJointAngles = observedJointAngles.tolist()
 targetJointAngles = targetJointAngles.tolist()
+deltaAngles = deltaAngles.tolist()
+
+print("episodeIdx length", len(episodeIdx))
+print("endEffectorPosition length", len(endEffectorPosition))
+print("observedJointAngles length", len(observedJointAngles))
+print("targetJointAngles length", len(targetJointAngles))
+print("deltaAngles length", len(deltaAngles))
+print("gripperOpen length", len(gripperOpen))
+print("image length", len(image))
 
 # puts the data into a pandas dataframe
 df = pd.DataFrame({
@@ -340,6 +437,7 @@ df = pd.DataFrame({
     'endEffectorPosition': endEffectorPosition,
     'observedJointAngles': observedJointAngles,
     'targetJointAngles': targetJointAngles,
+    'deltaAngles': deltaAngles,
     'gripperOpen': gripperOpen,
     'image': image
 })
@@ -348,3 +446,11 @@ df = pd.DataFrame({
 table = pa.Table.from_pandas(df)
 # writes the data to a parquet file
 pq.write_table(table, 'lerobotTests/robotDataTest.parquet')
+
+api.upload_file(
+    path_or_fileobj='lerobotTests/robotDataTest.parquet',
+    path_in_repo='robotDataTest.parquet',
+    repo_id='RadAlpaca11/lerobotTests',
+    repo_type='dataset',
+    commit_message='Add robot data test from code',
+)

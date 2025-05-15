@@ -166,3 +166,11 @@ cv2.imwrite('frame.jpg', frame)
     * got world position record
 * updated [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests) with newer tests
 * updated debug config to fix directory issues
+
+# 5/15/25
+* Got parallel simulation working
+* Improved data collection
+* Added push to huggingface to our code
+* Experimented with larger data collection
+    * need to fix cameras with parallel simulation
+[code](magma/xarm6GenesisData.py)
