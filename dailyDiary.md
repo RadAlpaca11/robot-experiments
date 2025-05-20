@@ -171,6 +171,16 @@ cv2.imwrite('frame.jpg', frame)
 * Got parallel simulation working
 * Improved data collection
 * Added push to huggingface to our code
+    * [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests)
 * Experimented with larger data collection
     * need to fix cameras with parallel simulation
 [code](magma/xarm6GenesisData.py)
+
+# 5/20/25
+* switched genesis to gpu to improve [parallel simulation](magma/xarm6GenesisData.py)
+    * this meant that we needed to change everything we used from the simulation from a numpy array to a torch tensor
+    * including our quaternion to euler function
+    * ran way faster with 100 than on cpu
+* Also fixed camera in the parallel simulation
+    * now the robots are in a row so you cant see them in the other's pictures, and the camera moves down the line to get the same angle on all of the robots
+    * also removed the world frame so the first picture wasn't different from the others
