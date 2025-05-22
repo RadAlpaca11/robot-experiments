@@ -1,101 +1,81 @@
-from itertools import product
+from dataclasses import dataclass
+from typing import List, Dict
+import numpy as np
 
-# Define the ranges for each joint
-joint_ranges = [
-    [0, 360],  # Joint 1 range
-    [-118, 120],  # Joint 2 range
-    [-225, 11],  # Joint 3 range
-    [0, 360],  # Joint 4 range
-    [-97, 180],  # Joint 5 range
-    [0, 360],  # Joint 6 range
-]
+@dataclass
+class Joint:
+    name: str
+    start: float
+    end: float
 
-# Number of steps per joint
-n = 10  # Adjust this based on how fine you want the discretization
-
-# Discretize each joint's range
-discretized_joints = [
-    [r[0] + i * (r[1] - r[0]) / (n - 1) for i in range(n)] for r in joint_ranges
-]
-
-# Generate all combinations
-joint_combinations = list(product(*discretized_joints))
-print(f"Total combinations: {len(joint_combinations)}")
-
-import random
-
-k = 10  # Number of combinations to sample
-sampled_combinations = random.sample(joint_combinations, k)
-print(f"Sampled combinations: {sampled_combinations}")
-
-def waypointPlan (numWaypoints=100, jointAngles = [
-    [0, 360], 
-    [-118, 120], 
-    [-225, 11], 
-    [0, 360], 
-    [-97, 180], 
-    [0, 360] 
-    ]):
-    rem = numWaypoints % len(jointAngles)
-
-    splitWaypoints = (numWaypoints - rem) / len(jointAngles)
+def generate_joint_points(total_points: int, weights: Dict[str, float], joints: Dict[str, Joint]) -> Dict[str, np.ndarray]:
+    """
+    Generate weighted distribution of points across joint ranges
     
-
-import math
-
-def inverseFact(n):
-    if n < 0:
-        raise ValueError("Input must be a non-negative integer")
-
-    # Start from 1!
-    i = 1
-    fact = 1
-    while fact < n:
-        i += 1
-        fact *= i
-
-    # Compare n with i! and (i-1)!
-    prevFact = fact // i
-    if abs(prevFact - n) <= abs(fact - n):
-        return prevFact, i - 1
-    else:
-        return fact, i
+    Args:
+        total_points: Total number of points to distribute
+        weights: Dictionary of joint names and their weights (should sum to 100)
+        joints: Dictionary of joint names and their range information
+    
+    Returns:
+        Dictionary of joint names and their calculated points
+    """
+    # Validate weights
+    if abs(sum(weights.values()) - 1) > 0.0001:
+        raise ValueError("Weights must sum to 100")
+    
+    # Calculate points per joint based on weights
+    points_per_joint = {
+        joint: int(round(weight * total_points))
+        for joint, weight in weights.items()
+    }
+    
+    # Adjust for rounding errors
+    points_diff = total_points - sum(points_per_joint.values())
+    if points_diff != 0:
+        # Add/subtract remaining points to/from the joint with highest weight
+        max_weight_joint = max(weights.items(), key=lambda x: x[1])[0]
+        points_per_joint[max_weight_joint] += points_diff
+    
+    # Generate points for each joint
+    result = {}
+    for joint_name, num_points in points_per_joint.items():
+        if num_points > 0:
+            joint = joints[joint_name]
+            result[joint_name] = np.linspace(joint.start, joint.end, num_points)
+        else:
+            result[joint_name] = np.array([])
+            
+    return result
 
 # Example usage
-number = int(input("Enter an integer: "))
-nearestFact, factOf = inverseFact(number)
-print(f"The nearest factorial to {number} is {nearestFact} ({factOf}!).")
-
-
-inverseFact(100) # 5
-print(inverseFact(100))
-
-import numpy as np
-from itertools import product
-import random
-
-# Define the ranges for each joint
-jointRanges = [
-    [0, 360],  # Joint 1 range
-    [-118, 120],  # Joint 2 range
-    [-225, 11],  # Joint 3 range
-    [0, 360],  # Joint 4 range
-    [-97, 180],  # Joint 5 range
-    [0, 360],  # Joint 6 range
-]
-
-# Number of steps per joint
-n = 10  # Adjust this based on how fine you want the discretization
-
-# Discretize each joint's range
-discretizedJoints = [
-    np.linspace(r[0], r[1], n) for r in jointRanges
-]
-
-# Generate all combinations of joint positions
-jointCombinations = list(product(*discretizedJoints))
-print(f"Total combinations: {len(jointCombinations)}")
-print(joint_combinations[:10])
-
-randomSamples = random.sample(jointCombinations, 10)
-print(f"Random samples: {randomSamples}")
+if __name__ == "__main__":
+    # Define joints
+    joints = {
+        "j1": Joint("j1", -180, 180),
+        "j2": Joint("j2", -90, 90),
+        "j3": Joint("j3", -170, 170),
+        "j4": Joint("j4", -180, 180),
+        "j5": Joint("j5", -120, 120),
+        "j6": Joint("j6", -360, 360)
+    }
+    
+    # Define weights (must sum to 100)
+    weights = {
+        "j1": 0.35,
+        "j2": 0.25,
+        "j3": 0.15,
+        "j4": 0.10,
+        "j5": 0.05,
+        "j6": 0.10
+    }
+    
+    # Generate 100 total points
+    result = generate_joint_points(100, weights, joints)
+    
+    # Print results
+    for joint_name, points in result.items():
+        print(f"{joint_name}: {len(points)} points")
+        print(points)
+        print()
+    print(len(result))

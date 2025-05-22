@@ -1,0 +1,7 @@
+envNums, time (hr:min:sec), observations
+10, 0:0:29
+20, 0:0:33, genesis setup took longest
+50, 0:1:04, simulation took longer to set up because of more environments
+100, 0:0:49
+500, 0:1:23
+1000, 0:1:30

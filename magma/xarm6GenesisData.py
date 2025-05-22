@@ -22,14 +22,14 @@ api = HfApi()
 def quatToEuler(q, scalarFirst=True, order='xyz', degrees=False, cpu=False):
     if cpu:
         q = q[0]
-        print(q)
+        # print(q)
         if scalarFirst:
             q = [q[1], q[2], q[3], q[0]]
         r = Rotation.from_quat(q)
         return r.as_euler(order, degrees=degrees)
     else:
         q = q[0]
-        print(q)
+        # print(q)
         if scalarFirst==False:
             q = [q[3], q[0], q[1], q[2]]
         q = quaternion_to_matrix(q)
@@ -46,7 +46,6 @@ def getFrame(cam):
 # # Initialize the robot.
 # remoteArm = XArmAPI('172.20.5.100')
 
-
 # def initialize_robot(remoteArm):
 #     remoteArm.clean_warn()
 #     remoteArm.clean_error()
@@ -61,8 +60,8 @@ def getFrame(cam):
 gs.init(backend=gs.gpu)
 
 scene = gs.Scene(
-    show_viewer = True,
-    # this is the viewer window that opens while the simulation is running, rather than the camera that records the video
+    show_viewer = False,
+    # this is the viewer window that opens while the simulation is running, not the camera that records the video
     viewer_options = gs.options.ViewerOptions(
         res           = (1280, 960),
         camera_pos    = (3.5, 0.0, 2.5),
@@ -121,12 +120,12 @@ camFilm = scene.add_camera(
 cam = scene.add_camera(
     res    = (640, 480),
     pos    = (-2.5, 3, 1.8),
-    lookat = (1, 0, 0),
+    lookat = (0, 0, 0.25),
     fov    = 15,
     GUI    = False,
 )
 
-envNum = 100
+envNum = 1000
 scene.build(n_envs=envNum, env_spacing=(4, 4), n_envs_per_row=envNum, center_envs_at_origin=False) # offsets y by 4 in one row
 
 camFilm.start_recording()
@@ -175,33 +174,105 @@ gripperClosePos = torch.Tensor([0.81, -0.88, 0.81, -0.88])
 gripperClosePos = gripperClosePos.to(0)
 
 # Define the ranges for each joint
-jointRanges = [
-    [0, 6.28319],  # Joint 1 range
-    [-2.05949, 2.0944],  # Joint 2 range
-    [-3.92699, 0.191986],  # Joint 3 range
-    [0, 6.28319],  # Joint 4 range
-    [-1.69297, 3.14159],  # Joint 5 range
-    [0, 6.28319],  # Joint 6 range
-]
 
-# Number of steps per joint
-n = 10  # Adjust this based on how fine you want the discretization
-# n = 10 will give 6,000,000 combinations
+# jointRanges = [
+#     [0, 6.28319],  # Joint 1 range
+#     [-2.05949, 2.0944],  # Joint 2 range
+#     [-3.92699, 0.191986],  # Joint 3 range
+#     [0, 6.28319],  # Joint 4 range
+#     [-1.69297, 3.14159],  # Joint 5 range
+#     [0, 6.28319],  # Joint 6 range
+# ]
 
-# Discretize each joint's range
-discretizedJoints = [
-    torch.linspace(r[0], r[1], n) for r in jointRanges
-]
 
-# Generate all combinations of joint positions
-jointCombinations = list(product(*discretizedJoints))
-# print(f"Total combinations: {len(jointCombinations)}")
+from dataclasses import dataclass
+from typing import List, Dict, Tuple
+import numpy as np
 
-# number of positions you want to use
-# the data will record the zero position, and number of random positions, each with both gripper open and close
-# so if you put 5, you will have 12 positions in the end
-randomSamples = random.sample(jointCombinations, 49)
-# print(f"Random samples: {randomSamples}")
+@dataclass
+class Joint:
+    name: str
+    start: float
+    end: float
+
+
+
+def generateJointPoints(total_points: int, weights: Dict[str, float], joints: Dict[str, Joint]) -> List[Tuple[float, ...]]:
+    if abs(sum(weights.values()) - 1) > 0.0001:
+        raise ValueError("Weights must sum to 100")
+    
+    result = []
+    joint_names = sorted(joints.keys())
+    
+    # Calculate change frequencies based on weights
+    changes_per_joint = {
+        joint: max(1, int(round(weight* total_points)))
+        for joint, weight in weights.items()
+    }
+    print(changes_per_joint)
+    
+    # Generate base values for each joint
+    current_values = {
+        joint_name: np.linspace(joints[joint_name].start, joints[joint_name].end, changes_per_joint[joint_name])
+        for joint_name in joint_names
+    }
+    
+    # Generate exactly total_points combinations
+    for i in range(total_points):
+        point = []
+        for joint_name in joint_names:
+            # Select value based on position in sequence
+            idx = i % len(current_values[joint_name])
+            point.append(current_values[joint_name][idx])
+        result.append(tuple(point))
+    
+    return result
+
+
+joints = {
+    "joint1": Joint("joint1", 0, 6.28319),
+    "joint2": Joint("joint2", -2.05949, 2.0944),
+    "joint3": Joint("joint3", -3.92699, 0.191986),
+    "joint4": Joint("joint4", 0, 6.28319),
+    "joint5": Joint("joint5", -1.69297, 3.14159),
+    "joint6": Joint("joint6", 0, 6.28319),
+}
+
+weights = {
+    "joint1": 0.35, 
+    "joint2": 0.25, 
+    "joint3": 0.15,
+    "joint4": 0.10, 
+    "joint5": 0.05, 
+    "joint6": 0.10
+}
+
+comboNums = envNum/2
+comboNums = int(comboNums-1)
+points = generateJointPoints(comboNums, weights, joints)
+print(f"Generated exactly {len(points)} points:")
+
+
+# # Number of steps per joint
+# n = 10  # Adjust this based on how fine you want the discretization
+# # n = 10 will give 6,000,000 combinations
+
+# # Discretize each joint's range
+# discretizedJoints = [
+#     torch.linspace(r[0], r[1], n) for r in jointRanges
+# ]
+
+# # Generate all combinations of joint positions
+# jointCombinations = list(product(*discretizedJoints))
+# # print(f"Total combinations: {len(jointCombinations)}")
+
+# # number of positions you want to use
+# # the data will record the zero position, and number of random positions, each with both gripper open and close
+# # so if you put 5, you will have 12 positions in the end
+# comboNums = envNum/2
+# comboNums = int(comboNums-1)
+# randomSamples = random.sample(jointCombinations, comboNums)
+# # print(f"Random samples: {randomSamples}")
 
 # Setting up the data for the file
 columns = ['episodeIdx', 'endEffectorPosition', 'observedJointAngles', 'targetJointAngles', 'deltaAngles', 'gripperOpen', 'image']
@@ -224,8 +295,8 @@ zeroPos = zeroPos.unsqueeze(0)
 # Adding the data to the lists
 episodeIdx = np.append(episodeIdx, ep)
 targetJointAngles = zeroPos
-print(targetJointAngles.shape)
-print(targetJointAngles)
+# print(targetJointAngles.shape)
+# print(targetJointAngles)
 targetJointAngles = targetJointAngles.to(0)
 gripperOpen = np.append(gripperOpen, True)
 
@@ -244,22 +315,22 @@ xarm6.control_dofs_position(
 # Adding the data to the lists
 episodeIdx = np.append(episodeIdx, ep)
 targetJointAngles = torch.cat((targetJointAngles, zeroPos), dim=0)
-print(targetJointAngles.shape)
-print(targetJointAngles)
+# print(targetJointAngles.shape)
+# print(targetJointAngles)
 gripperOpen = np.append(gripperOpen, False)
 
 # incrementing the episode index
 ep += 1
 
 # goes through and uses the random positions to move, get the data, and add the data to the lists
-for sample in randomSamples:
-    print("ep:", ep)
-    print(sample)
+for sample in points:
+    # print("ep:", ep)
+    # print(sample)
     sample1 = torch.Tensor(sample)
     sample1 = sample1.to(0)
     goToPos = torch.cat((sample1, gripperOpenPos))
-    print(goToPos)
-    print(goToPos.shape)
+    # print(goToPos)
+    # print(goToPos.shape)
     xarm6.control_dofs_position(
         goToPos,
         dofs_idx,
@@ -291,12 +362,12 @@ for sample in randomSamples:
 
     ep += 1
 
-for i in range(500):
+for i in range(250): # Trying more steps to see if the deltas get smaller
     scene.step()
     camFilm.render()
 
 camPos = [-2.5, 3, 1.8]
-camLookAt = [1, 0, 0]
+camLookAt = [0, 0, 0.25]
 
 # saves the recorded video
 camFilm.stop_recording(save_to_filename='video.mp4')
@@ -306,19 +377,14 @@ for env in range(envNum):
     currentPos = xarm6.get_dofs_position(dofs_idx, [env])
     currentWorldPos = end_effector.get_pos([env])
     currentWorldPos = currentWorldPos.to(0)
-    print(currentWorldPos)
-    print(currentWorldPos.shape)
     currentWorldQuat = end_effector.get_quat([env])
     currentWolrdEuler = quatToEuler(currentWorldQuat, scalarFirst=True)
     currentWolrdEuler = currentWolrdEuler.to(0)
-    print(currentWolrdEuler.shape)
     currentWorldPos = torch.cat((currentWorldPos[0], currentWolrdEuler))
     currentWorldPos = currentWorldPos.unsqueeze(0)
     currentDelta = torch.sub(currentPos, targetJointAngles[env])
     if env == 0:
         endEffectorPosition = torch.Tensor(currentWorldPos) # the end effector position in world coordinates with euler rotation
-        print(endEffectorPosition.shape)
-        print(endEffectorPosition)
         endEffectorPosition = endEffectorPosition.to(0)
         observedJointAngles = torch.Tensor(currentPos) # the joint angles of the robot
         observedJointAngles = observedJointAngles.to(0)
@@ -347,13 +413,13 @@ observedJointAngles = observedJointAngles.tolist()
 targetJointAngles = targetJointAngles.tolist()
 deltaAngles = deltaAngles.tolist()
 
-print("episodeIdx length", len(episodeIdx))
-print("endEffectorPosition length", len(endEffectorPosition))
-print("observedJointAngles length", len(observedJointAngles))
-print("targetJointAngles length", len(targetJointAngles))
-print("deltaAngles length", len(deltaAngles))
-print("gripperOpen length", len(gripperOpen))
-print("image length", len(image))
+# print("episodeIdx length", len(episodeIdx))
+# print("endEffectorPosition length", len(endEffectorPosition))
+# print("observedJointAngles length", len(observedJointAngles))
+# print("targetJointAngles length", len(targetJointAngles))
+# print("deltaAngles length", len(deltaAngles))
+# print("gripperOpen length", len(gripperOpen))
+# print("image length", len(image))
 
 # puts the data into a pandas dataframe
 df = pd.DataFrame({
@@ -378,3 +444,5 @@ api.upload_file(
     repo_type='dataset',
     commit_message='Add robot data test from code',
 )
+
+print(points)
