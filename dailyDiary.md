@@ -184,3 +184,8 @@ cv2.imwrite('frame.jpg', frame)
 * Also fixed camera in the parallel simulation
     * now the robots are in a row so you cant see them in the other's pictures, and the camera moves down the line to get the same angle on all of the robots
     * also removed the world frame so the first picture wasn't different from the others
+
+# 5/22/25
+* worked on improving point distribution generation and added that into [data code](magma/xarm6GenesisData.py)
+* removed print statements and visualization to improve speeds
+* tested speed (more envs exponentially increases time taken)

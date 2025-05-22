@@ -125,7 +125,7 @@ cam = scene.add_camera(
     GUI    = False,
 )
 
-envNum = 1000
+envNum = 20
 scene.build(n_envs=envNum, env_spacing=(4, 4), n_envs_per_row=envNum, center_envs_at_origin=False) # offsets y by 4 in one row
 
 camFilm.start_recording()
@@ -175,14 +175,6 @@ gripperClosePos = gripperClosePos.to(0)
 
 # Define the ranges for each joint
 
-# jointRanges = [
-#     [0, 6.28319],  # Joint 1 range
-#     [-2.05949, 2.0944],  # Joint 2 range
-#     [-3.92699, 0.191986],  # Joint 3 range
-#     [0, 6.28319],  # Joint 4 range
-#     [-1.69297, 3.14159],  # Joint 5 range
-#     [0, 6.28319],  # Joint 6 range
-# ]
 
 
 from dataclasses import dataclass
@@ -197,23 +189,25 @@ class Joint:
 
 
 
-def generateJointPoints(total_points: int, weights: Dict[str, float], joints: Dict[str, Joint]) -> List[Tuple[float, ...]]:
+def generateJointPoints(total_points: int, weights: Dict[str, float], joints: list[str], lowerRange: Dict[str, float], upperRange: Dict[str, float]) -> List[Tuple[float, ...]]:
     if abs(sum(weights.values()) - 1) > 0.0001:
-        raise ValueError("Weights must sum to 100")
+        raise ValueError("Weights must sum to 1")
     
     result = []
-    joint_names = sorted(joints.keys())
+    joint_names = joints
+    print(joint_names)
+
     
     # Calculate change frequencies based on weights
     changes_per_joint = {
         joint: max(1, int(round(weight* total_points)))
         for joint, weight in weights.items()
     }
-    print(changes_per_joint)
+    # print(changes_per_joint)
     
     # Generate base values for each joint
     current_values = {
-        joint_name: np.linspace(joints[joint_name].start, joints[joint_name].end, changes_per_joint[joint_name])
+        joint_name: np.linspace(lowerRange[joint_name], upperRange[joint_name], changes_per_joint[joint_name])
         for joint_name in joint_names
     }
     
@@ -229,27 +223,47 @@ def generateJointPoints(total_points: int, weights: Dict[str, float], joints: Di
     return result
 
 
-joints = {
-    "joint1": Joint("joint1", 0, 6.28319),
-    "joint2": Joint("joint2", -2.05949, 2.0944),
-    "joint3": Joint("joint3", -3.92699, 0.191986),
-    "joint4": Joint("joint4", 0, 6.28319),
-    "joint5": Joint("joint5", -1.69297, 3.14159),
-    "joint6": Joint("joint6", 0, 6.28319),
-}
+joints = [
+    'j1',
+    'j2',
+    'j3',
+    'j4',
+    'j5',
+    'j6'
+]
 
 weights = {
-    "joint1": 0.35, 
-    "joint2": 0.25, 
-    "joint3": 0.15,
-    "joint4": 0.10, 
-    "joint5": 0.05, 
-    "joint6": 0.10
+    'j1': 0.35,
+    'j2': 0.25,
+    'j3': 0.15,
+    'j4': 0.10,
+    'j5': 0.05,
+    'j6': 0.10
 }
+
+lowerRange = {
+    'j1': 0,  # Joint 1 range
+    'j2': -2.05949,  # Joint 2 range
+    'j3': -3.92699,  # Joint 3 range
+    'j4': 0,  # Joint 4 range
+    'j5': -1.69297,  # Joint 5 range
+    'j6': 0,  # Joint 6 range
+}
+
+upperRange = {
+    'j1': 6.28319,  # Joint 1 range
+    'j2': 2.0944,  # Joint 2 range
+    'j3': 0.191986,  # Joint 3 range
+    'j4': 6.28319,  # Joint 4 range
+    'j5': 3.14159,  # Joint 5 range
+    'j6': 6.28319,  # Joint 6 range
+}
+
+
 
 comboNums = envNum/2
 comboNums = int(comboNums-1)
-points = generateJointPoints(comboNums, weights, joints)
+points = generateJointPoints(comboNums, weights, joints, lowerRange, upperRange)
 print(f"Generated exactly {len(points)} points:")
 
 
@@ -432,11 +446,12 @@ df = pd.DataFrame({
     # 'image': image
 })
 
-# converts the data to a parquet file
+# # converts the data to a parquet file
 table = pa.Table.from_pandas(df)
 # writes the data to a parquet file
 pq.write_table(table, 'lerobotTests/robotDataTest.parquet')
 
+# Uploads the file to huggingface
 api.upload_file(
     path_or_fileobj='lerobotTests/robotDataTest.parquet',
     path_in_repo='robotDataTest.parquet',
@@ -444,5 +459,3 @@ api.upload_file(
     repo_type='dataset',
     commit_message='Add robot data test from code',
 )
-
-print(points)
