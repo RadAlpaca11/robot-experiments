@@ -191,5 +191,7 @@ cv2.imwrite('frame.jpg', frame)
 * tested speed (more envs exponentially increases time taken)
 
 # 5/27/25
-* worked on getting other arms working in genesis data collection
-* looked into foundry local
+* worked on getting other arms working in genesis data collection [sawyer](magma/sawyerGenesisData.py) [kuka](magma/kukaGenesisData.py)
+    * ur10 does not work right now [ur10](magma/ur10GenesisData.py)
+* looked into foundry local [notes](miscNotes/foundryLocalNotes.md)
+Also took a lot of data that was pushed to [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests)
