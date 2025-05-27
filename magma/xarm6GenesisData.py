@@ -125,7 +125,7 @@ cam = scene.add_camera(
     GUI    = False,
 )
 
-envNum = 20
+envNum = 10000
 scene.build(n_envs=envNum, env_spacing=(4, 4), n_envs_per_row=envNum, center_envs_at_origin=False) # offsets y by 4 in one row
 
 camFilm.start_recording()
@@ -173,29 +173,17 @@ gripperOpenPos = gripperOpenPos.to(0)
 gripperClosePos = torch.Tensor([0.81, -0.88, 0.81, -0.88])
 gripperClosePos = gripperClosePos.to(0)
 
-# Define the ranges for each joint
 
-
-
-from dataclasses import dataclass
 from typing import List, Dict, Tuple
 import numpy as np
 
-@dataclass
-class Joint:
-    name: str
-    start: float
-    end: float
-
-
-
-def generateJointPoints(total_points: int, weights: Dict[str, float], joints: list[str], lowerRange: Dict[str, float], upperRange: Dict[str, float]) -> List[Tuple[float, ...]]:
+def generateJointPoints(total_points: int, weights: Dict[str, float], joints: List[str], lowerRange: Dict[str, float], upperRange: Dict[str, float]) -> List[Tuple[float, ...]]:
     if abs(sum(weights.values()) - 1) > 0.0001:
         raise ValueError("Weights must sum to 1")
     
     result = []
     joint_names = joints
-    print(joint_names)
+    # print(joint_names)
 
     
     # Calculate change frequencies based on weights
@@ -203,7 +191,6 @@ def generateJointPoints(total_points: int, weights: Dict[str, float], joints: li
         joint: max(1, int(round(weight* total_points)))
         for joint, weight in weights.items()
     }
-    # print(changes_per_joint)
     
     # Generate base values for each joint
     current_values = {
@@ -260,33 +247,11 @@ upperRange = {
 }
 
 
-
 comboNums = envNum/2
 comboNums = int(comboNums-1)
 points = generateJointPoints(comboNums, weights, joints, lowerRange, upperRange)
-print(f"Generated exactly {len(points)} points:")
+# print(f"Generated exactly {len(points)} points:")
 
-
-# # Number of steps per joint
-# n = 10  # Adjust this based on how fine you want the discretization
-# # n = 10 will give 6,000,000 combinations
-
-# # Discretize each joint's range
-# discretizedJoints = [
-#     torch.linspace(r[0], r[1], n) for r in jointRanges
-# ]
-
-# # Generate all combinations of joint positions
-# jointCombinations = list(product(*discretizedJoints))
-# # print(f"Total combinations: {len(jointCombinations)}")
-
-# # number of positions you want to use
-# # the data will record the zero position, and number of random positions, each with both gripper open and close
-# # so if you put 5, you will have 12 positions in the end
-# comboNums = envNum/2
-# comboNums = int(comboNums-1)
-# randomSamples = random.sample(jointCombinations, comboNums)
-# # print(f"Random samples: {randomSamples}")
 
 # Setting up the data for the file
 columns = ['episodeIdx', 'endEffectorPosition', 'observedJointAngles', 'targetJointAngles', 'deltaAngles', 'gripperOpen', 'image']
@@ -367,7 +332,6 @@ for sample in points:
         dofs_idx,
         envs_idx=[ep]
     )
-
     
     episodeIdx = np.append(episodeIdx, ep)
     goToPos = goToPos.unsqueeze(0)
@@ -376,7 +340,10 @@ for sample in points:
 
     ep += 1
 
-for i in range(250): # Trying more steps to see if the deltas get smaller
+
+
+# Usage in main code:
+for i in range(500):
     scene.step()
     camFilm.render()
 
@@ -384,7 +351,7 @@ camPos = [-2.5, 3, 1.8]
 camLookAt = [0, 0, 0.25]
 
 # saves the recorded video
-camFilm.stop_recording(save_to_filename='video.mp4')
+camFilm.stop_recording(save_to_filename='lerobotTests/picsAndVids/xarm6/video.mp4')
 # cam.stop_recording(save_to_filename='robotCam.mp4')
 
 for env in range(envNum):
@@ -405,7 +372,8 @@ for env in range(envNum):
         deltaAngles = torch.Tensor(currentDelta) # the difference between the joint angles and the target joint angles
         deltaAngles = deltaAngles.to(0)
         frame = getFrame(cam)
-        cv2.imwrite('lerobotTests/picsAndVids/ep' + str(env) + '.jpg', frame)
+        cv2.imwrite('lerobotTests/picsAndVids/xarm6/ep' + str(env) + '.jpg', frame)
+        image = np.append(image, 'lerobotTests/picsAndVids/xarm6/ep' + str(env) + '.jpg')
 
     else:
         endEffectorPosition = torch.cat((endEffectorPosition, currentWorldPos), dim=0)
@@ -418,7 +386,8 @@ for env in range(envNum):
             lookat=camLookAt,
         )
         frame = getFrame(cam)
-        cv2.imwrite('lerobotTests/picsAndVids/ep' + str(env) + '.jpg', frame)
+        cv2.imwrite('lerobotTests/picsAndVids/xarm6/ep' + str(env) + '.jpg', frame)
+        image = np.append(image, 'lerobotTests/picsAndVids/xarm6/ep' + str(env) + '.jpg')
 
 
 # Converts the data that is arrays, to a list that can be written to the file
@@ -443,18 +412,18 @@ df = pd.DataFrame({
     'targetJointAngles': targetJointAngles,
     'deltaAngles': deltaAngles,
     'gripperOpen': gripperOpen,
-    # 'image': image
+    'image': image
 })
 
 # # converts the data to a parquet file
 table = pa.Table.from_pandas(df)
 # writes the data to a parquet file
-pq.write_table(table, 'lerobotTests/robotDataTest.parquet')
+pq.write_table(table, 'lerobotTests/xarm6RobotDataTest.parquet')
 
 # Uploads the file to huggingface
 api.upload_file(
-    path_or_fileobj='lerobotTests/robotDataTest.parquet',
-    path_in_repo='robotDataTest.parquet',
+    path_or_fileobj='lerobotTests/xarm6RobotDataTest.parquet',
+    path_in_repo='xarm6RobotDataTest.parquet',
     repo_id='RadAlpaca11/lerobotTests',
     repo_type='dataset',
     commit_message='Add robot data test from code',

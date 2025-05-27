@@ -189,3 +189,7 @@ cv2.imwrite('frame.jpg', frame)
 * worked on improving point distribution generation and added that into [data code](magma/xarm6GenesisData.py)
 * removed print statements and visualization to improve speeds
 * tested speed (more envs exponentially increases time taken)
+
+# 5/27/25
+* worked on getting other arms working in genesis data collection
+* looked into foundry local
