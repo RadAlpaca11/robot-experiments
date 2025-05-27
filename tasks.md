@@ -30,7 +30,7 @@
 * [Gemini Robotics](https://deepmind.google/discover/blog/gemini-robotics-brings-ai-into-the-physical-world/)
 * [nVidia Physical AI Dataset](https://huggingface.co/collections/nvidia/physical-ai-67c643edbb024053dcbcd6d8)
 * [nVidia GR00T 1 Humanoid AI Model](https://developer.nvidia.com/blog/accelerate-generalist-humanoid-robot-development-with-nvidia-isaac-gr00t-n1/)
-* 
+* [Foundry Local](https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-local/get-started)
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
