@@ -144,19 +144,20 @@ dofs_idx = [ur10.get_joint(name).dof_idx_local for name in jnt_names]
 
 # Turns out these were making things worse, and we could just let the model do it's thing.
 # # pulled from urdf
-ur10.set_dofs_kp(
-    np.array([150, 150, 150, 150, 150, 150]),
-    motors_dof
-)
-ur10.set_dofs_kv(
-    np.array([50, 50, 50, 50, 50, 50]),
-    motors_dof
-)
-ur10.set_dofs_force_range(
-    np.array([-330, -330, -150, -56, -56, -56]),
-    np.array([330, 330, 150, 56, 56, 56]),
-    motors_dof
-)
+# ur10.set_dofs_kp(
+#     np.array([5000, 5000, 5000, 5000, 5000, 5000]),
+#     motors_dof
+# )
+# ur10.set_dofs_kv(
+#     np.array([500, 500, 500, 500, 500, 500]),
+#     motors_dof
+# )
+
+# ur10.set_dofs_force_range(
+#     np.array([-330, -330, -150, -56, -56, -56]),
+#     np.array([330, 330, 150, 56, 56, 56]),
+#     motors_dof
+# )
 
 # get the end-effector link
 end_effector = ur10.get_link('wrist_3_link')

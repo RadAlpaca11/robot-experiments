@@ -167,7 +167,7 @@ print(position[1])
 camFilm.stop_recording(save_to_filename='video.mp4')
 
 
-# Note: Arm uses mm while genesis uses m. I don't fully know if the size of the arm is actually to scale in the simulator though.
+# Note: Arm uses mm while genesis uses m. I don't exactly know if the size of the arm is actually to scale in the simulator though.
 
 time.sleep(5)
 position = remoteArm.get_position(is_radian=True)

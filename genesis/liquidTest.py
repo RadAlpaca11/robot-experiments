@@ -7,7 +7,8 @@
 
 import genesis as gs
 
-gs.init(backend=gs.cpu)
+
+gs.init(backend=gs.gpu)
 
 # combination of previous code used to set up scene, and instructions for fluid simulation
 scene = gs.Scene(
@@ -42,7 +43,8 @@ scene = gs.Scene(
 
 plane = scene.add_entity(gs.morphs.Plane())
 fluid = scene.add_entity(
-    #material = gs.materials.SPH.liquid(mu=0.02, gamma=0.02),
+    # material = gs.materials.SPH.liquid(mu=0.02, gamma=0.02),
+    material = gs.materials.SPH.Liquid(),
     morph = gs.morphs.Box(
         size = (0.4, 0.4, 0.4),
         pos = (0.0, 0.0, 0.65),
@@ -65,7 +67,8 @@ elastic = scene.add_entity(
 )
 
 emitter = scene.add_emitter(
-    material = gs.matherials.SPH.liquid(mu=0.02, gamma=0.02),
+    # material = gs.matherials.SPH.liquid(mu=0.02, gamma=0.02),
+    material = gs.materials.SPH.Liquid(),
     max_particles = 1000,
     surface = gs.surfaces.Default(
         color = (0.4, 1.0, 0.8),

@@ -16,6 +16,18 @@ import pyarrow.parquet as pq
 from huggingface_hub import HfApi
 api = HfApi()
 
+# zip images
+from zipfile import ZipFile
+import os
+import datetime
+
+today = datetime.date.today()
+formattedDate = today.strftime("%Y%m%d")
+
+zipPath = 'lerobotTests/picsAndVids/xarm6/xarm6EpPics'+ str(formattedDate) + '.zip'
+os.makedirs(os.path.dirname(zipPath), exist_ok=True)
+imageZip = ZipFile(zipPath, 'w')
+
 # Function to convert quaternion to Euler angles
 def quatToEuler(q, scalarFirst=True, order='xyz', degrees=False, cpu=False):
     if cpu:
@@ -349,8 +361,9 @@ camPos = [-2.5, 3, 1.8]
 camLookAt = [0, 0, 0.25]
 
 # saves the recorded video
-camFilm.stop_recording(save_to_filename='lerobotTests/picsAndVids/xarm6/video.mp4')
+camFilm.stop_recording(save_to_filename='lerobotTests/picsAndVids/xarm6/video' + str(formattedDate) + '.mp4')
 # cam.stop_recording(save_to_filename='robotCam.mp4')
+
 
 for env in range(envNum):
     currentPos = xarm6.get_dofs_position(dofs_idx, [env])
@@ -370,8 +383,11 @@ for env in range(envNum):
         deltaAngles = torch.Tensor(currentDelta) # the difference between the joint angles and the target joint angles
         deltaAngles = deltaAngles.to(0)
         frame = getFrame(cam)
-        cv2.imwrite('lerobotTests/picsAndVids/xarm6/ep' + str(env) + '.jpg', frame)
-        image = np.append(image, 'lerobotTests/picsAndVids/xarm6/ep' + str(env) + '.jpg')
+        imagePath = f'lerobotTests/picsAndVids/xarm6/{str(formattedDate)}ep{str(env)}.jpg'
+        cv2.imwrite(imagePath, frame)
+        imageZip.write(imagePath, f'{str(formattedDate)}ep{str(env)}.jpg')
+        os.remove(imagePath)  # remove the image after zipping it
+        image = np.append(image, zipPath)
 
     else:
         endEffectorPosition = torch.cat((endEffectorPosition, currentWorldPos), dim=0)
@@ -385,9 +401,13 @@ for env in range(envNum):
             lookat=camLookAt,
         )
         frame = getFrame(cam)
-        cv2.imwrite('lerobotTests/picsAndVids/xarm6/ep' + str(env) + '.jpg', frame)
-        image = np.append(image, 'lerobotTests/picsAndVids/xarm6/ep' + str(env) + '.jpg')
+        imagePath = f'lerobotTests/picsAndVids/xarm6/{str(formattedDate)}ep{str(env)}.jpg'
+        cv2.imwrite(imagePath, frame)
+        imageZip.write(imagePath, f'{str(formattedDate)}ep{str(env)}.jpg')
+        os.remove(imagePath)
+        image = np.append(image, imagePath)
 
+imageZip.close()
 
 # Converts the data that is arrays, to a list that can be written to the file
 endEffectorPosition = endEffectorPosition.tolist()
@@ -414,16 +434,24 @@ df = pd.DataFrame({
     'image': image
 })
 
-# # converts the data to a parquet file
+# converts the data to a parquet file
 table = pa.Table.from_pandas(df)
 # writes the data to a parquet file
-pq.write_table(table, 'lerobotTests/xarm6RobotDataTest.parquet')
+pq.write_table(table, 'lerobotTests/xarm6RobotDataTest' + str(formattedDate) + '.parquet')
 
 # Uploads the file to huggingface
 api.upload_file(
-    path_or_fileobj='lerobotTests/xarm6RobotDataTest.parquet',
-    path_in_repo='xarm6RobotDataTest.parquet',
+    path_or_fileobj='lerobotTests/xarm6RobotDataTest' + str(formattedDate)+ '.parquet',
+    path_in_repo='train/xarm6RobotDataTest' + str(formattedDate) + '.parquet',
     repo_id='RadAlpaca11/lerobotTests',
     repo_type='dataset',
     commit_message='Add robot data test from code',
+)
+
+api.upload_file(
+    path_or_fileobj='lerobotTests/picsAndVids/xarm6/xarm6EpPics'+ str(formattedDate) + '.zip',
+    path_in_repo='picsAndVids/xarm6EpPics'+ str(formattedDate) + '.zip',
+    repo_id='RadAlpaca11/lerobotTests',
+    repo_type='dataset',
+    commit_message='Add xarm6 episode pictures from code',
 )

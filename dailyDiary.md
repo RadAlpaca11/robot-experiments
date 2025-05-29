@@ -195,3 +195,9 @@ cv2.imwrite('frame.jpg', frame)
     * ur10 does not work right now [ur10](magma/ur10GenesisData.py)
 * looked into foundry local [notes](miscNotes/foundryLocalNotes.md)
 Also took a lot of data that was pushed to [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests)
+
+# 5/29/25
+* improved [fluid simulation](genesis/liquidTest.py) by switching to the gpu
+* worked on [foundry local](miscNotes/foundryLocalNotes.md)
+* updated image saving in [data collection](magma/xarm6GenesisData.py)
+* reorganized [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests) to make the viewer work

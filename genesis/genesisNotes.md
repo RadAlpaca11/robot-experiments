@@ -16,9 +16,9 @@ We have gone through some of the Getting Started section of the [user guide](htt
 - [x] Hello, Genesis
 - [x] Visualization & Rendering
 - [x] Control Your Robot
-- [ ] Parallel Simulation
+- [x] Parallel Simulation
 - [x] Inverse Kinematics & Motion Planning
-- [ ] Advanced and Parallel IK
+- [x] Advanced and Parallel IK
 - [x] Beyond Rigid Bodies (we found this runs really slow)
 - [ ] Interactive Information Access and Debugging
 - [ ] Training Locomotion Policies with RL
