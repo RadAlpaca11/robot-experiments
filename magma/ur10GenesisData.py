@@ -8,8 +8,6 @@ import genesis as gs
 from scipy.spatial.transform import Rotation
 
 # libraries for data collection
-from itertools import product
-import random
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
@@ -321,6 +319,8 @@ for sample in points:
 
     ep += 1
 
+    # this code is only used if there is a gripper on the robot
+
     # sample2 = torch.Tensor(sample)
     # sample2 = sample2.to(0)
     # goToPos = torch.cat((sample2, gripperClosePos))
@@ -377,6 +377,7 @@ for env in range(envNum):
         endEffectorPosition = torch.cat((endEffectorPosition, currentWorldPos), dim=0)
         observedJointAngles = torch.cat((observedJointAngles, currentPos), dim=0)
         deltaAngles = torch.cat((deltaAngles, currentDelta), dim=0)
+        # the offset is adjusted for our environment spacing
         camPos = [camPos[0], camPos[1]+4, camPos[2]]
         camLookAt = [camLookAt[0], camLookAt[1]+4, camLookAt[2]]
         cam.set_pose(

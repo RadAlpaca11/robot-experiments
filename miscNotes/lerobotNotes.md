@@ -3,8 +3,12 @@ In genesis we made a [test dataset](https://huggingface.co/datasets/RadAlpaca11/
 
 Initially, we were thinking about how to modify the lerobot scripts to fit our needs, but we realized that we could just find out how lerobot datasets are formatted, and just take that data in our own [code](../magma/xarm6GenesisData.py)
 
-We tested to see if giving the robot a bit more time to get to it's position would make the deltaPos smaller, 
-
+We now have data collection for almost all of the robots in the lab:
+- [xarm](../magma/xarm6GenesisData.py)
+- [kuka](../magma/kukaGenesisData.py)
+- [sawyer](../magma/sawyerGenesisData.py)
+- [ur10e](../magma/ur10GenesisData.py)
+    - the robot does not move yet
 
 ## Main structure of a dataset (taken from the README)
 ```

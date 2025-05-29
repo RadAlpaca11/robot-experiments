@@ -140,10 +140,6 @@ for i in range(100):
 # print('joints done')
 
 for i in range(25):
-
-    # The physical robot's base (which everything is relative to) is mounted slightly off the surface
-    # so if the end effector goes below the base, it will just drag along the ground
-    # We could just add a cube under the base of the robot in the urdf if we want...
     position = remoteArm.get_position(is_radian=True)
     print(position)
     truePosition = [i+0.105 for i in position[1][:6]]
@@ -172,7 +168,6 @@ camFilm.stop_recording(save_to_filename='video.mp4')
 
 
 # Note: Arm uses mm while genesis uses m. I don't fully know if the size of the arm is actually to scale in the simulator though.
-
 
 time.sleep(5)
 position = remoteArm.get_position(is_radian=True)

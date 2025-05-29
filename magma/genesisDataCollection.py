@@ -252,7 +252,7 @@ def collectData(
     ep = 0
     # zero positions
     zeroPos = torch.Tensor([0, 0, 0, 0, 0, 0, gripperOpenPos[0], gripperOpenPos[1], gripperOpenPos[2], gripperOpenPos[3]])
-    xarm6.control_dofs_position(
+    arm.control_dofs_position(
         zeroPos,
         dofs_idx,
         envs_idx=[ep],
@@ -273,7 +273,7 @@ def collectData(
     zeroPos = torch.Tensor([0, 0, 0, 0, 0, 0, gripperClosePos[0], gripperClosePos[1], gripperClosePos[2], gripperClosePos[3]])
     zeroPos = zeroPos.to(0)
     zeroPos = zeroPos.unsqueeze(0)
-    xarm6.control_dofs_position(
+    arm.control_dofs_position(
         zeroPos,
         dofs_idx,
         envs_idx=[ep]
@@ -298,7 +298,7 @@ def collectData(
         goToPos = torch.cat((sample1, gripperOpenPos))
         # print(goToPos)
         # print(goToPos.shape)
-        xarm6.control_dofs_position(
+        arm.control_dofs_position(
             goToPos,
             dofs_idx,
             envs_idx=[ep]
