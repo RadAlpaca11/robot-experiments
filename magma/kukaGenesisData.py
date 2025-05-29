@@ -125,7 +125,7 @@ cam = scene.add_camera(
     GUI    = False,
 )
 
-envNum = 30
+envNum = 10000
 scene.build(n_envs=envNum, env_spacing=(4, 4), n_envs_per_row=envNum, center_envs_at_origin=False) # offsets y by 4 in one row
 
 camFilm.start_recording()
