@@ -16,6 +16,18 @@ import pyarrow.parquet as pq
 from huggingface_hub import HfApi
 api = HfApi()
 
+# zip images
+from zipfile import ZipFile
+import os
+import datetime
+
+today = datetime.date.today()
+formattedDate = today.strftime("%Y%m%d")
+
+zipPath = 'lerobotTests/picsAndVids/sawyer/sawyerEpPics'+ str(formattedDate) + '.zip'
+os.makedirs(os.path.dirname(zipPath), exist_ok=True)
+imageZip = ZipFile(zipPath, 'w')
+
 # Function to convert quaternion to Euler angles
 def quatToEuler(q, scalarFirst=True, order='xyz', degrees=False, cpu=False):
     if cpu:
@@ -123,7 +135,7 @@ cam = scene.add_camera(
     GUI    = False,
 )
 
-envNum = 30
+envNum = 10000
 scene.build(n_envs=envNum, env_spacing=(4, 4), n_envs_per_row=envNum, center_envs_at_origin=False) # offsets y by 4 in one row
 
 camFilm.start_recording()
@@ -351,7 +363,7 @@ camPos = [-2.5, 3, 1.8]
 camLookAt = [0, 0, 0.25]
 
 # saves the recorded video
-camFilm.stop_recording(save_to_filename='video.mp4')
+camFilm.stop_recording(save_to_filename='lerobotTests/picsAndVids/sawyer/video' + str(formattedDate) + '.mp4')
 # cam.stop_recording(save_to_filename='robotCam.mp4')
 
 for env in range(envNum):
@@ -371,10 +383,6 @@ for env in range(envNum):
         observedJointAngles = observedJointAngles.to(0)
         deltaAngles = torch.Tensor(currentDelta) # the difference between the joint angles and the target joint angles
         deltaAngles = deltaAngles.to(0)
-        frame = getFrame(cam)
-        cv2.imwrite('lerobotTests/picsAndVids/sawyer/ep' + str(env) + '.jpg', frame)
-        image = np.append(image, 'lerobotTests/picsAndVids/sawyer/ep' + str(env) + '.jpg')
-
 
     else:
         endEffectorPosition = torch.cat((endEffectorPosition, currentWorldPos), dim=0)
@@ -387,10 +395,13 @@ for env in range(envNum):
             pos=camPos,
             lookat=camLookAt,
         )
-        frame = getFrame(cam)
-        cv2.imwrite('lerobotTests/picsAndVids/sawyer/ep' + str(env) + '.jpg', frame)
-        image = np.append(image, 'lerobotTests/picsAndVids/sawyer/ep' + str(env) + '.jpg')
-
+        
+    frame = getFrame(cam)
+    imagePath = f'lerobotTests/picsAndVids/sawyer/{str(formattedDate)}ep{str(env)}.jpg'
+    cv2.imwrite(imagePath, frame)
+    imageZip.write(imagePath, f'{str(formattedDate)}ep{str(env)}.jpg')
+    os.remove(imagePath)  # remove the image after zipping it
+    image = np.append(image, zipPath)
 
 # Converts the data that is arrays, to a list that can be written to the file
 endEffectorPosition = endEffectorPosition.tolist()
@@ -420,13 +431,21 @@ df = pd.DataFrame({
 # # converts the data to a parquet file
 table = pa.Table.from_pandas(df)
 # writes the data to a parquet file
-pq.write_table(table, 'lerobotTests/sawyerRobotDataTest.parquet')
+pq.write_table(table, 'lerobotTests/sawyerRobotDataTest' + str(formattedDate) + '.parquet')
 
 # Uploads the file to huggingface
 api.upload_file(
     path_or_fileobj='lerobotTests/sawyerRobotDataTest.parquet',
-    path_in_repo='sawyerRobotDataTest.parquet',
+    path_in_repo='train/sawyerRobotDataTest.parquet',
     repo_id='RadAlpaca11/lerobotTests',
     repo_type='dataset',
     commit_message='Add robot data test from code',
+)
+
+api.upload_file(
+    path_or_fileobj='lerobotTests/picsAndVids/sawyer/sawyerEpPics'+ str(formattedDate) + '.zip',
+    path_in_repo='picsAndVids/sawyerEpPics'+ str(formattedDate) + '.zip',
+    repo_id='RadAlpaca11/lerobotTests',
+    repo_type='dataset',
+    commit_message='Add sawyer episode pictures from code',
 )

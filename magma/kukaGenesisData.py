@@ -16,6 +16,18 @@ import pyarrow.parquet as pq
 from huggingface_hub import HfApi
 api = HfApi()
 
+# zip images
+from zipfile import ZipFile
+import os
+import datetime
+
+today = datetime.date.today()
+formattedDate = today.strftime("%Y%m%d")
+
+zipPath = 'lerobotTests/picsAndVids/kuka/kukaEpPics'+ str(formattedDate) + '.zip'
+os.makedirs(os.path.dirname(zipPath), exist_ok=True)
+imageZip = ZipFile(zipPath, 'w')
+
 # Function to convert quaternion to Euler angles
 def quatToEuler(q, scalarFirst=True, order='xyz', degrees=False, cpu=False):
     if cpu:
@@ -351,7 +363,7 @@ camPos = [-2.5, 3, 1.8]
 camLookAt = [0, 0, 0.25]
 
 # saves the recorded video
-camFilm.stop_recording(save_to_filename='video.mp4')
+camFilm.stop_recording(save_to_filename='lerobotTests/picsAndVids/kuka/video' + str(formattedDate) + '.mp4')
 # cam.stop_recording(save_to_filename='robotCam.mp4')
 
 for env in range(envNum):
@@ -371,9 +383,6 @@ for env in range(envNum):
         observedJointAngles = observedJointAngles.to(0)
         deltaAngles = torch.Tensor(currentDelta) # the difference between the joint angles and the target joint angles
         deltaAngles = deltaAngles.to(0)
-        frame = getFrame(cam)
-        cv2.imwrite('lerobotTests/picsAndVids/kuka/ep' + str(env) + '.jpg', frame)
-        image = np.append(image, 'lerobotTests/picsAndVids/kuka/ep' + str(env) + '.jpg')
 
 
     else:
@@ -387,10 +396,15 @@ for env in range(envNum):
             pos=camPos,
             lookat=camLookAt,
         )
-        frame = getFrame(cam)
-        cv2.imwrite('lerobotTests/picsAndVids/kuka/ep' + str(env) + '.jpg', frame)
-        image = np.append(image, 'lerobotTests/picsAndVids/kuka/ep' + str(env) + '.jpg')
+        
+    frame = getFrame(cam)
+    imagePath = f'lerobotTests/picsAndVids/kuka/{str(formattedDate)}ep{str(env)}.jpg'
+    cv2.imwrite(imagePath, frame)
+    imageZip.write(imagePath, f'{str(formattedDate)}ep{str(env)}.jpg')
+    os.remove(imagePath)  # remove the image after zipping it
+    image = np.append(image, zipPath)
 
+imageZip.close()  # close the zip file
 
 # Converts the data that is arrays, to a list that can be written to the file
 endEffectorPosition = endEffectorPosition.tolist()
@@ -420,13 +434,21 @@ df = pd.DataFrame({
 # # converts the data to a parquet file
 table = pa.Table.from_pandas(df)
 # writes the data to a parquet file
-pq.write_table(table, 'lerobotTests/kukaRobotDataTest.parquet')
+pq.write_table(table, 'lerobotTests/kukaRobotDataTest' + str(formattedDate) + '.parquet')
 
 # Uploads the file to huggingface
 api.upload_file(
-    path_or_fileobj='lerobotTests/kukaRobotDataTest.parquet',
-    path_in_repo='kukaRobotDataTest.parquet',
+    path_or_fileobj='lerobotTests/kukaRobotDataTest' + str(formattedDate) + '.parquet',
+    path_in_repo='train/kukaRobotDataTest' + str(formattedDate) + '.parquet',
     repo_id='RadAlpaca11/lerobotTests',
     repo_type='dataset',
     commit_message='Add robot data test from code',
+)
+
+api.upload_file(
+    path_or_fileobj='lerobotTests/picsAndVids/kuka/kukaEpPics'+ str(formattedDate) + '.zip',
+    path_in_repo='picsAndVids/kukaEpPics'+ str(formattedDate) + '.zip',
+    repo_id='RadAlpaca11/lerobotTests',
+    repo_type='dataset',
+    commit_message='Add kuka episode pictures from code',
 )
