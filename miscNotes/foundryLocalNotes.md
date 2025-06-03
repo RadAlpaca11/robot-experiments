@@ -23,6 +23,7 @@ to exit interactive chat:
 ```
 ## Compile Huggingface models to run on Foundry Local
 Install Olive to optimize models to ONNX format
+(The guide suggests using a virtual environment, so you can create one if you want)
 ```
 pip install olive-ai
 ```

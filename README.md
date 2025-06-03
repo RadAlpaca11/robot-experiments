@@ -2,13 +2,15 @@
 
 [Tasks](tasks.md): This is a list of tasks that we are working on or need to work on.
 
+[Robots](robots.md): This is a table of the robots in the lab, with their models and status of what we have worked on.
+
 [Troubleshooting](troubleshooting.md): This is a list of common issues we run into and how we solve them.
 
 
 # File structure
 > **General conventions**:
 > - picsAndVids appears in multiple folders, an is a collection of pictures and videos taken using the project. (not specified in the file structure)
-> - Notes that are related to a project that we have a folder dedicated to are in that folder.
+> - Notes that are related to a project that we have an organized folder dedicated to are in that folder.
 * [miscNotes](miscNotes): Notes on topics that do not fit into other folders or are not related to a specific project
 * [genesis](genesis): Overall folder for Genesis work. The work in this folder is focused on the simulator by itself. The work integrating the simulator with openVLA is in the openVLA folder.
     * [graveyard](genesis/graveyard): Old code that we haven't tested and are no longer using
@@ -21,9 +23,9 @@
 * [openPi0](openPi0): Overall folder for openPi0 work.
 * [openPi](openPi): Overall folder for openPi work.
 * [openvla-oft](openvlaOFT/openvla-oft): Overall folder for openvla-oft work.
-* [magma](magma): Folder of Magma work.
+* [magma](magma): Folder of Magma work. This also includes code for data collection that we are planning to use to finetune the model.
     * [magmaSource](magma/magmaSource): The source code for magma (this is a submodule so you may have to pull it separately)
-
+* [Isaac-GROOT](Isaac-GR00T): source code for Isaac-GR00T
 
 
 
