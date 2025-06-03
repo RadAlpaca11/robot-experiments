@@ -62,3 +62,21 @@ Got this error:
 ```
 ValueError: Unable to get dummy inputs for the model. Please provide io_config or install an optimum version that supports the model for export.
 ```
+
+### On Windows:
+
+
+
+When installing olive-ai: 
+```
+[WinError 206] The filename or extention is too long
+```
+To solve, ran
+```
+regedit
+```
+Navigate to 
+```
+HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/Control/FileSystem
+```
+Change variable longPathEnabled to 1

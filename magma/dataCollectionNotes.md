@@ -11,6 +11,8 @@ We collect data using the Genesis simulator and output it as a .parquet file, wh
 * To keep the file names not too long, they only use the date, so they will write over one that has been done on the same day
 * The code does take a while to run with more environments
     ![Environment number vs time](./envNums.png)
+* The image .zip is not stored in the git repository, so you have to download it from [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests)
+* The .parquet file and the image .zip automatically get pushed to the [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests) at the end of the code
 
 # Plans
 * Make the code more modular with functions and classes

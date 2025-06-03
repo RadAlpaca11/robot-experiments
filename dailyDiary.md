@@ -201,3 +201,10 @@ Also took a lot of data that was pushed to [huggingface](https://huggingface.co/
 * worked on [foundry local](miscNotes/foundryLocalNotes.md)
 * updated image saving in [data collection](magma/xarm6GenesisData.py)
 * reorganized [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests) to make the viewer work
+
+# 6/3/25
+* collected more data for [huggingface](https://huggingface.co/datasets/RadAlpaca11/lerobotTests)
+* worked more on [foundry local](miscNotes/foundryLocalNotes.md)
+    * tried to get other models working
+    * tried to get it working on windows
+* created notes for [data collection](magma/dataCollectionNotes.md)
