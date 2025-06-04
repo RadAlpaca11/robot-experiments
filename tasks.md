@@ -31,6 +31,8 @@
 * [nVidia Physical AI Dataset](https://huggingface.co/collections/nvidia/physical-ai-67c643edbb024053dcbcd6d8)
 * [nVidia GR00T 1 Humanoid AI Model](https://developer.nvidia.com/blog/accelerate-generalist-humanoid-robot-development-with-nvidia-isaac-gr00t-n1/)
 * [Foundry Local](https://learn.microsoft.com/en-us/azure/ai-foundry/foundry-local/get-started)
+* [LIBERO] (https://github.com/Lifelong-Robot-Learning/LIBERO)
+* [SmolVLA](https://arxiv.org/pdf/2506.01844)
 
 ## Simulation
 * ~~[Genesis](https://genesis-embodied-ai.github.io/)~~
