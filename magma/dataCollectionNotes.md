@@ -1,4 +1,5 @@
 [Collected data](https://huggingface.co/datasets/RadAlpaca11/lerobotTests)
+[images](https://huggingface.co/datasets/RadAlpaca11/lerobotTests/tree/main/picsAndVids)
 
 # Overall
 We collect data using the Genesis simulator and output it as a .parquet file, which is the same format as lerobot datasets. The images are collected in a .zip file to make things neater and easier to download. The data is then uploaded to HuggingFace for easy access and sharing.
