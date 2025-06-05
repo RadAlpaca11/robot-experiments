@@ -37,3 +37,5 @@ We collect data using the Genesis simulator and output it as a .parquet file, wh
 # Plans
 * Make the code more modular with functions and classes
 * Create a safety check for the robot's workspace
+* Get the [ur10](./magma/ur10GenesisData.py) arm working
+* Investigate if the [kuka](./magma/kukaGenesisData.py) arm is working
