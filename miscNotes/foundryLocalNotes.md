@@ -63,11 +63,11 @@ Got this error:
 ValueError: Unable to get dummy inputs for the model. Please provide io_config or install an optimum version that supports the model for export.
 ```
 
-### On Windows:
+## On Windows:
 
 
 
-When installing olive-ai: 
+### When installing olive-ai: 
 ```
 [WinError 206] The filename or extention is too long
 ```
@@ -80,3 +80,13 @@ Navigate to
 HKEY_LOCAL_MACHINE/SYSTEM/CurrentControlSet/Control/FileSystem
 ```
 Change variable longPathEnabled to 1
+
+### Installing Huggingface:
+Pip install did not work; had to use
+```
+conda install conda-forge::huggingface_hub
+```
+huggingface-cli login did not work because pip was not installed
+Installed pip
+Torch doesn't work with python 3.13; had to downgrade to 3.10
+Had to pip install onnxruntime
