@@ -4,6 +4,8 @@
 
 [Robots](robots.md): This is a table of the robots in the lab, with their models and status of what we have worked on.
 
+[Data collection](dataCollectionNotes.md)
+
 [Troubleshooting](troubleshooting.md): This is a list of common issues we run into and how we solve them.
 
 

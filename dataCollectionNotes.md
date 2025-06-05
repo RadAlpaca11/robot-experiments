@@ -1,24 +1,26 @@
 
 # Summary of data
-We have data on 3 robots, the [x arm](../magma/lerobotTests/xarm6RobotDataTest20250529.parquet), [kuka](../magma/lerobotTests/kukaRobotDataTest20250603.parquet), and [sawyer](../magma/lerobotTests/sawyerRobotDataTest20250603.parquet) arm. They each have over 10,000 data points.
+We have data on 3 robots, the [x arm](./magma/lerobotTests/xarm6RobotDataTest20250529.parquet), [kuka](./magma/lerobotTests/kukaRobotDataTest20250603.parquet), and [sawyer](./magma/lerobotTests/sawyerRobotDataTest20250603.parquet) arm. They each have over 10,000 data points.
 
 Follow these links to find the [collected data](https://huggingface.co/datasets/RadAlpaca11/lerobotTests) and associated [images](https://huggingface.co/datasets/RadAlpaca11/lerobotTests/tree/main/picsAndVids)
+
+You can also find code for the [x arm](../magma/xarm6GenesisData.py), [kuka](./magma/kukaGenesisData.py), [sawyer](./magma/sawyerGenesisData.py), and [ur10](./magma/ur10GenesisData.py) arms. Note that the ur10 does not currently work.
 
 # Overall
 We collect data using the Genesis simulator and output it as a .parquet file, which is the same format as lerobot datasets. The images are collected in a .zip file to make things neater and easier to download. The data is then uploaded to HuggingFace for easy access and sharing.
 
 ## Example images
-![Xarm6](../magma/lerobotTests/picsAndVids/ep1003.jpg)
+![Xarm6](./magma/lerobotTests/picsAndVids/ep1003.jpg)
 
-![Xarm6](../magma/lerobotTests/picsAndVids/ep105.jpg)
+![Xarm6](./magma/lerobotTests/picsAndVids/ep105.jpg)
 
-![Xarm6](../magma/lerobotTests/picsAndVids/xarm6/ep0.jpg)
+![Xarm6](./magma/lerobotTests/picsAndVids/xarm6/ep0.jpg)
 
-![kuka](../magma/lerobotTests/picsAndVids/kuka/ep0.jpg)
+![kuka](./magma/lerobotTests/picsAndVids/kuka/ep0.jpg)
 
-![sawyer](../magma/lerobotTests/picsAndVids/sawyer/ep21.jpg)
+![sawyer](./magma/lerobotTests/picsAndVids/sawyer/ep21.jpg)
 
-![sawyer](../magma/lerobotTests/picsAndVids/sawyer/ep0.jpg)
+![sawyer](./magma/lerobotTests/picsAndVids/sawyer/ep0.jpg)
 
 # Some notes on the code
 * We use parallel simulation running on the GPU to move a single robot for each datapoint
