@@ -1,6 +1,5 @@
 from PIL import Image
 import torch
-import numpy as np
 from transformers import AutoModelForCausalLM
 from transformers import AutoProcessor 
 
@@ -10,11 +9,11 @@ processor = AutoProcessor.from_pretrained("microsoft/Magma-8B", trust_remote_cod
 model.to("cuda")
 
 # Inference
-image = Image.open("../openVLA/picsAndVids/magmaPic.png").convert("RGB")
+image = Image.open("magmaSource/assets/images/magma_logo.jpg").convert("RGB")
 
 convs = [
-    {"role": "system", "content": "You are an agent that can see, talk, and act."},            
-    {"role": "user", "content": "<image_start><image><image_end>\n What is the first step to move the robot to touch the yellow block?"},
+    {"role": "system", "content": "You are agent that can see, talk and act."},            
+    {"role": "user", "content": "<image_start><image><image_end>\nWhat is the letter on the robot?"},
 ]
 prompt = processor.tokenizer.apply_chat_template(convs, tokenize=False, add_generation_prompt=True)
 inputs = processor(images=[image], texts=prompt, return_tensors="pt")
@@ -33,22 +32,7 @@ generation_args = {
 with torch.inference_mode():
     generate_ids = model.generate(**inputs, **generation_args)
 
-# get the last action, and convert the action (as token) to a discretized action
-generate_ids = generate_ids[0, -8:-1].cpu().tolist()
+generate_ids = generate_ids[:, inputs["input_ids"].shape[-1] :]
+response = processor.decode(generate_ids[0], skip_special_tokens=True).strip()
 
-predicted_action_ids = np.array(generate_ids).astype(np.int64)
-discretized_actions = processor.tokenizer.vocab_size - predicted_action_ids
-
-print(discretized_actions)
-
-
-# i=0
-
-# for id in generate_ids:
-#     nextId = id.cpu().tolist()
-#     predictedId = np.array(nextId).astype(np.int64)
-#     discretizedId = processor.tokenizer.vocab_size - predictedId
-#     print(discretizedId)
-#     i+=1
-#     print(i)
-
+print(response)

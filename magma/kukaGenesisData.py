@@ -70,7 +70,7 @@ def getFrame(cam):
 gs.init(backend=gs.gpu)
 
 scene = gs.Scene(
-    show_viewer = False,
+    show_viewer = True,
     # this is the viewer window that opens while the simulation is running, not the camera that records the video
     viewer_options = gs.options.ViewerOptions(
         res           = (1280, 960),
@@ -135,7 +135,7 @@ cam = scene.add_camera(
     GUI    = False,
 )
 
-envNum = 10000
+envNum = 10
 scene.build(n_envs=envNum, env_spacing=(4, 4), n_envs_per_row=envNum, center_envs_at_origin=False) # offsets y by 4 in one row
 
 camFilm.start_recording()
