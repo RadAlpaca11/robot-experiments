@@ -155,21 +155,16 @@ jnt_names = [
 ]
 dofs_idx = [kuka.get_joint(name).dof_idx_local for name in jnt_names]
 
-# Turns out these were making things worse, and we could just let the model do it's thing.
-# # pulled from urdf
-# xarm6.set_dofs_kp(
-#     np.array([100, 100, 100, 100, 100, 100, 10, 10, 10, 10]),
-#     motors_dof
-# )
-# xarm6.set_dofs_kv(
-#     np.array([40, 40, 40, 40, 40, 40, 2, 2, 2, 2]),
-#     motors_dof
-# )
-# xarm6.set_dofs_force_range(
-#     np.array([-50, -50, -32, -32, -32, -20,  -1000, -1000, -1000, -1000]),
-#     np.array([50, 50, 32, 32, 32, 20, 1000, 1000, 1000, 1000]),
-#     motors_dof
-# )
+kuka.set_dofs_kp(
+    np.array([4500, 4500, 3500, 3500, 2000, 2000, 2000]),
+)
+kuka.set_dofs_kv(
+    np.array([450, 450, 350, 350, 200, 200, 200]),
+)
+kuka.set_dofs_force_range(
+    np.array([-87, -87, -87, -87, -12, -12, -12]),
+    np.array([87, 87, 87, 87, 12, 12, 12]),
+)
 
 # get the end-effector link
 end_effector = kuka.get_link('link7')
@@ -213,6 +208,7 @@ def generateJointPoints(total_points: int, weights: Dict[str, float], joints: Li
             idx = i % len(current_values[joint_name])
             point.append(current_values[joint_name][idx])
         result.append(tuple(point))
+        print(point)
     
     return result
 

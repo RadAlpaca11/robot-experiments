@@ -4,7 +4,7 @@ We have data on 3 robots, the [x arm](./magma/lerobotTests/xarm6RobotDataTest202
 
 Follow these links to find the [collected data](https://huggingface.co/datasets/RadAlpaca11/lerobotTests) and associated [images](https://huggingface.co/datasets/RadAlpaca11/lerobotTests/tree/main/picsAndVids)
 
-You can also find code for the [x arm](../magma/xarm6GenesisData.py), [kuka](./magma/kukaGenesisData.py), [sawyer](./magma/sawyerGenesisData.py), and [ur10](./magma/ur10GenesisData.py) arms. Note that the ur10 does not currently work.
+You can also find code for the [x arm](../magma/xarm6GenesisData.py), [kuka](./magma/kukaGenesisData.py), [sawyer](./magma/sawyerGenesisData.py), and [ur10](./magma/ur10GenesisData.py) arms. Note that the ur10 does not currently work due to physics settings.
 
 # Overall
 We collect data using the Genesis simulator and output it as a .parquet file, which is the same format as lerobot datasets. The images are collected in a .zip file to make things neater and easier to download. The data is then uploaded to HuggingFace for easy access and sharing.
@@ -22,6 +22,8 @@ We collect data using the Genesis simulator and output it as a .parquet file, wh
 
 ![sawyer](./magma/lerobotTests/picsAndVids/sawyer/ep0.jpg)
 
+![parallel simulation](./parallelSimulation.png)
+
 # Some notes on the code
 * We use parallel simulation running on the GPU to move a single robot for each datapoint
 * The code uses forward kinematics to move the robot joints to specific angles
@@ -38,4 +40,3 @@ We collect data using the Genesis simulator and output it as a .parquet file, wh
 * Make the code more modular with functions and classes
 * Create a safety check for the robot's workspace
 * Get the [ur10](./magma/ur10GenesisData.py) arm working
-* Investigate if the [kuka](./magma/kukaGenesisData.py) arm is working

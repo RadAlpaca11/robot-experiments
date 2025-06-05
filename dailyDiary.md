@@ -207,4 +207,9 @@ Also took a lot of data that was pushed to [huggingface](https://huggingface.co/
 * worked more on [foundry local](miscNotes/foundryLocalNotes.md)
     * tried to get other models working
     * tried to get it working on windows
-* created notes for [data collection](magma/dataCollectionNotes.md)
+* created notes for [data collection](magma/dataCollectionNotes.md)\
+
+# 6/5/25
+* polished [data collection notes](./dataCollectionNotes.md) and [foundry local notes](./miscNotes/foundryLocalNotes.md)
+* made the repository public!
+* more kuka data

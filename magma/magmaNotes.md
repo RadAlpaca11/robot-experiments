@@ -167,3 +167,9 @@ How would you move to touch the yellow block?\
 
 How would you move the robot's gripper to the left?\
 [143 133  98 122 133 124 128]
+
+
+
+
+conda install pytorch torchvision torchaudio pytorch-cuda pytorch3d -c pytorch -c nvidia -c pytorch3d
+                                                                     
